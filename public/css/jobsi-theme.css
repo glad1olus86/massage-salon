@@ -1,0 +1,1375 @@
+/* ===== JOBSI THEME CSS ===== */
+/* All sizes increased by 20% for better visibility */
+
+/* Import Open Sans with all needed weights */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+/* Hide default footer for Jobsi theme */
+.dash-footer {
+    display: none !important;
+}
+
+/* Hide breadcrumb and page title, but keep action buttons */
+.page-header .breadcrumb {
+    display: none !important;
+}
+
+.page-header .page-header-title {
+    display: none !important;
+}
+
+/* Make page-header minimal when only action buttons are shown */
+.page-header .page-block {
+    padding: 10px 0;
+}
+
+.page-header .page-block>div>div:first-child {
+    display: none !important;
+}
+
+/* Keep action buttons visible and aligned right */
+.page-header .action-btn-col {
+    margin-left: auto;
+}
+
+/* JOBSI Header Styles */
+.jobsi-header .header-wrapper {
+    padding: 10px 18px;
+}
+
+/* Page Indicator in Header */
+.jobsi-page-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Position to align with content area (sidebar is 264px, header padding is ~18px) */
+    margin-left: 40px;
+}
+
+@media (max-width: 1024px) {
+    .jobsi-page-indicator {
+        margin-left: 10px;
+    }
+}
+
+.jobsi-page-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jobsi-page-icon img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.jobsi-page-icon i {
+    font-size: 20px;
+}
+
+.jobsi-page-title {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 35px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.jobsi-header-btn {
+    width: 60px;
+    height: 54px;
+    background: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.jobsi-header-btn:hover {
+    transform: translateY(-1px);
+}
+
+.jobsi-header-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.jobsi-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 19px;
+    height: 19px;
+    background: #22B404;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.jobsi-lang-selector {
+    width: auto !important;
+    padding: 0 14px;
+    gap: 7px;
+}
+
+.jobsi-flag {
+    width: 29px;
+    height: 19px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.jobsi-dropdown-flag {
+    width: 22px;
+    height: 15px;
+    object-fit: cover;
+    border-radius: 2px;
+    margin-right: 8px;
+}
+
+.jobsi-lang-text {
+    font-size: 14px;
+    color: #000;
+}
+
+.jobsi-company-block {
+    height: 54px;
+    background: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+}
+
+.jobsi-company-block svg {
+    width: 22px;
+    height: 22px;
+}
+
+.jobsi-company-name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #000;
+}
+
+.jobsi-user-block {
+    height: 54px;
+    background: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 14px;
+}
+
+.jobsi-user-email {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #000;
+}
+
+.jobsi-user-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: #666;
+}
+
+.jobsi-header-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.jobsi-header-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.jobsi-header-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Sidebar Styles */
+.jobsi-sidebar {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('../fromfigma/background.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    width: 294px !important;
+    box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.08) !important;
+    border-radius: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    height: 100vh !important;
+    min-height: 100% !important;
+    position: fixed !important;
+}
+
+.jobsi-sidebar .navbar-wrapper {
+    padding-top: 0;
+}
+
+.jobsi-sidebar .m-header {
+    padding: 18px 24px !important;
+    text-align: center;
+}
+
+.jobsi-sidebar .m-header img {
+    max-width: 168px !important;
+    height: auto;
+}
+
+.jobsi-sidebar .navbar-content {
+    padding-top: 12px;
+}
+
+.jobsi-sidebar .dash-navbar {
+    padding: 0 12px;
+}
+
+.jobsi-sidebar .dash-navbar .dash-item {
+    margin-bottom: 3px;
+}
+
+.jobsi-sidebar .dash-navbar .dash-item .dash-link {
+    color: #000;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+}
+
+.jobsi-sidebar .dash-navbar .dash-item.active .dash-link,
+.jobsi-sidebar .dash-navbar .dash-item .dash-link:hover {
+    color: #000 !important;
+    background: rgba(255, 244, 244, 1) !important;
+    border-radius: 8px;
+    font-weight: 300 !important;
+}
+
+.jobsi-sidebar .dash-micon {
+    width: 31px;
+    height: 31px;
+    min-width: 31px;
+    background: rgba(255, 244, 244, 1) !important;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.jobsi-sidebar .dash-micon img {
+    width: 14px;
+    height: 14px;
+}
+
+.jobsi-sidebar .dash-micon i {
+    font-size: 14px !important;
+}
+
+.jobsi-sidebar .dash-mtext {
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+/* Arrow for dropdown menus in Jobsi sidebar */
+.jobsi-sidebar .dash-hasmenu>.dash-link {
+    position: relative;
+}
+
+.jobsi-sidebar .dash-arrow {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+}
+
+.jobsi-sidebar .dash-arrow i,
+.jobsi-sidebar .dash-arrow svg {
+    width: 16px;
+    height: 16px;
+    color: #333;
+    stroke-width: 2;
+}
+
+.jobsi-sidebar .dash-hasmenu.active>.dash-link .dash-arrow i,
+.jobsi-sidebar .dash-hasmenu.active>.dash-link .dash-arrow svg,
+.jobsi-sidebar .dash-hasmenu>.dash-link:hover .dash-arrow i,
+.jobsi-sidebar .dash-hasmenu>.dash-link:hover .dash-arrow svg {
+    color: #FF0049;
+}
+
+/* Rotate arrow when submenu is open - flip up */
+.jobsi-sidebar .dash-hasmenu.dash-trigger>.dash-link .dash-arrow i,
+.jobsi-sidebar .dash-hasmenu.dash-trigger>.dash-link .dash-arrow svg {
+    transform: rotate(0deg);
+}
+
+/* Submenu styles for Jobsi sidebar */
+.jobsi-sidebar .dash-submenu {
+    padding-left: 55px !important;
+}
+
+.jobsi-sidebar .dash-submenu .dash-item .dash-link {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    color: #333;
+}
+
+.jobsi-sidebar .dash-submenu .dash-item .dash-link:hover,
+.jobsi-sidebar .dash-submenu .dash-item.active .dash-link {
+    color: #FF0049;
+}
+
+/* Google Reviews Block */
+.jobsi-google-reviews {
+    position: absolute;
+    bottom: 24px;
+    left: 18px;
+    right: 18px;
+}
+
+.jobsi-google-reviews .review-card {
+    background: #fff;
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.jobsi-google-reviews .review-label {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 0 10px;
+    font-size: 10px;
+    color: #000;
+    white-space: nowrap;
+}
+
+.jobsi-google-reviews img {
+    width: 100%;
+    height: auto;
+}
+
+/* Dashboard Wrapper */
+.jobsi-dashboard-wrapper {
+    padding: 18px;
+}
+
+/* Widget Styles - Adapted from Figma (735x404.6px scaled) */
+.jobsi-widget {
+    background: #fff;
+    box-shadow: 0px 5.6px 14px 1.4px rgba(0, 0, 0, 0.07);
+    border-radius: 10px;
+    padding: 20px 25px;
+    position: relative;
+    overflow: visible;
+    min-height: 290px;
+    padding-bottom: 70px;
+}
+
+/* Dropdown menu in widgets - ensure it appears above other elements */
+.jobsi-widget .dropdown-menu {
+    z-index: 1050;
+    max-height: 300px;
+    overflow-y: auto;
+    min-width: 230px;
+    /* Минимальная ширина dropdown меню */
+}
+
+/* ===== CASHBOX WIDGET STYLES ===== */
+.jobsi-widget-cashbox {
+    min-height: 180px;
+    padding-bottom: 50px;
+}
+
+.jobsi-cashbox-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    z-index: 2;
+}
+
+.jobsi-cashbox-left {
+    flex: 0 0 auto;
+    min-width: 320px;
+}
+
+.jobsi-cashbox-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    min-height: 120px;
+}
+
+/* Balance Row */
+.jobsi-cashbox-balance-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+    white-space: nowrap;
+}
+
+.jobsi-cashbox-balance-label {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #000;
+}
+
+.jobsi-cashbox-balance-value {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    color: #000;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.jobsi-cashbox-balance-value.negative {
+    color: #FF0049;
+}
+
+.jobsi-cashbox-balance-currency {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #FFAAAA;
+}
+
+/* Expenses */
+.jobsi-cashbox-expenses {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.jobsi-cashbox-expense-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 280px;
+}
+
+.jobsi-cashbox-expense-label {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: #000;
+}
+
+.jobsi-cashbox-expense-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.jobsi-cashbox-expense-value {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #000;
+    text-align: right;
+}
+
+.jobsi-cashbox-expense-currency {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #FFAAAA;
+}
+
+/* Legend */
+.jobsi-cashbox-legend {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.jobsi-cashbox-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 9px;
+    color: #000;
+}
+
+.jobsi-cashbox-legend-text-light {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 9px;
+    color: #000;
+    background: #FFF0F4;
+    padding: 2px 6px;
+    border-radius: 2px;
+}
+
+.jobsi-cashbox-legend-text {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 9px;
+    color: #000;
+}
+
+.jobsi-cashbox-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.jobsi-cashbox-legend-dot.light {
+    background: #FFF0F4;
+}
+
+.jobsi-cashbox-legend-dot.dark {
+    background: #FFAAAA;
+}
+
+/* Chart */
+.jobsi-cashbox-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 85px;
+}
+
+.jobsi-cashbox-bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.jobsi-cashbox-bars {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 65px;
+}
+
+.jobsi-cashbox-bar-light {
+    width: 16px;
+    background: #FFF0F4;
+    border-radius: 4px 4px 0 0;
+    min-height: 10px;
+}
+
+.jobsi-cashbox-bar-dark {
+    width: 16px;
+    background: #FFAAAA;
+    border-radius: 4px 4px 0 0;
+    min-height: 6px;
+}
+
+.jobsi-cashbox-bar-month {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px;
+    color: #000;
+    margin-top: 4px;
+}
+
+/* Background Icon */
+.jobsi-cashbox-bg-icon {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.03;
+    z-index: 1;
+}
+
+.jobsi-cashbox-bg-icon img {
+    width: 140px;
+    height: 140px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .jobsi-cashbox-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .jobsi-cashbox-right {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .jobsi-cashbox-chart {
+        justify-content: flex-start;
+    }
+
+    .jobsi-cashbox-expense-row {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Widget Header - Figma: font-size 22.4px, font-weight 600 */
+.jobsi-widget-header {
+    margin-bottom: 15px;
+}
+
+.jobsi-filter-dropdown {
+    color: #FF0049;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.jobsi-filter-dropdown svg {
+    width: 25px;
+    height: 25px;
+}
+
+.jobsi-widget-body {
+    position: relative;
+    z-index: 2;
+}
+
+/* Stats - Figma: font-size 25.2px, font-weight 300 for labels, 700 for numbers */
+.jobsi-stat-row {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    color: #000;
+    margin-bottom: 8px;
+    line-height: 35px;
+}
+
+.jobsi-stat-num {
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.jobsi-stat-big {
+    font-weight: 700;
+    font-size: 31px;
+}
+
+.jobsi-stat-label-sm {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 35px;
+}
+
+.jobsi-currency {
+    color: #FFAAAA;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.jobsi-currency-big {
+    color: #FFAAAA;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+/* Warning Triangle with exclamation */
+.jobsi-warning-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.jobsi-warning-icon svg {
+    display: block;
+}
+
+.jobsi-warning-exclamation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%);
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* Progress Bars - Figma: height 26.6px */
+.jobsi-progress-green {
+    height: 27px;
+    background: #22B404;
+    border-radius: 0;
+}
+
+.jobsi-progress-red {
+    height: 27px;
+    background: #F8ABAB;
+    border-radius: 0;
+}
+
+/* Fluctuation - Figma: label 30.8px, value 63px */
+.jobsi-fluctuation-label {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 31px;
+    color: #000;
+    line-height: 49px;
+}
+
+.jobsi-fluctuation-value {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 63px;
+    color: #000;
+    line-height: 49px;
+}
+
+/* Widget Background Icon - Figma: 257.6px */
+.jobsi-widget-bg {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.02;
+    z-index: 1;
+}
+
+.jobsi-widget-bg img {
+    width: 200px;
+    height: 200px;
+}
+
+/* Workplace widget - move briefcase icon higher */
+.jobsi-widget-workplace .jobsi-widget-bg {
+    top: 35%;
+}
+
+/* Widget Footer - Figma: line 4.2px height, text 25.2px */
+.jobsi-widget-footer-line {
+    position: absolute;
+    bottom: 50px;
+    left: 25px;
+    right: 25px;
+    height: 4px;
+    background: #FF0049;
+}
+
+.jobsi-widget-footer-text {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #B1B0AF;
+}
+
+/* ===== WORKPLACE WIDGET - Figma Exact Styles ===== */
+.jobsi-widget-workplace {
+    min-height: 290px;
+}
+
+.jobsi-workplace-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 64px;
+}
+
+.jobsi-workplace-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.jobsi-workplace-label {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 35px;
+    color: #000;
+    min-width: 140px;
+}
+
+.jobsi-workplace-num {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 31px;
+    line-height: 35px;
+    color: #000;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Fluctuation Block - Figma layout */
+.jobsi-fluctuation-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.jobsi-fluctuation-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ===== HOTEL WIDGET - Figma Exact Styles ===== */
+.jobsi-widget-hotel {
+    min-height: 290px;
+}
+
+.jobsi-hotel-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+
+/* Month Tabs */
+.jobsi-month-tabs {
+    display: flex;
+    gap: 29px;
+    padding: 14px 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.jobsi-month-tab {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #FF0049;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.jobsi-month-tab:hover,
+.jobsi-month-tab.active {
+    color: #FF0049;
+    text-decoration: underline;
+}
+
+/* Quick Actions */
+.jobsi-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    background: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
+    border-radius: 7px;
+    padding: 18px;
+}
+
+/* Adaptive grid based on number of buttons */
+.jobsi-quick-actions[data-buttons="1"] {
+    grid-template-columns: 1fr;
+}
+
+.jobsi-quick-actions[data-buttons="1"] .jobsi-action-btn {
+    aspect-ratio: 4 / 1;
+    max-width: 400px;
+}
+
+.jobsi-quick-actions[data-buttons="2"] {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.jobsi-quick-actions[data-buttons="2"] .jobsi-action-btn {
+    aspect-ratio: 2 / 1;
+}
+
+.jobsi-quick-actions[data-buttons="3"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.jobsi-quick-actions[data-buttons="3"] .jobsi-action-btn {
+    aspect-ratio: 1.5 / 1;
+}
+
+.jobsi-quick-actions[data-buttons="4"] {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.jobsi-quick-actions[data-buttons="4"] .jobsi-action-btn {
+    aspect-ratio: 1.2 / 1;
+}
+
+.jobsi-quick-actions[data-buttons="5"] {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.jobsi-action-btn {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #FFF0F4;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #000;
+    transition: all 0.2s ease;
+    padding: 10px;
+}
+
+.jobsi-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
+    color: #000;
+    text-decoration: none;
+}
+
+.jobsi-action-btn img {
+    width: 75px;
+    height: 75px;
+    margin-bottom: 12px;
+}
+
+.jobsi-action-btn span {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    line-height: 15px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .jobsi-quick-actions {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .jobsi-quick-actions[data-buttons="1"],
+    .jobsi-quick-actions[data-buttons="2"] {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .jobsi-quick-actions[data-buttons="1"] .jobsi-action-btn,
+    .jobsi-quick-actions[data-buttons="2"] .jobsi-action-btn {
+        aspect-ratio: 2 / 1;
+        max-width: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .jobsi-quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .jobsi-quick-actions[data-buttons="1"] {
+        grid-template-columns: 1fr;
+    }
+
+    .jobsi-quick-actions .jobsi-action-btn {
+        aspect-ratio: 1.5 / 1;
+    }
+
+    .jobsi-quick-actions[data-buttons="1"] .jobsi-action-btn {
+        aspect-ratio: 3 / 1;
+        max-width: none;
+    }
+
+    .jobsi-month-tabs {
+        gap: 12px;
+    }
+
+    .jobsi-sidebar {
+        width: 240px !important;
+    }
+}
+
+/* Adjust main content for sidebar */
+.dash-sidebar.jobsi-sidebar~.dash-container {
+    margin-left: 264px;
+}
+
+/* Hide close buttons on desktop by default */
+.jobsi-sidebar-close,
+.jobsi-sidebar-close-fixed {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .dash-sidebar.jobsi-sidebar~.dash-container {
+        margin-left: 0;
+    }
+
+    /* Hide sidebar by default on mobile - slide out to left */
+    .dash-sidebar.jobsi-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1050;
+        width: 264px !important;
+    }
+
+    /* Show sidebar when mob-sidebar-active class is added (by dash.js) */
+    .dash-sidebar.jobsi-sidebar.mob-sidebar-active {
+        transform: translateX(0);
+    }
+
+    /* Style the overlay created by dash.js */
+    .dash-sidebar.jobsi-sidebar .dash-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 264px;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+    }
+
+    /* Mobile sidebar close button - VISIBLE on mobile */
+    .jobsi-sidebar-close {
+        display: flex !important;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: #FF0049 !important;
+        border-radius: 8px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 2px 10px rgba(255, 0, 73, 0.3);
+    }
+
+    .jobsi-sidebar-close i {
+        font-size: 22px;
+        color: #fff !important;
+    }
+
+    .jobsi-sidebar-close:hover {
+        background: #e60042 !important;
+    }
+
+    /* Fixed close button - in right corner of screen, outside sidebar */
+    .jobsi-sidebar-close-fixed {
+        display: none;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 44px;
+        height: 44px;
+        border: none;
+        background: #FF0049 !important;
+        border-radius: 10px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1100;
+        box-shadow: 0 4px 15px rgba(255, 0, 73, 0.4);
+        transition: transform 0.2s, opacity 0.3s;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .jobsi-sidebar-close-fixed i {
+        font-size: 24px;
+        color: #fff !important;
+    }
+
+    .jobsi-sidebar-close-fixed:hover {
+        background: #e60042 !important;
+        transform: scale(1.05);
+    }
+
+    /* Show fixed button only when sidebar is open */
+    .dash-sidebar.jobsi-sidebar.mob-sidebar-active~.jobsi-sidebar-close-fixed {
+        display: flex !important;
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* ==
+=== LARGE CASHBOX WIDGET STYLES ===== */
+.jobsi-widget-cashbox-large {
+    min-height: 350px;
+    padding-bottom: 60px;
+}
+
+.jobsi-cashbox-content-large {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    z-index: 2;
+    gap: 40px;
+}
+
+.jobsi-cashbox-left-large {
+    flex: 0 0 auto;
+    min-width: 400px;
+}
+
+.jobsi-cashbox-right-large {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Balance Row Large */
+.jobsi-cashbox-balance-row-large {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    margin-bottom: 20px;
+    white-space: nowrap;
+}
+
+.jobsi-cashbox-balance-label-large {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    color: #000;
+}
+
+/* Cashbox title - semibold */
+.jobsi-widget-cashbox-large .jobsi-filter-dropdown {
+    font-weight: 600;
+}
+
+.jobsi-cashbox-balance-value-large {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 49px;
+    color: #000;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.jobsi-cashbox-balance-value-large.negative {
+    color: #FF0049;
+}
+
+.jobsi-cashbox-balance-currency-large {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #FFAAAA;
+}
+
+/* Expenses Large */
+.jobsi-cashbox-expenses-large {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 5px 10px;
+    margin-top: 15px;
+    align-items: baseline;
+}
+
+.jobsi-cashbox-expense-row-large {
+    display: contents;
+}
+
+.jobsi-cashbox-expense-label-large {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    color: #000;
+}
+
+.jobsi-cashbox-expense-amount-large {
+    display: contents;
+}
+
+.jobsi-cashbox-expense-value-large {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 31px;
+    color: #000;
+    text-align: right;
+}
+
+.jobsi-cashbox-expense-currency-large {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #FFAAAA;
+}
+
+/* Chart Wrapper - new layout */
+.jobsi-cashbox-chart-wrapper {
+    display: flex;
+    align-items: stretch;
+    background: rgba(255, 244, 244, 0.35);
+    border-radius: 10px;
+    padding: 20px;
+    gap: 30px;
+}
+
+.jobsi-cashbox-chart-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Legend Large */
+.jobsi-cashbox-legend-large {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.jobsi-cashbox-legend-item-large {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    color: #000;
+    line-height: 1.3;
+}
+
+.jobsi-cashbox-legend-dot-large {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.jobsi-cashbox-legend-dot-large.light {
+    background: #FFF0F4;
+}
+
+.jobsi-cashbox-legend-dot-large.dark {
+    background: #FFAAAA;
+}
+
+/* Coins Icon */
+.jobsi-cashbox-coins-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jobsi-cashbox-coins-icon img {
+    width: 180px;
+    height: auto;
+    opacity: 0.15;
+}
+
+/* Chart Large */
+.jobsi-cashbox-chart-large {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 180px;
+    flex: 1;
+}
+
+.jobsi-cashbox-bar-group-large {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.jobsi-cashbox-bars-large {
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 150px;
+}
+
+.jobsi-cashbox-bar-light-large {
+    width: 22px;
+    background: #FFF0F4;
+    border-radius: 8px 8px 0 0;
+    min-height: 15px;
+}
+
+.jobsi-cashbox-bar-dark-large {
+    width: 22px;
+    background: #FFAAAA;
+    border-radius: 8px 8px 0 0;
+    min-height: 10px;
+}
+
+.jobsi-cashbox-bar-month-large {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #000;
+    margin-top: 6px;
+}
+
+/* Background Icon Large */
+.jobsi-cashbox-bg-icon-large {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.03;
+    z-index: 1;
+}
+
+.jobsi-cashbox-bg-icon-large img {
+    width: 200px;
+    height: 200px;
+}
+
+/* Responsive Large Cashbox */
+@media (max-width: 1200px) {
+    .jobsi-cashbox-content-large {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .jobsi-cashbox-right-large {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .jobsi-cashbox-chart-container-large {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .jobsi-cashbox-expense-row-large {
+        width: 100%;
+        max-width: 400px;
+    }
+}
