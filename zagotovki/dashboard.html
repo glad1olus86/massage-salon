@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity | Главная</title>
+
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/components-responsive.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <img src="./assets/logo-massage.png" alt="Infinity logo | Massage" class="sidebar-logo">
+        <nav class="sidebar-nav">
+            <ul class="sidebar-nav__list">
+                <li>
+                    <a href="./dashboard.html" class="sidebar-nav__link"><img
+                            src="./assets/icons/nav-dashboard-icon.svg" class="sidebar-nav__icon"
+                            alt="Dashboard icon">Главная</a>
+                </li>
+                <li>
+                    <a href="./branches.html" class="sidebar-nav__link"><img src="./assets/icons/nav-branches-icon.svg"
+                            class="sidebar-nav__icon" alt="Branches icon">Филиалы</a>
+                </li>
+                <li>
+                    <a href="./employees.html" class="sidebar-nav__link"><img
+                            src="./assets/icons/nav-employees-icon.svg" class="sidebar-nav__icon"
+                            alt="Employees icon">Сотрудники</a>
+                </li>
+                <li>
+                    <a href="./services.html" class="sidebar-nav__link"><img src="./assets/icons/nav-services-icon.svg"
+                            class="sidebar-nav__icon" alt="Services icon">Услуги</a>
+                </li>
+                <li>
+                    <a href="./clients.html" class="sidebar-nav__link"><img src="./assets/icons/nav-clients-icon.svg"
+                            class="sidebar-nav__icon" alt="Clients icon">Клиенты</a>
+                </li>
+                <li>
+                    <a href="./orders.html" class="sidebar-nav__link"><img src="./assets/icons/nav-orders-icon.svg"
+                            class="sidebar-nav__icon" alt="Orders icon">Заказы</a>
+                </li>
+                <li>
+                    <a href="./calendar.html" class="sidebar-nav__link"><img src="./assets/icons/nav-calendar-icon.svg"
+                            class="sidebar-nav__icon" alt="Calendar icon">Календарь</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-contacts">
+            <span class="sidebar-contacts__title">КОНТАКТЫ АДМИНИСТРАТОРА</span>
+            <ul class="sidebar-contacts__list">
+                <li><a href="tel:+4207775557777" class="sidebar-contact__link">
+                        <img src="./assets/icons/contacts-phone-icon.svg" alt="Phone icon"
+                            class="sidebar-contact__icon">
+                        +420 777 555 7777
+                    </a>
+                </li>
+                <li><a href="mailto:admin@masaze-infinity.cz" class="sidebar-contact__link">
+                        <img src="./assets/icons/contacts-mail-icon.svg" alt="Mail icon" class="sidebar-contact__icon">
+                        admin@masaze-infinity.cz
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <a href="#" class="sidebar-ideas-wrapper">
+            <div class="sidebar-ideas">
+                Идеи и
+                <svg class="sidebar-ideas-icon" viewBox="0 0 18 25" fill="none">
+                    <path
+                        d="M6.90065 0.1962C3.59157 0.887655 0.908466 3.54508 0.20246 6.87472C-0.393683 9.68634 0.340936 12.5091 2.21794 14.6192C3.13547 15.6506 3.66164 17.0121 3.66164 18.3583V19.8232C3.66164 20.7978 4.29968 21.6257 5.17985 21.9125C5.46931 23.6227 6.95368 24.9989 8.78859 24.9989C10.623 24.9989 12.1078 23.6232 12.3973 21.9125C13.2775 21.6257 13.9155 20.7978 13.9155 19.8231V18.3583C13.9155 17.0094 14.4435 15.6643 15.402 14.5707C16.805 12.9701 17.5777 10.9164 17.5777 8.788C17.5777 3.24283 12.502 -0.974015 6.90065 0.1962ZM8.78859 23.5341C7.84709 23.5341 7.0216 22.8862 6.71677 22.0155H10.8604C10.5556 22.8862 9.7301 23.5341 8.78859 23.5341ZM12.4507 19.8232C12.4507 20.227 12.1221 20.5556 11.7183 20.5556H5.85891C5.45505 20.5556 5.12648 20.227 5.12648 19.8232V19.0907H12.4507V19.8232ZM14.3004 13.6052C13.2789 14.7706 12.6505 16.1759 12.491 17.6259H5.08635C4.92707 16.1751 4.30021 14.756 3.31252 13.6456C1.74816 11.887 1.13688 9.52984 1.63547 7.17857C2.21745 4.43375 4.45378 2.20401 7.20031 1.63014C11.889 0.650302 16.1128 4.1714 16.1128 8.788C16.1128 10.561 15.4692 12.2718 14.3004 13.6052Z"
+                        fill="#FFC107" />
+                </svg>
+                предложения
+            </div>
+        </a>
+    </aside>
+    <div class="container">
+        <header class="header">
+            <button type="button" class="header-profile-button">
+                <img src="./assets/profile-image.webp" alt="Profile image" class="header-profile__image">
+                <span class="header-profile__name">Виктория</span>
+                <div class="arrow-button">
+                    <svg viewBox="0 0 7 5" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white" />
+                    </svg>
+                </div>
+            </button>
+            <div class="header-row">
+                <button type="button" class="header__outlined-button">
+                    <img src="./assets/icons/header-language-icon.svg" alt="Language icon"
+                        class="header__outlined-button-icon">
+                    Русский
+                </button>
+                <button type="button" class="header__outlined-button">
+                    <img src="./assets/icons/header-settings-icon.svg" alt="Settings icon"
+                        class="header__outlined-button-icon">
+                    Настройки
+                </button>
+                <button type="button" class="header__outlined-button">
+                    <img src="./assets/icons/header-logout-icon.svg" alt="Logout icon"
+                        class="header__outlined-button-icon">
+                </button>
+            </div>
+        </header>
+        <main class="main-content">
+            <h1 class="main-content__title">Панель администратора</h1>
+            <section class="dashboard-grid">
+                <div class="new-orders card">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <span class="block-title__numbers">75</span>
+                            новых заказов за
+                        </div>
+                        <div class="dropdown" data-dropdown>
+                            <button type="button" class="dropdown__trigger" aria-haspopup="listbox"
+                                aria-expanded="false">
+                                <span class="dropdown__value" data-dropdown-value>неделю</span>
+                                <div class="arrow-button">
+                                    <svg viewBox="0 0 7 5" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z"
+                                            fill="white" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="dropdown__menu" role="listbox" aria-label="Период">
+                                <button type="button" class="dropdown__option" role="option" data-value="день"
+                                    aria-selected="false">день</button>
+                                <button type="button" class="dropdown__option" role="option" data-value="неделю"
+                                    aria-selected="true">неделю</button>
+                                <button type="button" class="dropdown__option" role="option" data-value="месяц"
+                                    aria-selected="false">месяц</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="new-orders__content">
+                        <table class="table table--spacious orders-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Клиент</th>
+                                    <th scope="col">Дата</th>
+                                    <th scope="col">Услуга</th>
+                                    <th scope="col">Сотрудник</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Lukas Weber</td>
+                                    <td>12.11.2025</td>
+                                    <td>Autoerotika</td>
+                                    <td><a class="text-link text-link--brand" href="#">Lea</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Sofia Garcia</td>
+                                    <td>28.09.2025</td>
+                                    <td>Autoerotika s hračkou</td>
+                                    <td><a class="text-link text-link--brand" href="#">Sanra</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Alessandro Ricci</td>
+                                    <td>05.01.2025</td>
+                                    <td>Escort, Sauna</td>
+                                    <td><a class="text-link text-link--brand" href="#">Mia</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Camille Dubois</td>
+                                    <td>19.07.2025</td>
+                                    <td>Lesbishow</td>
+                                    <td><a class="text-link text-link--brand" href="#">Monika</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Oliver Smith</td>
+                                    <td>30.06.2025</td>
+                                    <td>Masáž prostaty</td>
+                                    <td><a class="text-link text-link--brand" href="#">Martina</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Lars Johansson</td>
+                                    <td>14.02.2025</td>
+                                    <td>Prsní masáž</td>
+                                    <td><a class="text-link text-link--brand" href="#">Selena</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Jakub Nowak</td>
+                                    <td>03.08.2022</td>
+                                    <td>Pussycat, Prsní masáž</td>
+                                    <td><a class="text-link text-link--brand" href="#">Natalie</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Bram de Vries Nikos</td>
+                                    <td>22.10.2025</td>
+                                    <td>Sauna</td>
+                                    <td><a class="text-link text-link--brand" href="#">Kiki</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="card-actions">
+                            <button type="button" class="btn btn--dark sm-button sm-button--dark">Новый заказ</button>
+                            <button type="button"
+                                class="btn btn--outlined-dark sm-button sm-button--outlined-dark">Полная статистика
+                                заказов</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="duty-wrapper">
+                    <div class="duty card">
+                        <div class="block-header">
+                            <div class="block-title">
+                                дежурный недели:
+                                <span class="block-title__numbers">35</span>
+                            </div>
+                            <img src="./assets/icons/cleaning-icon.svg" alt="Cleaning icon" class="block-title__icon">
+                        </div>
+
+                        <div class="duty__content">
+                            <table class="table table--compact">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Сотрудник</th>
+                                        <th scope="col">Филиал</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Lea">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Lea</a>
+                                            </div>
+                                        </td>
+                                        <td><a class="text-link text-link--brand text-link--lg" href="#">Hálkova</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Sanra">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Sanra</a>
+                                            </div>
+                                        </td>
+                                        <td><a class="text-link text-link--brand text-link--lg" href="#">Koubkova</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <a href="#" class="action-tile">
+                        <span class="action-tile__icon">
+                            <img src="./assets/icons/control-icon.svg" alt="Контроль уборки">
+                        </span>
+                        <span class="action-tile__label">КОНТРОЛЬ УБОРКИ</span>
+                    </a>
+
+                    <a href="#" class="action-tile">
+                        <span class="action-tile__icon">
+                            <img src="./assets/icons/nav-branches-icon.svg" alt="Управление филиалами">
+                        </span>
+                        <span class="action-tile__label">УПРАВЛЕНИЕ ФИЛИАЛАМИ</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="calendar-section">
+                <h2 class="main-content__title">Календарь</h2>
+
+                <div class="calendar card" aria-label="Календарь">
+                    <div class="calendar__inner">
+                        <div class="calendar__weekdays" aria-hidden="true">
+                            <div class="calendar__weekday">Понедельник</div>
+                            <div class="calendar__weekday">Вторник</div>
+                            <div class="calendar__weekday">Среда</div>
+                            <div class="calendar__weekday">Четверг</div>
+                            <div class="calendar__weekday">Пятница</div>
+                            <div class="calendar__weekday">Суббота</div>
+                            <div class="calendar__weekday">Воскресенье</div>
+                        </div>
+
+                        <div class="calendar__grid" role="grid">
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">1</div>
+                                <div class="calendar__meta">
+                                    <div class="calendar__label">резервации</div>
+                                    <div class="calendar__dots" aria-hidden="true">
+                                        <span class="calendar__dot"></span>
+                                        <span class="calendar__dot"></span>
+                                        <span class="calendar__dot"></span>
+                                    </div>
+                                </div>
+
+                                <ul class="calendar__items" aria-label="События">
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--cleaning"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Комнаты чистые</span>
+                                        <span class="calendar__item-status calendar__item-status--ok"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--control"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Общая уборка и стирка</span>
+                                        <span class="calendar__item-status calendar__item-status--ok"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">2</div>
+                                <div class="calendar__meta">
+                                    <div class="calendar__label">резервации</div>
+                                    <div class="calendar__dots" aria-hidden="true">
+                                        <span class="calendar__dot"></span>
+                                        <span class="calendar__dot"></span>
+                                    </div>
+                                </div>
+
+                                <ul class="calendar__items" aria-label="События">
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--cleaning"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Комнаты чистые</span>
+                                        <span class="calendar__item-status calendar__item-status--ok"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--control"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Общая уборка и стирка</span>
+                                        <span class="calendar__item-status calendar__item-status--ok"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">3</div>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">4</div>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">5</div>
+                                <div class="calendar__meta">
+                                    <div class="calendar__label">резервации</div>
+                                </div>
+
+                                <ul class="calendar__items" aria-label="События">
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--cleaning"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Комнаты чистые</span>
+                                        <span class="calendar__item-status calendar__item-status--ok"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--control"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Общая уборка и стирка</span>
+                                        <span class="calendar__item-status calendar__item-status--bad"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M6.29289 6.29289C6.68342 5.90237 7.31658 5.90237 7.70711 6.29289L10 8.58579L12.2929 6.29289C12.6834 5.90237 13.3166 5.90237 13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711L11.4142 10L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L10 11.4142L7.70711 13.7071C7.31658 14.0976 6.68342 14.0976 6.29289 13.7071C5.90237 13.3166 5.90237 12.6834 6.29289 12.2929L8.58579 10L6.29289 7.70711C5.90237 7.31658 5.90237 6.68342 6.29289 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">6</div>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">7</div>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">8</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">9</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">10</div>
+                                <div class="calendar__meta">
+                                    <div class="calendar__label">резервации</div>
+                                    <div class="calendar__dots" aria-hidden="true">
+                                        <span class="calendar__dot"></span>
+                                        <span class="calendar__dot"></span>
+                                        <span class="calendar__dot"></span>
+                                    </div>
+                                </div>
+
+                                <ul class="calendar__items" aria-label="События">
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--cleaning"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Комнаты чистые</span>
+                                        <span class="calendar__item-status calendar__item-status--bad"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M6.29289 6.29289C6.68342 5.90237 7.31658 5.90237 7.70711 6.29289L10 8.58579L12.2929 6.29289C12.6834 5.90237 13.3166 5.90237 13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711L11.4142 10L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L10 11.4142L7.70711 13.7071C7.31658 14.0976 6.68342 14.0976 6.29289 13.7071C5.90237 13.3166 5.90237 12.6834 6.29289 12.2929L8.58579 10L6.29289 7.70711C5.90237 7.31658 5.90237 6.68342 6.29289 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                    <li class="calendar__item">
+                                        <span class="calendar__item-icon calendar__item-icon--control"
+                                            aria-hidden="true"></span>
+                                        <span class="calendar__item-text">Общая уборка и стирка</span>
+                                        <span class="calendar__item-status calendar__item-status--bad"
+                                            aria-hidden="true">
+                                            <svg viewBox="0 0 20 20" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M6.29289 6.29289C6.68342 5.90237 7.31658 5.90237 7.70711 6.29289L10 8.58579L12.2929 6.29289C12.6834 5.90237 13.3166 5.90237 13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711L11.4142 10L13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071C13.3166 14.0976 12.6834 14.0976 12.2929 13.7071L10 11.4142L7.70711 13.7071C7.31658 14.0976 6.68342 14.0976 6.29289 13.7071C5.90237 13.3166 5.90237 12.6834 6.29289 12.2929L8.58579 10L6.29289 7.70711C5.90237 7.31658 5.90237 6.68342 6.29289 6.29289Z"
+                                                    fill="white" />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">11</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">12</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">13</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">14</div>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">15</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">16</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">17</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">18</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">19</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">20</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">21</div>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">22</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">23</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">24</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">25</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">26</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">27</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">28</div>
+                            </div>
+
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">29</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">30</div>
+                            </div>
+                            <div class="calendar__cell" role="gridcell">
+                                <div class="calendar__date">31</div>
+                            </div>
+                            <div class="calendar__cell calendar__cell--inactive" role="gridcell">
+                                <div class="calendar__date calendar__date--muted">1</div>
+                            </div>
+                            <div class="calendar__cell calendar__cell--inactive" role="gridcell">
+                                <div class="calendar__date calendar__date--muted">2</div>
+                            </div>
+                            <div class="calendar__cell calendar__cell--inactive" role="gridcell">
+                                <div class="calendar__date calendar__date--muted">3</div>
+                            </div>
+                            <div class="calendar__cell calendar__cell--inactive" role="gridcell">
+                                <div class="calendar__date calendar__date--muted">4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="performance-section">
+                <h2 class="main-content__title">Эффективность сотрудников</h2>
+
+                <div class="performance-grid performance-grid--with-leader">
+                    <div class="performance card">
+                        <div class="block-header">
+                            <div class="block-title">
+                                <span class="block-title__numbers">TOP 10</span>
+                                сотрудников по эффективности за
+                            </div>
+
+                            <div class="dropdown" data-dropdown>
+                                <button type="button" class="dropdown__trigger" aria-haspopup="listbox"
+                                    aria-expanded="false">
+                                    <span class="dropdown__value" data-dropdown-value>неделю</span>
+                                    <div class="arrow-button" aria-hidden="true">
+                                        <svg viewBox="0 0 7 5" fill="none">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z"
+                                                fill="white" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div class="dropdown__menu" role="listbox" aria-label="Период">
+                                    <button type="button" class="dropdown__option" role="option" data-value="день"
+                                        aria-selected="false">день</button>
+                                    <button type="button" class="dropdown__option" role="option" data-value="неделю"
+                                        aria-selected="true">неделю</button>
+                                    <button type="button" class="dropdown__option" role="option" data-value="месяц"
+                                        aria-selected="false">месяц</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="performance__content">
+                            <table class="table table--compact table--performance" aria-label="Топ сотрудников">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Сотрудник</th>
+                                        <th scope="col">Заказов</th>
+                                        <th scope="col">Уборка (коэфф.)</th>
+                                        <th scope="col">Уборка (рейтинг)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="person performance-person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Lea">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Lea</a>
+                                            </div>
+                                        </td>
+                                        <td class="performance__metric">11</td>
+                                        <td class="performance__metric">735</td>
+                                        <td>
+                                            <div class="rating" aria-label="Рейтинг 4.5 из 5">
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true">
+                                                    <svg class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                    <svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                </span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true">
+                                                    <svg class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                    <svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                </span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true">
+                                                    <svg class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                    <svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                </span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true">
+                                                    <svg class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                    <svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                </span>
+                                                <span class="rating__star" style="--fill: 50%" aria-hidden="true">
+                                                    <svg class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                    <svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="person performance-person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Sanra">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Sanra</a>
+                                            </div>
+                                        </td>
+                                        <td class="performance__metric">9</td>
+                                        <td class="performance__metric">246</td>
+                                        <td>
+                                            <div class="rating" aria-label="Рейтинг 4 из 5">
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 0%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="person performance-person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Anira">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Anira</a>
+                                            </div>
+                                        </td>
+                                        <td class="performance__metric">5</td>
+                                        <td class="performance__metric">529</td>
+                                        <td>
+                                            <div class="rating" aria-label="Рейтинг 5 из 5">
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="person performance-person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Anet">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Anet</a>
+                                            </div>
+                                        </td>
+                                        <td class="performance__metric">3</td>
+                                        <td class="performance__metric">361</td>
+                                        <td>
+                                            <div class="rating" aria-label="Рейтинг 3 из 5">
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 0%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 0%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="person performance-person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Lisa">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Lisa</a>
+                                            </div>
+                                        </td>
+                                        <td class="performance__metric">2</td>
+                                        <td class="performance__metric">904</td>
+                                        <td>
+                                            <div class="rating" aria-label="Рейтинг 5 из 5">
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="person performance-person">
+                                                <img class="avatar avatar--sm" src="./assets/profile-image.webp"
+                                                    alt="Julia">
+                                                <a class="text-link text-link--brand text-link--lg semibold"
+                                                    href="#">Julia</a>
+                                            </div>
+                                        </td>
+                                        <td class="performance__metric">0</td>
+                                        <td class="performance__metric">877</td>
+                                        <td>
+                                            <div class="rating" aria-label="Рейтинг 4.5 из 5">
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 100%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                                <span class="rating__star" style="--fill: 50%" aria-hidden="true"><svg
+                                                        class="rating__star-base" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg><svg class="rating__star-fill" viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                    </svg></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="leader card">
+                        <div class="leader__header">Лидер<br>просмотров</div>
+                        <div class="leader__content">
+                            <img class="leader__image" src="./assets/profile-image.webp" alt="Лидер просмотров">
+                            <div class="leader__name">JULIA</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="./scripts/interactions.js"></script>
+</body>
+
+</html>

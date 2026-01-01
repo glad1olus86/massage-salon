@@ -30,6 +30,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'pusher' => \App\Http\Middleware\pusherConfig::class,
             'plan.module' => \App\Http\Middleware\CheckPlanModule::class,
             'mobile.redirect' => \App\Http\Middleware\MobileRedirect::class,
+            'role.masseuse' => \App\Http\Middleware\RoleMasseuseMiddleware::class,
+            'role.admin' => \App\Http\Middleware\RoleAdminMiddleware::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
 
         // middlewareGroups / Group Middleware

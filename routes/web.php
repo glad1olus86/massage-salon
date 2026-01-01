@@ -341,7 +341,7 @@ Route::get('/config-cache', function () {
 
 
 //================================= Invoice Payment Gateways  ====================================//
-Route::group(['middleware' => ['verified']], function () {
+Route::group(['middleware' => ['auth']], function () {
 
     // Route::get('/home', [DashboardController::class, 'account_dashboard_index'])->name('home')->middleware(['XSS', 'revalidate']);
 
@@ -417,6 +417,168 @@ Route::group(['middleware' => ['verified']], function () {
     Route::get('/jobsi-dashboard/hotel-stats', [\App\Http\Controllers\JobsiDashboardController::class, 'getHotelStats'])->name('jobsi.dashboard.hotel-stats')->middleware(['auth', 'XSS']);
     Route::get('/jobsi-dashboard/workplace-stats', [\App\Http\Controllers\JobsiDashboardController::class, 'getWorkplaceStats'])->name('jobsi.dashboard.workplace-stats')->middleware(['auth', 'XSS']);
     Route::get('/jobsi-dashboard/cashbox-stats', [\App\Http\Controllers\JobsiDashboardController::class, 'getCashboxStats'])->name('jobsi.dashboard.cashbox-stats')->middleware(['auth', 'XSS']);
+
+    // ==================== INFINITY MASSAGE SALON ROUTES ====================
+    Route::prefix('infinitycrm')->middleware(['auth', 'XSS', 'revalidate', 'role.admin'])->group(function () {
+        // Dashboard
+        Route::get('/', [\App\Http\Controllers\InfinityController::class, 'dashboard'])->name('infinity.dashboard');
+        
+        // Branches (Филиалы) - Full CRUD
+        Route::resource('branches', \App\Http\Controllers\Infinity\BranchController::class)->names([
+            'index' => 'infinity.branches.index',
+            'create' => 'infinity.branches.create',
+            'store' => 'infinity.branches.store',
+            'show' => 'infinity.branches.show',
+            'edit' => 'infinity.branches.edit',
+            'update' => 'infinity.branches.update',
+            'destroy' => 'infinity.branches.destroy',
+        ]);
+        
+        // Branch user assignment
+        Route::post('/branches/{branch}/assign-user', [\App\Http\Controllers\Infinity\BranchController::class, 'assignUser'])->name('infinity.branches.assign-user');
+        Route::delete('/branches/{branch}/users/{user}', [\App\Http\Controllers\Infinity\BranchController::class, 'removeUser'])->name('infinity.branches.remove-user');
+        
+        // Branch rooms
+        Route::post('/branches/{branch}/rooms', [\App\Http\Controllers\Infinity\RoomController::class, 'store'])->name('infinity.rooms.store');
+        Route::put('/branches/{branch}/rooms/{room}', [\App\Http\Controllers\Infinity\RoomController::class, 'update'])->name('infinity.rooms.update');
+        Route::delete('/branches/{branch}/rooms/{room}', [\App\Http\Controllers\Infinity\RoomController::class, 'destroy'])->name('infinity.rooms.destroy');
+        
+        // Employees (Сотрудники) - Full CRUD
+        Route::resource('employees', \App\Http\Controllers\Infinity\EmployeeController::class)->names([
+            'index' => 'infinity.employees.index',
+            'create' => 'infinity.employees.create',
+            'store' => 'infinity.employees.store',
+            'edit' => 'infinity.employees.edit',
+            'update' => 'infinity.employees.update',
+            'destroy' => 'infinity.employees.destroy',
+        ])->parameters(['employees' => 'employee'])->except(['show']);
+        
+        // Services (Услуги) - Full CRUD
+        Route::resource('services', \App\Http\Controllers\Infinity\MassageServiceController::class)->names([
+            'index' => 'infinity.services.index',
+            'create' => 'infinity.services.create',
+            'store' => 'infinity.services.store',
+            'edit' => 'infinity.services.edit',
+            'update' => 'infinity.services.update',
+            'destroy' => 'infinity.services.destroy',
+        ])->parameters(['services' => 'service'])->except(['show']);
+        Route::get('/services-list', [\App\Http\Controllers\Infinity\MassageServiceController::class, 'list'])->name('infinity.services.list');
+        
+        // Clients (Клиенты) - Full CRUD
+        Route::resource('clients', \App\Http\Controllers\Infinity\MassageClientController::class)->names([
+            'index' => 'infinity.clients.index',
+            'create' => 'infinity.clients.create',
+            'store' => 'infinity.clients.store',
+            'show' => 'infinity.clients.show',
+            'edit' => 'infinity.clients.edit',
+            'update' => 'infinity.clients.update',
+            'destroy' => 'infinity.clients.destroy',
+        ])->parameters(['clients' => 'client']);
+        Route::get('/clients-search', [\App\Http\Controllers\Infinity\MassageClientController::class, 'search'])->name('infinity.clients.search');
+        
+        // Orders (Заказы) - Full CRUD
+        Route::resource('orders', \App\Http\Controllers\Infinity\MassageOrderController::class)->names([
+            'index' => 'infinity.orders.index',
+            'create' => 'infinity.orders.create',
+            'store' => 'infinity.orders.store',
+            'edit' => 'infinity.orders.edit',
+            'update' => 'infinity.orders.update',
+            'destroy' => 'infinity.orders.destroy',
+        ])->parameters(['orders' => 'order'])->except(['show']);
+        
+        // Calendar (Календарь)
+        Route::get('/calendar', [\App\Http\Controllers\Infinity\CalendarController::class, 'index'])->name('infinity.calendar');
+        Route::get('/calendar/day/{date}', [\App\Http\Controllers\Infinity\CalendarController::class, 'dayDetails'])->name('infinity.calendar.day');
+        Route::get('/calendar/month-data', [\App\Http\Controllers\Infinity\CalendarController::class, 'getMonthData'])->name('infinity.calendar.month-data');
+        
+        // Bookings (Бронирования)
+        Route::post('/bookings', [\App\Http\Controllers\Infinity\BookingController::class, 'store'])->name('infinity.bookings.store');
+        Route::put('/bookings/{booking}', [\App\Http\Controllers\Infinity\BookingController::class, 'update'])->name('infinity.bookings.update');
+        Route::delete('/bookings/{booking}', [\App\Http\Controllers\Infinity\BookingController::class, 'destroy'])->name('infinity.bookings.destroy');
+        Route::post('/bookings/check-availability', [\App\Http\Controllers\Infinity\BookingController::class, 'checkAvailability'])->name('infinity.bookings.check-availability');
+        Route::get('/bookings/available-slots', [\App\Http\Controllers\Infinity\BookingController::class, 'getAvailableSlots'])->name('infinity.bookings.available-slots');
+        
+        // Duties (Дежурства)
+        Route::put('/duties/{duty}/change', [\App\Http\Controllers\Infinity\DutyController::class, 'changeDuty'])->name('infinity.duties.change');
+        Route::post('/duties/{duty}/complete', [\App\Http\Controllers\Infinity\DutyController::class, 'completeDuty'])->name('infinity.duties.complete');
+        Route::put('/cleaning-status/{status}', [\App\Http\Controllers\Infinity\DutyController::class, 'updateCleaningStatus'])->name('infinity.cleaning-status.update');
+        Route::post('/duties/assign', [\App\Http\Controllers\Infinity\DutyController::class, 'assignDuties'])->name('infinity.duties.assign');
+        Route::get('/duties/employees', [\App\Http\Controllers\Infinity\DutyController::class, 'getEmployeesWithPoints'])->name('infinity.duties.employees');
+    });
+
+    // ==================== MASSEUSE DASHBOARD ROUTES ====================
+    Route::prefix('masseuse')->middleware(['auth', 'XSS', 'revalidate', 'role.masseuse'])->group(function () {
+        // Dashboard
+        Route::get('/', [\App\Http\Controllers\Masseuse\DashboardController::class, 'index'])->name('masseuse.dashboard');
+        Route::get('/schedule', [\App\Http\Controllers\Masseuse\DashboardController::class, 'schedule'])->name('masseuse.schedule');
+        
+        // Clients (Мои клиенты)
+        Route::resource('clients', \App\Http\Controllers\Masseuse\ClientController::class)->names([
+            'index' => 'masseuse.clients.index',
+            'create' => 'masseuse.clients.create',
+            'store' => 'masseuse.clients.store',
+            'show' => 'masseuse.clients.show',
+            'edit' => 'masseuse.clients.edit',
+            'update' => 'masseuse.clients.update',
+            'destroy' => 'masseuse.clients.destroy',
+        ]);
+        
+        // Profile (Мой профиль)
+        Route::get('/profile', [\App\Http\Controllers\Masseuse\ProfileController::class, 'edit'])->name('masseuse.profile.edit');
+        Route::put('/profile', [\App\Http\Controllers\Masseuse\ProfileController::class, 'update'])->name('masseuse.profile.update');
+        
+        // Bookings (Бронирования)
+        Route::get('/bookings/create', [\App\Http\Controllers\Masseuse\BookingController::class, 'create'])->name('masseuse.bookings.create');
+        Route::post('/bookings', [\App\Http\Controllers\Masseuse\BookingController::class, 'store'])->name('masseuse.bookings.store');
+        Route::delete('/bookings/{booking}', [\App\Http\Controllers\Masseuse\BookingController::class, 'destroy'])->name('masseuse.bookings.destroy');
+        Route::post('/bookings/check-availability', [\App\Http\Controllers\Masseuse\BookingController::class, 'checkAvailability'])->name('masseuse.bookings.check-availability');
+        Route::post('/bookings/check-range-availability', [\App\Http\Controllers\Masseuse\BookingController::class, 'checkRangeAvailability'])->name('masseuse.bookings.check-range-availability');
+        Route::get('/bookings/slots', [\App\Http\Controllers\Masseuse\BookingController::class, 'getSlots'])->name('masseuse.bookings.slots');
+        
+        // Orders (Мои заказы)
+        Route::resource('orders', \App\Http\Controllers\Masseuse\OrderController::class)->names([
+            'index' => 'masseuse.orders.index',
+            'create' => 'masseuse.orders.create',
+            'store' => 'masseuse.orders.store',
+            'edit' => 'masseuse.orders.edit',
+            'update' => 'masseuse.orders.update',
+            'destroy' => 'masseuse.orders.destroy',
+        ])->except(['show']);
+        
+        // Cleaning (Уборка)
+        Route::post('/cleaning-status/{status}/mark-clean', [\App\Http\Controllers\Masseuse\CleaningController::class, 'markClean'])->name('masseuse.cleaning.mark-clean');
+    });
+
+    // ==================== OPERATOR DASHBOARD ROUTES ====================
+    Route::prefix('operator')->middleware(['auth', 'XSS', 'revalidate', 'role:operator'])->group(function () {
+        // Dashboard
+        Route::get('/', [\App\Http\Controllers\Operator\DashboardController::class, 'index'])->name('operator.dashboard');
+        
+        // Employees (Мои сотрудники) - только подопечные
+        Route::resource('employees', \App\Http\Controllers\Operator\EmployeeController::class)->names([
+            'index' => 'operator.employees.index',
+            'create' => 'operator.employees.create',
+            'store' => 'operator.employees.store',
+            'edit' => 'operator.employees.edit',
+            'update' => 'operator.employees.update',
+            'destroy' => 'operator.employees.destroy',
+        ])->parameters(['employees' => 'employee'])->except(['show']);
+        
+        // Orders (Заказы) - только от подопечных сотрудников
+        Route::resource('orders', \App\Http\Controllers\Operator\OrderController::class)->names([
+            'index' => 'operator.orders.index',
+            'create' => 'operator.orders.create',
+            'store' => 'operator.orders.store',
+            'edit' => 'operator.orders.edit',
+            'update' => 'operator.orders.update',
+            'destroy' => 'operator.orders.destroy',
+        ])->parameters(['orders' => 'order'])->except(['show']);
+        
+        // Calendar (Календарь) - только филиал оператора
+        Route::get('/calendar', [\App\Http\Controllers\Operator\CalendarController::class, 'index'])->name('operator.calendar');
+        Route::get('/calendar/day/{date}', [\App\Http\Controllers\Operator\CalendarController::class, 'dayDetails'])->name('operator.calendar.day');
+        Route::get('/calendar/month-data', [\App\Http\Controllers\Operator\CalendarController::class, 'getMonthData'])->name('operator.calendar.month-data');
+    });
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile')->middleware(['auth', 'XSS', 'revalidate']);
 

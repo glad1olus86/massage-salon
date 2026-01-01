@@ -17,9 +17,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = 'account-dashboard';
+    public const HOME = 'infinitycrm';
 
-    public const EMPHOME = 'jobsi-dashboard';
+    public const EMPHOME = 'infinitycrm';
 
     /**
      * The controller namespace for the application.

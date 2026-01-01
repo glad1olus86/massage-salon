@@ -1,0 +1,87 @@
+.block-header--dark-red {
+  background-color: #881d44; /* Dark red/purple color */
+  color: #fff;
+}
+
+.block-header--cleaning {
+  background-color: #881d44; /* Dark red/purple color */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-action-button {
+  margin-left: 20px;
+  margin-right: auto;
+  background-color: #222; /* Dark button background */
+  border-color: #222;
+  color: #fff;
+  font-size: 18px;
+  height: 40px;
+  border-radius: 8px;
+  padding: 0 20px;
+}
+
+.block-date {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.new-orders__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.new-orders__table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.new-orders__chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.chart-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  background-color: #ff0000; /* Red placeholder as requested */
+  border-radius: 12px;
+}
+
+.duty-checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Adjust table styles if needed */
+.table--performance th,
+.table--performance td {
+  text-align: center;
+}
+
+.table--performance th:first-child,
+.table--performance td:first-child {
+  text-align: left;
+}
+
+/* Ensure the card actions are at the bottom of the table wrapper */
+.new-orders__table-wrapper .card-actions {
+  margin-top: auto;
+  padding: 0;
+}
+
+@media (max-width: 1200px) {
+  .new-orders__grid {
+    grid-template-columns: 1fr;
+  }
+}

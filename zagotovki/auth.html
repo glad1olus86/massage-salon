@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity | Авторизация</title>
+
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/auth.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <img src="./assets/logo-massage.png" alt="Infinity logo | Massage" class="logo">
+            <form action="" class="auth-form" autocomplete="off">
+                <label for="login" class="input-label">
+                    <img src="./assets/icons/user-auth-icon.svg" alt="User icon" class="input-icon">
+                    <input type="text" id="login" name="login" placeholder="Логин" required class="input">
+                </label>
+                <label for="password" class="input-label">
+                    <img src="./assets/icons/password-auth-icon.svg" alt="Password icon" class="input-icon">
+                    <input type="password" id="password" name="password" placeholder="Пароль" required class="input">
+                </label>
+
+                <!-- Тут одну варто прибрати, а потім у auth.css відкалібрувати margin-top login-/register-button, як буде потрібно -->
+                <button type="submit" class="submit-button login-button">Войти в систему</button>
+                <button type="submit" class="submit-button register-button">Регистрация</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

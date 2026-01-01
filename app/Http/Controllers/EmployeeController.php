@@ -120,7 +120,8 @@ class EmployeeController extends Controller
                     ]
                 );
                 if ($settings['email_verification'] == 'on') {
-                    $user->email_verified_at = null;
+                    // Email verification disabled - always mark as verified
+                    $user->email_verified_at = date('Y-m-d H:i:s');
                 } else {
                     $user->email_verified_at = date('Y-m-d H:i:s');
                 }

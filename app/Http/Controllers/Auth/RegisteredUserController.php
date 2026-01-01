@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\VerifyReCaptchaToken;
 use App\Http\Controllers\Controller;
 use App\Models\ExperienceCertificate;
 use App\Models\GenerateOfferLetter;
@@ -12,7 +11,6 @@ use App\Models\User;
 use  App\Models\Utility;
 use Auth;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
@@ -48,31 +46,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $settings = Utility::settings();
-        //ReCpatcha
-        $validation = [];
-
-        if(isset($settings['recaptcha_module']) && $settings['recaptcha_module'] == 'on')
-        {
-            if($settings['google_recaptcha_version'] == 'v2-checkbox'){
-                $validation['g-recaptcha-response'] = 'required|captcha';
-            }
-            elseif($settings['google_recaptcha_version'] == 'v3-checkbox'){
-                $result = event(new VerifyReCaptchaToken($request));
-
-                if (!isset($result[0]['status']) || $result[0]['status'] != true) {
-                    $key = 'g-recaptcha-response';
-                    $request->merge([$key => null]); // Set the key to null
-
-                    $validation['g-recaptcha-response'] = 'required';
-                }
-            }else{
-                $validation = [];
-            }
-        }else{
-            $validation = [];
-        }
-        $this->validate($request, $validation);
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -99,88 +72,32 @@ class RegisteredUserController extends Controller
         ]);
         \Auth::login($user);
 
-        $settings = Utility::settings();
+        // Email verification disabled - always mark as verified
+        $user->email_verified_at = date('Y-m-d H:i:s');
+        $user->save();
+        
+        $role_r = Role::findByName('company');
+        $user->assignRole($role_r);
+        $user->userDefaultData($user->id);
+        $user->userDefaultDataRegister($user->id);
+        //default bank account for new company
+        $user->userDefaultBankAccount($user->id);
+        // Copy theme settings from super admin
+        User::copyThemeSettings($user->id);
 
-        if ($settings['email_verification'] == 'on') {
-            try { 
+        Utility::chartOfAccountTypeData($user->id);
+        // default chart of account for new company
+        Utility::chartOfAccountData1($user->id);
 
-                Utility::smtpDetail(1);
+        GenerateOfferLetter::defaultOfferLetterRegister($user->id);
+        ExperienceCertificate::defaultExpCertificatRegister($user->id);
+        JoiningLetter::defaultJoiningLetterRegister($user->id);
+        NOC::defaultNocCertificateRegister($user->id);
 
-                // event(new Registered($user));
-                $user->sendEmailVerificationNotification();
-
-                $role_r = Role::findByName('company');
-                $user->assignRole($role_r);
-                $user->userDefaultDataRegister($user->id);
-                $user->userWarehouseRegister($user->id);
-
-                //default bank account for new company
-                $user->userDefaultBankAccount($user->id);
-                // Copy theme settings from super admin
-                User::copyThemeSettings($user->id);
-
-                Utility::chartOfAccountTypeData($user->id);
-                // Utility::chartOfAccountData($user);
-                // default chart of account for new company
-                Utility::chartOfAccountData1($user->id);
-
-                Utility::pipeline_lead_deal_Stage($user->id);
-                Utility::project_task_stages($user->id);
-                Utility::labels($user->id);
-                Utility::sources($user->id);
-                Utility::jobStage($user->id);
-                GenerateOfferLetter::defaultOfferLetterRegister($user->id);
-                ExperienceCertificate::defaultExpCertificatRegister($user->id);
-                JoiningLetter::defaultJoiningLetterRegister($user->id);
-                NOC::defaultNocCertificateRegister($user->id);
-
-            } catch (\Exception $e) {
-
-                $user->delete();
-                return redirect()->back()->with('status', __('Email SMTP settings does not configure so please contact to your site admin.'));
-            }
-
-            if (isset($request->plan) && Crypt::decrypt($request->plan) && Crypt::decrypt($request->plan) != 1) {
-                return redirect()->route('stripe', ['code' => $request->plan]);
-            } else {
-                return redirect(RouteServiceProvider::HOME);
-                // return view('auth.verify');
-            }
-
+        if (isset($request->plan) && Crypt::decrypt($request->plan) && Crypt::decrypt($request->plan) != 1) {
+            return redirect()->route('stripe', ['code' => $request->plan]);
         } else {
-            $user->email_verified_at = date('h:i:s');
-            $user->save();
-            $role_r = Role::findByName('company');
-            $user->assignRole($role_r);
-            $user->userDefaultData($user->id);
-            $user->userDefaultDataRegister($user->id);
-            //default bank account for new company
-            $user->userDefaultBankAccount($user->id);
-            // Copy theme settings from super admin
-            User::copyThemeSettings($user->id);
-
-            Utility::chartOfAccountTypeData($user->id);
-            // Utility::chartOfAccountData($user);
-            // default chart of account for new company
-            Utility::chartOfAccountData1($user->id);
-
-            GenerateOfferLetter::defaultOfferLetterRegister($user->id);
-            ExperienceCertificate::defaultExpCertificatRegister($user->id);
-            JoiningLetter::defaultJoiningLetterRegister($user->id);
-            NOC::defaultNocCertificateRegister($user->id);
-
-            $userArr = [
-                'email' => $user->email,
-                'password' => $user->password,
-            ];
-
-            $resp = Utility::sendUserEmailTemplate('new_user', [$user->id => $user->email], $userArr);
-
-            if (isset($request->plan) && Crypt::decrypt($request->plan) && Crypt::decrypt($request->plan) != 1) {
-                return redirect()->route('stripe', ['code' => $request->plan]);
-            } else {
-                return redirect(RouteServiceProvider::HOME);
-            }
+            return redirect(RouteServiceProvider::HOME);
         }
 
     }

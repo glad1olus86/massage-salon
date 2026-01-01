@@ -17,15 +17,8 @@ class EmailVerificationPromptController extends Controller
      */
     public function __invoke(Request $request , $lang = '')
     {
-        if($lang == '')
-        {
-            $lang = Utility::getValByName('default_language');
-        }
-        \App::setLocale($lang);
-        
-        return $request->user()->hasVerifiedEmail()
-                    ? redirect()->intended(RouteServiceProvider::HOME)
-                    : view('auth.verify',compact('lang'));
+        // Email verification disabled - always redirect to home
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     public function showVerifyForm($lang = '')

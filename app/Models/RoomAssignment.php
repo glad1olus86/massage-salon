@@ -12,15 +12,25 @@ class RoomAssignment extends Model
     // Payment types
     const PAYMENT_AGENCY = 'agency';  // Agency pays (default)
     const PAYMENT_WORKER = 'worker';  // Worker pays themselves
+    const PAYMENT_USER = 'user';      // User (masseuse) pays
+
+    // Status types
+    const STATUS_ACTIVE = 'active';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
         'worker_id',
+        'user_id',
         'room_id',
+        'branch_id',
         'hotel_id',
         'check_in_date',
         'check_out_date',
         'payment_type',
         'payment_amount',
+        'notes',
+        'status',
         'created_by',
     ];
 
@@ -38,6 +48,19 @@ class RoomAssignment extends Model
         return [
             self::PAYMENT_AGENCY => __('Agency pays'),
             self::PAYMENT_WORKER => __('Worker pays'),
+            self::PAYMENT_USER => __('User pays'),
+        ];
+    }
+
+    /**
+     * Get status options for forms.
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            self::STATUS_ACTIVE => __('Active'),
+            self::STATUS_COMPLETED => __('Completed'),
+            self::STATUS_CANCELLED => __('Cancelled'),
         ];
     }
 
@@ -74,11 +97,27 @@ class RoomAssignment extends Model
     }
 
     /**
-     * Get the worker for this assignment.
+     * Get the worker for this assignment (legacy support).
      */
     public function worker()
     {
         return $this->belongsTo(Worker::class);
+    }
+
+    /**
+     * Get the user (masseuse) for this assignment.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the assignee (user or worker).
+     */
+    public function getAssigneeAttribute()
+    {
+        return $this->user ?? $this->worker;
     }
 
     /**
@@ -90,7 +129,15 @@ class RoomAssignment extends Model
     }
 
     /**
-     * Get the hotel for this assignment.
+     * Get the branch for this assignment.
+     */
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    /**
+     * Get the hotel for this assignment (legacy support).
      */
     public function hotel()
     {
@@ -102,7 +149,7 @@ class RoomAssignment extends Model
      */
     public function scopeActive($query)
     {
-        return $query->whereNull('check_out_date');
+        return $query->whereNull('check_out_date')->where('status', self::STATUS_ACTIVE);
     }
 
     /**
@@ -114,11 +161,19 @@ class RoomAssignment extends Model
     }
 
     /**
+     * Scope to get assignments for a specific user.
+     */
+    public function scopeForUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
      * Check if this assignment is currently active.
      */
     public function isActive()
     {
-        return $this->check_out_date === null;
+        return $this->check_out_date === null && $this->status === self::STATUS_ACTIVE;
     }
 
     /**

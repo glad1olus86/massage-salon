@@ -140,12 +140,8 @@ class UserController extends Controller
                 $user['referral_code'] = $code;
                 $user['created_by'] = \Auth::user()->creatorId();
                 $user['plan'] = Plan::first()->id;
-                if ($settings['email_verification'] == 'on') {
-
-                    $user['email_verified_at'] = null;
-                } else {
-                    $user['email_verified_at'] = date('Y-m-d H:i:s');
-                }
+                // Email verification disabled - always mark as verified
+                $user['email_verified_at'] = date('Y-m-d H:i:s');
                 $user['is_enable_login'] = $enableLogin;
 
                 $user->save();

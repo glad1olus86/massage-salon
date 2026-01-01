@@ -1,0 +1,833 @@
+.arrow-button {
+  background-color: var(--brand-color);
+  border-radius: 4px;
+  padding: 3px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.arrow-button svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 20px;
+  background-color: var(--brand-color);
+  min-height: 64px;
+  border-radius: 15px 15px 0 0;
+  margin: -1px -1px 0 -1px;
+}
+.block-title {
+  font-size: 24px;
+  color: #fff;
+}
+.block-title__numbers {
+  background-color: var(--accent-color);
+  color: #fff;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-weight: 700;
+}
+.block-title__icon {
+  width: 38px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.dropdown__trigger {
+  border: 0;
+  cursor: pointer;
+  background-color: var(--accent-color);
+  color: #fff;
+  font-size: 22px;
+  border-radius: 10px;
+  padding: 5px 16px;
+  padding-bottom: 7px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dropdown__trigger .arrow-button {
+  margin-top: 3px;
+}
+
+.dropdown__trigger:focus-visible {
+  outline: 2px solid var(--brand-color);
+  outline-offset: 2px;
+}
+
+.dropdown__value {
+  white-space: nowrap;
+}
+
+.dropdown__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 200px;
+  padding: 8px;
+  border-radius: 10px;
+  z-index: 2;
+
+  background: var(--accent-color);
+
+  display: none;
+}
+
+.dropdown.is-open .dropdown__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dropdown__option {
+  border: 0;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px 16px;
+  text-align: left;
+
+  background: transparent;
+  color: #fff;
+  font-size: 20px;
+}
+
+.dropdown__option:hover,
+.dropdown__option[aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown__option:focus-visible {
+  outline: 2px solid var(--brand-color);
+  outline-offset: 2px;
+}
+
+.table,
+.orders-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th,
+.orders-table thead th {
+  text-align: left;
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  padding: 18px 26px 10px 26px;
+}
+
+.table tbody td,
+.orders-table tbody td {
+  font-size: 16px;
+  font-weight: 400;
+  color: #000;
+  padding: 6px 26px;
+  vertical-align: top;
+}
+
+.table--spacious thead th {
+  padding: 18px 26px 10px 26px;
+}
+
+.table--spacious tbody td {
+  padding: 6px 26px;
+}
+
+.table--compact thead th {
+  padding: 18px 24px 10px 24px;
+}
+
+.table--compact tbody td {
+  padding: 10px 24px;
+}
+
+.text-link {
+  text-decoration: none;
+}
+
+.text-link--brand {
+  color: var(--brand-color);
+}
+
+.text-link--lg {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.semibold {
+  font-weight: 600;
+}
+.text-link--brand:hover {
+  text-decoration: underline;
+}
+
+.btn,
+.sm-button {
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn--dark,
+.sm-button--dark {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: 2px solid var(--accent-color);
+  min-width: 200px;
+}
+
+.btn--outlined-dark,
+.sm-button--outlined-dark {
+  background-color: transparent;
+  color: var(--accent-color);
+  border: 2px solid var(--accent-color);
+  min-width: 360px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 20px;
+  padding: 22px 26px 24px 26px;
+}
+
+.avatar {
+  display: block;
+  object-fit: cover;
+}
+
+.avatar--sm {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.action-tile {
+  display: flex;
+  width: 100%;
+  min-height: 92px;
+  border-radius: 15px;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: #fff;
+}
+
+.action-tile__icon {
+  width: 92px;
+  background-color: var(--brand-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 92px;
+}
+
+.action-tile__icon img {
+  width: 42px;
+  height: 42px;
+}
+
+.action-tile__label {
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--brand-color);
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 1024px) {
+  .block-title {
+    font-size: 22px;
+  }
+
+  .table thead th,
+  .orders-table thead th {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .block-header {
+    padding: 10px 14px;
+    min-height: 58px;
+  }
+
+  .block-title {
+    font-size: 20px;
+  }
+
+  .block-title__numbers {
+    border-radius: 10px;
+    padding: 4px 9px;
+  }
+
+  .block-title__icon {
+    width: 32px;
+  }
+
+  .dropdown__trigger {
+    font-size: 18px;
+    padding: 6px 12px;
+    padding-bottom: 7px;
+  }
+
+  .table thead th,
+  .orders-table thead th {
+    font-size: 20px;
+  }
+
+  .table tbody td,
+  .orders-table tbody td {
+    font-size: 15px;
+  }
+
+  .text-link--lg {
+    font-size: 24px;
+  }
+
+  .action-tile__label {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .card-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn,
+  .sm-button {
+    width: 100%;
+  }
+
+  .btn--dark,
+  .sm-button--dark,
+  .btn--outlined-dark,
+  .sm-button--outlined-dark {
+    min-width: 0;
+  }
+
+  .table thead th,
+  .orders-table thead th {
+    font-size: 18px;
+    padding: 14px 16px 10px 16px;
+  }
+
+  .table tbody td,
+  .orders-table tbody td {
+    padding: 8px 16px;
+  }
+
+  .table--spacious {
+    min-width: 720px;
+  }
+
+  .table--compact {
+    min-width: 520px;
+  }
+
+  .card {
+    overflow-x: auto;
+  }
+
+  .action-tile {
+    min-height: 80px;
+  }
+
+  .action-tile__icon {
+    width: 78px;
+    flex-basis: 78px;
+  }
+
+  .action-tile__icon img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .action-tile__label {
+    padding: 0 18px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 425px) {
+  .block-header {
+    padding: 10px 12px;
+  }
+
+  .dropdown__menu {
+    min-width: 170px;
+  }
+
+  .text-link--lg {
+    font-size: 22px;
+  }
+
+  .person {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .action-tile__label {
+    font-size: 18px;
+  }
+}
+
+/* Calendar Styles */
+.calendar {
+  width: 100%;
+}
+
+.calendar__inner {
+  padding: 16px;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(210px, 1fr));
+  min-width: 1470px;
+  background-color: var(--brand-color);
+}
+
+.calendar__weekday {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 16px 14px;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.calendar__weekday:last-child {
+  border-right: 0;
+}
+
+.calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(210px, 1fr));
+  min-width: 1470px;
+  border-top: 1px solid rgba(22, 11, 14, 0.35);
+  grid-auto-rows: 190px;
+}
+
+.calendar__cell {
+  height: 190px;
+  border-right: 1px solid rgba(22, 11, 14, 0.35);
+  border-bottom: 1px solid rgba(22, 11, 14, 0.35);
+  background-color: #fff;
+
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-rows: 44px 1fr;
+  column-gap: 14px;
+  row-gap: 10px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.calendar__cell:nth-child(7n) {
+  border-right: 0;
+}
+
+.calendar__cell--inactive {
+  background-color: rgba(22, 11, 14, 0.03);
+}
+
+.calendar__date {
+  width: 44px;
+  height: 44px;
+  background-color: rgba(177, 32, 84, 0.16);
+  color: var(--accent-color);
+  font-size: 16px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar__date--muted {
+  color: rgba(22, 11, 14, 0.65);
+}
+
+.calendar__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 0;
+  padding: 8px 12px 0 0;
+}
+
+.calendar__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-color);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.calendar__dots {
+  display: flex;
+  gap: 6px;
+}
+
+.calendar__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--brand-color);
+}
+
+.calendar__items {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 4px 12px 12px 12px;
+}
+
+.calendar__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.calendar__item-icon {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  background-color: var(--brand-color);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+.calendar__item-icon--cleaning {
+  mask-image: url("../assets/icons/cleaning-icon.svg");
+  -webkit-mask-image: url("../assets/icons/cleaning-icon.svg");
+}
+
+.calendar__item-icon--control {
+  mask-image: url("../assets/icons/control-icon.svg");
+  -webkit-mask-image: url("../assets/icons/control-icon.svg");
+}
+
+.calendar__item-text {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--accent-color);
+  line-height: 1.1;
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.calendar__item-status {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex: 0 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar__item-status svg {
+  width: 10px;
+  height: 10px;
+}
+
+.calendar__item-status--ok {
+  background-color: var(--success-color);
+}
+
+.calendar__item-status--bad {
+  background-color: var(--danger-color);
+}
+
+/* Performance Styles */
+.performance__content {
+  padding: 18px 20px 22px 20px;
+}
+
+.table--performance tbody td {
+  font-size: 20px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.performance-person {
+  gap: 12px;
+}
+
+.performance__metric {
+  color: var(--accent-color);
+}
+
+/* Rating Styles */
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rating__star {
+  --fill: 100%;
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.rating__star svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.rating__star-base {
+  fill: rgba(22, 11, 14, 0.18);
+}
+
+.rating__star-fill {
+  position: absolute;
+  inset: 0;
+  fill: var(--rating-star-color);
+  clip-path: inset(0 calc(100% - var(--fill)) 0 0);
+}
+
+/* Leader Card Styles */
+.leader {
+  overflow: hidden;
+}
+
+.leader__header {
+  background-color: var(--brand-color);
+  color: #fff;
+  padding: 22px 18px;
+  font-size: 26px;
+  text-align: center;
+}
+
+.leader__content {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.leader__image {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.leader__name {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent-color);
+  letter-spacing: 0.8px;
+}
+
+/* Calendar & Performance Responsive */
+@media (max-width: 1024px) {
+  .calendar__weekday {
+    font-size: 16px;
+    padding: 14px 12px;
+  }
+
+  .calendar__cell {
+    min-height: 132px;
+    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-rows: 44px 1fr;
+    height: 180px;
+  }
+
+  .calendar__date {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .calendar__label {
+    font-size: 13px;
+  }
+
+  .calendar__dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .calendar__item-text {
+    font-size: 14px;
+  }
+
+  .rating__star {
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
+  }
+
+  .leader__header {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table--performance tbody td {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .calendar__inner {
+    padding: 12px;
+  }
+
+  .calendar__cell {
+    min-height: 124px;
+    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-rows: 48px 1fr;
+    height: 170px;
+  }
+
+  .calendar__date {
+    width: 48px;
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .calendar__meta {
+    gap: 8px;
+  }
+
+  .calendar__label {
+    font-size: 12px;
+  }
+
+  .calendar__dots {
+    gap: 5px;
+  }
+
+  .calendar__dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .calendar__item-text {
+    font-size: 13px;
+  }
+
+  .calendar__item-status {
+    width: 14px;
+    height: 14px;
+    flex-basis: 14px;
+  }
+
+  .calendar__item-status svg {
+    width: 9px;
+    height: 9px;
+  }
+
+  .performance__content {
+    padding: 14px 14px 16px 14px;
+  }
+
+  .table--performance {
+    min-width: 760px;
+  }
+
+  .table--performance tbody td {
+    font-size: 16px;
+  }
+
+  .rating__star {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+  }
+
+  .leader__header {
+    font-size: 20px;
+    padding: 18px 16px;
+  }
+}
+
+/* Alert Messages */
+.alert {
+  padding: 12px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.alert--success {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.alert--error {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.alert--warning {
+  background-color: rgba(234, 179, 8, 0.15);
+  color: #ca8a04;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+.alert--info {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}

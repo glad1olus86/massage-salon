@@ -182,16 +182,17 @@ class AuditService
     public static function logRoomCreated($room)
     {
         $hotel = $room->hotel;
+        $branch = $room->branch;
+        $locationName = $branch ? $branch->name : ($hotel ? $hotel->name : 'Unknown');
 
         return self::log(
             'room.created',
-            __('Room created') . ": {$room->room_number} " . __('in hotel') . " \"{$hotel->name}\"",
+            __('Room created') . ": {$room->room_number} " . __('in') . " \"{$locationName}\"",
             $room,
             null,
             [
                 'room_number' => $room->room_number,
-                'hotel' => $hotel->name,
-                'capacity' => $room->capacity,
+                'location' => $locationName,
             ]
         );
     }
@@ -202,10 +203,12 @@ class AuditService
     public static function logRoomUpdated($room, $oldValues)
     {
         $hotel = $room->hotel;
+        $branch = $room->branch;
+        $locationName = $branch ? $branch->name : ($hotel ? $hotel->name : 'Unknown');
 
         return self::log(
             'room.updated',
-            __('Room updated') . ": {$room->room_number} " . __('in hotel') . " \"{$hotel->name}\"",
+            __('Room updated') . ": {$room->room_number} " . __('in') . " \"{$locationName}\"",
             $room,
             $oldValues,
             $room->only(array_keys($oldValues))
@@ -221,7 +224,7 @@ class AuditService
             'room.deleted',
             __('Room deleted') . ": {$room->room_number}",
             $room,
-            ['room_number' => $room->room_number, 'capacity' => $room->capacity],
+            ['room_number' => $room->room_number],
             null
         );
     }

@@ -13,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Lab404\Impersonate\Models\Impersonate;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, Impersonate;
 
@@ -27,6 +27,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'type',
         'storage_limit',
         'avatar',
+        'photos',
+        'birth_date',
+        'nationality',
         'company_address',
         'company_ico',
         'company_phone',
@@ -46,6 +49,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_enable_login',
         'last_login_at',
         'created_by',
+        'branch_id',
+        'operator_id',
     ];
 
     protected $hidden = [
@@ -55,7 +60,20 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'photos' => 'array',
+        'birth_date' => 'date',
     ];
+
+    /**
+     * Get age from birth_date
+     */
+    public function getAgeAttribute()
+    {
+        if (!$this->birth_date) {
+            return null;
+        }
+        return $this->birth_date->age;
+    }
 
     public $settings;
 
@@ -224,6 +242,88 @@ class User extends Authenticatable implements MustVerifyEmail
         $settings = Utility::settings();
 
         return $settings["journal_prefix"] . sprintf("%05d", $number);
+    }
+
+    /**
+     * Get the branch this user belongs to (for masseuses).
+     */
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    /**
+     * Get massage services this user (masseuse) provides.
+     */
+    public function massageServices()
+    {
+        return $this->belongsToMany(MassageService::class, 'user_massage_services')
+            ->withPivot('custom_price', 'is_extra')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get regular (non-extra) massage services.
+     */
+    public function regularServices()
+    {
+        return $this->massageServices()->wherePivot('is_extra', false);
+    }
+
+    /**
+     * Get extra massage services.
+     */
+    public function extraServices()
+    {
+        return $this->massageServices()->wherePivot('is_extra', true);
+    }
+
+    /**
+     * Get active massage services this user provides.
+     */
+    public function activeMassageServices()
+    {
+        return $this->massageServices()->where('is_active', true);
+    }
+
+    /**
+     * Get massage orders where this user is the employee (masseuse).
+     */
+    public function massageOrdersAsEmployee()
+    {
+        return $this->hasMany(MassageOrder::class, 'employee_id');
+    }
+
+    /**
+     * Get cleaning duties assigned to this user.
+     */
+    public function cleaningDuties()
+    {
+        return $this->hasMany(CleaningDuty::class, 'user_id');
+    }
+
+    /**
+     * Get the operator who manages this user (for masseuses).
+     */
+    public function operator()
+    {
+        return $this->belongsTo(User::class, 'operator_id');
+    }
+
+    /**
+     * Get subordinate users managed by this operator.
+     */
+    public function subordinates()
+    {
+        return $this->hasMany(User::class, 'operator_id');
+    }
+
+    /**
+     * Get array of subordinate user IDs.
+     */
+    public function getSubordinateIds(): array
+    {
+        return $this->subordinates()->pluck('id')->toArray();
     }
 
     public function getPlan()

@@ -1,0 +1,55 @@
+.duty-wrapper {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 1fr 1fr;
+}
+.duty {
+  padding-bottom: 20px;
+}
+.actions-grid {
+  display: grid;
+  gap: 16px 40px;
+  grid-template-columns: 1fr 1fr;
+}
+.table-sum {
+  font-size: 18px;
+  padding: 22px 26px 24px 26px;
+}
+.table-sum span {
+  font-weight: 800;
+}
+.table-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lg-table-number {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+}
+
+@media screen and (max-width: 1440px) {
+  .table-footer {
+    padding: 22px 26px;
+    gap: 20px;
+  }
+  .table-sum,
+  .card-actions {
+    padding: 0;
+  }
+  .duty-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .table-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+}

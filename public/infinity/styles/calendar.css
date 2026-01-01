@@ -1,0 +1,1047 @@
+/* ==========================================================================
+   Infinity Calendar Styles
+   ========================================================================== */
+
+/* Calendar Page Layout */
+.calendar-page {
+    margin-top: 20px;
+}
+
+.calendar-card {
+    padding: 0;
+}
+
+.calendar-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.branch-select {
+    padding: 8px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.branch-select:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.branch-select option {
+    background: #333;
+    color: #fff;
+}
+
+/* Calendar Header */
+.calendar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, var(--brand-color) 0%, #a91d4d 50%, #8B1538 100%);
+    color: #fff;
+    border-radius: 12px 12px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.calendar-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+}
+
+.calendar-month-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    min-width: 240px;
+    text-align: center;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.calendar-nav-btn {
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(4px);
+}
+
+.calendar-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-nav-btn:active {
+    transform: scale(0.98);
+}
+
+.calendar-nav-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.5;
+}
+
+/* Calendar Header Center */
+.calendar-header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.calendar-branch-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    backdrop-filter: blur(4px);
+}
+
+.calendar-branch-select {
+    padding: 6px 24px 6px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    min-width: 160px;
+}
+
+.calendar-branch-select:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.calendar-branch-select option {
+    background: #333;
+    color: #fff;
+}
+
+/* Calendar Grid */
+.calendar-grid {
+    padding: 0;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: linear-gradient(180deg, rgba(139, 21, 56, 0.08) 0%, rgba(139, 21, 56, 0.03) 100%);
+}
+
+.weekday {
+    padding: 16px 8px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 3px solid var(--brand-color);
+}
+
+.weekday.weekend {
+    color: var(--brand-color);
+    background: rgba(177, 32, 84, 0.05);
+}
+
+/* Calendar Days */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-day {
+    min-height: 120px;
+    padding: 8px;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.calendar-day:hover {
+    background: rgba(177, 32, 84, 0.05);
+    box-shadow: inset 0 0 0 2px rgba(177, 32, 84, 0.2);
+}
+
+.calendar-day--empty {
+    background: #f9f9f9;
+    cursor: default;
+}
+
+.calendar-day--empty:hover {
+    background: #f9f9f9;
+    box-shadow: none;
+}
+
+.calendar-day--today {
+    background: rgba(177, 32, 84, 0.1);
+}
+
+.calendar-day--today .day-number {
+    background: var(--brand-color);
+    color: #fff;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-day--weekend {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* Day Content */
+.day-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 6px;
+}
+
+.day-bookings {
+    margin-bottom: 4px;
+}
+
+.bookings-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #666;
+}
+
+.booking-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--brand-color);
+    border-radius: 50%;
+}
+
+/* Duty Badge */
+.day-duty {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.duty--pending {
+    background: rgba(251, 191, 36, 0.2);
+    color: #b45309;
+}
+
+.duty--pending .duty-icon img {
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(18deg) brightness(95%) contrast(98%);
+}
+
+.duty--completed {
+    background: rgba(34, 197, 94, 0.2);
+    color: #16a34a;
+}
+
+.duty--completed .duty-icon img {
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(95%) contrast(98%);
+}
+
+.duty-icon {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.duty-icon img {
+    width: 16px;
+    height: 16px;
+}
+
+.duty-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+}
+
+/* Cleaning Status Badge */
+.day-cleaning-status {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+}
+
+.cleaning-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 0 4px;
+}
+
+.cleaning-badge svg {
+    width: 12px;
+    height: 12px;
+}
+
+.cleaning-badge--clean {
+    background: rgba(34, 197, 94, 0.2);
+    color: #16a34a;
+}
+
+.cleaning-badge--partial {
+    background: rgba(251, 191, 36, 0.2);
+    color: #b45309;
+}
+
+.cleaning-badge--dirty {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+/* Calendar Legend */
+.calendar-legend {
+    display: flex;
+    gap: 24px;
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+.legend-item .duty-icon {
+    display: flex;
+    align-items: center;
+}
+
+.legend-item .duty-icon img {
+    filter: invert(20%) sepia(80%) saturate(2000%) hue-rotate(320deg) brightness(80%) contrast(90%);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.25s ease-out;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content--large {
+    max-width: 600px;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--brand-color) 0%, #9a1c4a 100%);
+    border-radius: 20px 20px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.modal-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+    border-radius: 0 0 20px 20px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.form-label .required {
+    color: #ef4444;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--brand-color);
+}
+
+/* Button Styles */
+.btn {
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn--brand {
+    background: linear-gradient(135deg, var(--brand-color) 0%, #9a1c4a 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(177, 32, 84, 0.3);
+}
+
+.btn--brand:hover {
+    box-shadow: 0 6px 16px rgba(177, 32, 84, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn--secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+}
+
+.btn--secondary:hover {
+    background: #e5e7eb;
+    border-color: #d1d5db;
+}
+
+.btn--sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+.btn--outline-danger {
+    background: transparent;
+    color: #ef4444;
+    border: 2px solid #ef4444;
+}
+
+.btn--outline-danger:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* Availability Message */
+.availability-message {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.availability-message.available {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
+
+.availability-message.unavailable {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+/* Loading & Empty States */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+}
+
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #888;
+}
+
+.error {
+    text-align: center;
+    padding: 40px;
+    color: #ef4444;
+}
+
+/* Day Details Content */
+.day-details-section {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.day-details-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.day-details-section h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--brand-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.booking-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 2px solid rgba(177, 32, 84, 0.15);
+    border-radius: 12px;
+    flex-wrap: wrap;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.booking-item:hover {
+    border-color: var(--brand-color);
+    box-shadow: 0 2px 8px rgba(177, 32, 84, 0.1);
+}
+
+.booking-time {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--brand-color);
+    min-width: 110px;
+}
+
+.booking-room {
+    background: var(--brand-color);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.booking-user {
+    flex: 1;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Duty Info */
+.duty-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(177, 32, 84, 0.08) 0%, rgba(177, 32, 84, 0.03) 100%);
+    border: 2px solid rgba(177, 32, 84, 0.15);
+    border-radius: 14px;
+    flex-wrap: wrap;
+}
+
+.duty-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+}
+
+.duty-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--brand-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(177, 32, 84, 0.3);
+}
+
+.duty-details {
+    flex: 1;
+}
+
+.duty-details-name {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--accent-color);
+    margin-bottom: 4px;
+}
+
+.duty-details-status {
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.duty-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.no-duty-message {
+    text-align: center;
+    padding: 30px 20px;
+    color: #888;
+    background: #f9f9f9;
+    border-radius: 12px;
+}
+
+/* Cleaning Statuses */
+.cleaning-statuses {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.cleaning-status-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: #fff;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    transition: border-color 0.2s;
+}
+
+.cleaning-status-item:hover {
+    border-color: #ddd;
+}
+
+.cleaning-status-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: #333;
+}
+
+.cleaning-status-toggle {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.cleaning-status-toggle.clean {
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+}
+
+.cleaning-status-toggle.clean:hover {
+    background: rgba(34, 197, 94, 0.25);
+    transform: scale(1.05);
+}
+
+.cleaning-status-toggle.dirty {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.cleaning-status-toggle.dirty:hover {
+    background: rgba(239, 68, 68, 0.25);
+    transform: scale(1.05);
+}
+
+/* Employees Points List */
+.employees-points-list {
+    margin-top: 16px;
+}
+
+.employee-points-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f9f9f9;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.employee-points {
+    font-weight: 600;
+    color: var(--brand-color);
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .calendar-month-title {
+        font-size: 18px;
+        min-width: 180px;
+    }
+
+    .weekday {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+
+    .calendar-day {
+        min-height: 100px;
+        padding: 6px;
+    }
+
+    .day-number {
+        font-size: 13px;
+    }
+
+    .duty-name {
+        max-width: 60px;
+    }
+}
+
+/* Mobile Landscape */
+@media (max-width: 900px) {
+    .calendar-weekdays {
+        display: none;
+    }
+
+    .calendar-days {
+        grid-template-columns: repeat(7, 1fr);
+        font-size: 12px;
+    }
+
+    .calendar-day {
+        min-height: 80px;
+        padding: 4px;
+    }
+
+    .day-duty {
+        font-size: 10px;
+        padding: 2px 4px;
+    }
+
+    .duty-name {
+        max-width: 40px;
+    }
+
+    .duty-icon {
+        font-size: 10px;
+    }
+
+    .booking-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .bookings-indicator {
+        font-size: 9px;
+    }
+
+    .cleaning-badge {
+        min-width: 16px;
+        height: 16px;
+        font-size: 9px;
+    }
+
+    .calendar-legend {
+        gap: 16px;
+        padding: 12px 16px;
+    }
+
+    .legend-item {
+        font-size: 11px;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 600px) {
+    .calendar-header {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .calendar-month-title {
+        font-size: 16px;
+        min-width: 140px;
+    }
+
+    .calendar-nav-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .calendar-days {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .calendar-day {
+        min-height: 60px;
+        padding: 3px;
+    }
+
+    .day-number {
+        font-size: 11px;
+        margin-bottom: 2px;
+    }
+
+    .calendar-day--today .day-number {
+        width: 22px;
+        height: 22px;
+        font-size: 10px;
+    }
+
+    .day-bookings {
+        display: none;
+    }
+
+    .day-duty {
+        font-size: 8px;
+        padding: 2px 3px;
+        gap: 2px;
+    }
+
+    .duty-icon {
+        font-size: 8px;
+    }
+
+    .duty-name {
+        display: none;
+    }
+
+    .day-cleaning-status {
+        bottom: 2px;
+        right: 2px;
+    }
+
+    .cleaning-badge {
+        min-width: 14px;
+        height: 14px;
+        font-size: 8px;
+    }
+
+    .modal-content {
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .modal-overlay {
+        padding: 0;
+    }
+
+    .modal-header {
+        padding: 16px 20px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .duty-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .duty-actions {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+    }
+
+    .duty-actions .btn {
+        flex: 1;
+    }
+
+    .cleaning-statuses {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 375px) {
+    .calendar-day {
+        min-height: 50px;
+    }
+
+    .day-number {
+        font-size: 10px;
+    }
+
+    .day-duty {
+        display: none;
+    }
+
+    .calendar-legend {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

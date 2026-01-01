@@ -239,6 +239,16 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(RouteServiceProvider::HOME);
 
         }
+        elseif($user->type == 'masseuse' || $user->hasRole('masseuse'))
+        {
+            // Массажисты всегда идут на свой дашборд (без intended чтобы не редиректило на admin)
+            return redirect('/masseuse');
+        }
+        elseif($user->hasRole('operator'))
+        {
+            // Операторы идут на свой дашборд (будет создан позже)
+            return redirect()->intended('/operator');
+        }
         else
         {
             return redirect()->intended(RouteServiceProvider::EMPHOME);
@@ -291,7 +301,7 @@ class AuthenticatedSessionController extends Controller
 
         // Return view with cookie
         return response()
-            ->view('auth.login-custom', compact('lang','settings'))
+            ->view('auth.login-infinity', compact('lang','settings'))
             ->withCookie(cookie('selected_lang', $lang, 60 * 24 * 30)); // 30 days
     }
 

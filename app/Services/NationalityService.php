@@ -143,4 +143,14 @@ class NationalityService
         $all = self::getAll();
         return isset($all[$code]) ? __($all[$code]) : null;
     }
+
+    /**
+     * Get country code by nationality name (English)
+     */
+    public static function getCodeByName(string $name): ?string
+    {
+        $all = self::getAll();
+        $flipped = array_flip($all);
+        return $flipped[$name] ?? null;
+    }
 }

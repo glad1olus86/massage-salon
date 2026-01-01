@@ -1,0 +1,21 @@
+:root {
+  --brand-color: rgba(177, 32, 84, 1);
+  --accent-color: rgba(22, 11, 14, 1);
+  --light-accent-color: rgba(217, 217, 217, 1);
+  --success-color: #0aa75a;
+  --danger-color: #e53935;
+  --rating-star-color: #ffc107;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: linear-gradient(180deg, #160b0e 0%, #7c3e4f 100%);
+  min-height: 100vh;
+  width: 100%;
+}
