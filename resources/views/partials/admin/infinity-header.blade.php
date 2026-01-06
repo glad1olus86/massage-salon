@@ -29,7 +29,7 @@
             </div>
         </div>
         
-        <a href="{{ route('profile') }}" class="header__outlined-button header__outlined-button--settings">
+        <a href="{{ route('profile') }}" class="header__outlined-button header__outlined-button--settings" style="display: none;">
             <img src="{{ asset('infinity/assets/icons/header-settings-icon.svg') }}" alt="" class="header__outlined-button-icon">
             {{ __('Настройки') }}
         </a>
