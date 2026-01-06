@@ -51,7 +51,68 @@ class DashboardController extends Controller
         $ordersCount = $orders->count();
         $totalEarnings = $orders->sum('amount');
 
-        // Комиссия оператора (например, 10%)
+        // Расчёт дохода оператора на основе доли от услуг (только не отменённые)
+        $operatorIncome = 0;
+        foreach ($orders as $order) {
+            if ($order->service && $order->status !== 'cancelled') {
+                $duration = $order->duration ?? 60;
+                $share = match ($duration) {
+                    60 => $order->service->operator_share_60,
+                    90 => $order->service->operator_share_90,
+                    120 => $order->service->operator_share_120,
+                    default => $order->service->operator_share_60,
+                };
+                $operatorIncome += $share ?? 0;
+            }
+        }
+
+        // Доход за текущий месяц (для модуля)
+        $monthStart = now()->startOfMonth();
+        $monthOrders = MassageOrder::whereIn('employee_id', $subordinateIds)
+            ->where('order_date', '>=', $monthStart)
+            ->where('status', '!=', 'cancelled')
+            ->with('service')
+            ->get();
+        
+        $monthlyOperatorIncome = 0;
+        foreach ($monthOrders as $order) {
+            if ($order->service) {
+                $duration = $order->duration ?? 60;
+                $share = match ($duration) {
+                    60 => $order->service->operator_share_60,
+                    90 => $order->service->operator_share_90,
+                    120 => $order->service->operator_share_120,
+                    default => $order->service->operator_share_60,
+                };
+                $monthlyOperatorIncome += $share ?? 0;
+            }
+        }
+
+        // Последние 8 заказов для модуля дохода (только не отменённые)
+        $recentIncomeOrders = MassageOrder::whereIn('employee_id', $subordinateIds)
+            ->where('order_date', '>=', $monthStart)
+            ->where('status', '!=', 'cancelled')
+            ->with(['service', 'employee'])
+            ->orderBy('order_date', 'desc')
+            ->orderBy('order_time', 'desc')
+            ->take(8)
+            ->get()
+            ->map(function ($order) {
+                $duration = $order->duration ?? 60;
+                $share = 0;
+                if ($order->service) {
+                    $share = match ($duration) {
+                        60 => $order->service->operator_share_60,
+                        90 => $order->service->operator_share_90,
+                        120 => $order->service->operator_share_120,
+                        default => $order->service->operator_share_60,
+                    };
+                }
+                $order->operator_share = $share ?? 0;
+                return $order;
+            });
+
+        // Комиссия оператора (старый расчёт - оставляем для совместимости)
         $commissionRate = 0.10;
         $operatorCommission = $totalEarnings * $commissionRate;
 
@@ -107,6 +168,8 @@ class DashboardController extends Controller
             'ordersCount',
             'totalEarnings',
             'operatorCommission',
+            'monthlyOperatorIncome',
+            'recentIncomeOrders',
             'dutyEmployees',
             'dutyCount',
             'topEmployees',

@@ -224,5 +224,197 @@
     display: flex;
     justify-content: center;
 }
+
+/* Красивые кнопки добавления */
+.block-header .btn.btn--dark {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+}
+
+.block-header .btn.btn--dark:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Мобильные стили для клиентов */
+@media (max-width: 1100px) {
+    .entity-row {
+        grid-template-columns: 56px 120px 80px 120px minmax(0, 1fr) auto;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 900px) {
+    .entity-row {
+        grid-template-columns: 48px 1fr 70px auto;
+        gap: 12px;
+        padding: 12px 14px;
+    }
+    
+    /* Скрываем национальность и услуги */
+    .entity-row .pill--with-flag,
+    .entity-row__services {
+        display: none;
+    }
+    
+    .entity-row__avatar {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .entity-row__name-link {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .clients-section {
+        overflow: hidden;
+    }
+    
+    .entity-list {
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .entity-list__body {
+        padding: 14px;
+    }
+    
+    .entity-rows {
+        gap: 10px;
+    }
+    
+    .entity-row {
+        grid-template-columns: 48px 1fr;
+        gap: 12px;
+        padding: 14px;
+    }
+    
+    /* Скрываем возраст на маленьких экранах */
+    .entity-row .pill--brand:not(.pill--with-flag):not(.entity-row__services) {
+        display: none;
+    }
+    
+    .entity-row__name-link {
+        font-size: 16px;
+    }
+    
+    .entity-row__avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+    }
+    
+    .entity-row__avatar--placeholder {
+        font-size: 14px;
+    }
+    
+    /* Кнопки действий - большие и в ряд внизу карточки */
+    .entity-row__actions {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        margin-top: 8px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(177, 32, 84, 0.15);
+    }
+    
+    .entity-row__actions form {
+        flex: 1;
+        display: flex;
+    }
+    
+    .action-btn {
+        flex: 1;
+        width: 100%;
+        height: 44px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+    
+    .action-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* Block header адаптация */
+    .block-header {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 14px 16px;
+    }
+    
+    .block-title__numbers {
+        font-size: 16px;
+    }
+    
+    .block-header .btn.btn--dark {
+        padding: 12px 18px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .entity-list__body {
+        padding: 12px;
+    }
+    
+    .entity-row {
+        padding: 12px;
+    }
+    
+    .entity-row__name-link {
+        font-size: 15px;
+    }
+    
+    .entity-row__avatar {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .action-btn {
+        height: 42px;
+    }
+    
+    /* Кнопка на всю ширину */
+    .block-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .block-header .btn.btn--dark {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .entity-row__actions {
+        gap: 8px;
+    }
+    
+    .action-btn {
+        height: 40px;
+        border-radius: 8px;
+    }
+    
+    .action-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+}
 </style>
 @endpush

@@ -17,6 +17,10 @@ Route::get('/register/{ref_id?}/{lang?}', [RegisteredUserController::class, 'sho
 Route::post('/register/store', [RegisteredUserController::class, 'store'])
                 ->middleware('guest')->name('register.store');
 
+// Masseuse Registration Routes
+Route::post('/register/masseuse', [RegisteredUserController::class, 'storeMasseuse'])
+                ->middleware('guest')->name('register.masseuse');
+
 Route::get('/login/{lang?}', [AuthenticatedSessionController::class, 'showLoginForm'])
                 ->middleware('guest')
                 ->name('login');

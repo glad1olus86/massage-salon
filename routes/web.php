@@ -511,6 +511,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Dashboard
         Route::get('/', [\App\Http\Controllers\Masseuse\DashboardController::class, 'index'])->name('masseuse.dashboard');
         Route::get('/schedule', [\App\Http\Controllers\Masseuse\DashboardController::class, 'schedule'])->name('masseuse.schedule');
+        Route::patch('/orders/{order}/status', [\App\Http\Controllers\Masseuse\DashboardController::class, 'updateOrderStatus'])->name('masseuse.orders.update-status');
         
         // Clients (Мои клиенты)
         Route::resource('clients', \App\Http\Controllers\Masseuse\ClientController::class)->names([
@@ -573,6 +574,9 @@ Route::group(['middleware' => ['auth']], function () {
             'update' => 'operator.orders.update',
             'destroy' => 'operator.orders.destroy',
         ])->parameters(['orders' => 'order'])->except(['show']);
+        
+        // Order status update (AJAX)
+        Route::patch('/orders/{order}/status', [\App\Http\Controllers\Operator\OrderController::class, 'updateStatus'])->name('operator.orders.status');
         
         // Calendar (Календарь) - только филиал оператора
         Route::get('/calendar', [\App\Http\Controllers\Operator\CalendarController::class, 'index'])->name('operator.calendar');

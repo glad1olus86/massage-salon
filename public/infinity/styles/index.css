@@ -1,6 +1,7 @@
 :root {
   --brand-color: rgba(177, 32, 84, 1);
   --accent-color: rgba(22, 11, 14, 1);
+  --light-accent-color: rgba(42, 25, 29, 1);
   --success-color: #22c55e;
   --danger-color: #ef4444;
   --rating-star-color: #fbbf24;

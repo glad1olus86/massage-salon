@@ -19,33 +19,74 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        // Сегодняшние бронирования массажиста
-        $todayBookings = RoomBooking::where('user_id', $user->id)
-            ->whereDate('booking_date', today())
+        // Все активные бронирования на месяц (не просроченные)
+        $monthEnd = now()->endOfMonth();
+        
+        $activeBookings = RoomBooking::where('user_id', $user->id)
+            ->whereDate('booking_date', '>=', today())
+            ->whereDate('booking_date', '<=', $monthEnd)
             ->where('status', '!=', 'cancelled')
+            ->orderBy('booking_date')
             ->orderBy('start_time')
             ->with(['room', 'client'])
             ->get();
 
-        // Последние заказы массажиста (за последние 7 дней)
-        $recentOrders = MassageOrder::where('employee_id', $user->id)
-            ->where('order_date', '>=', now()->subDays(7))
-            ->orderBy('order_date', 'desc')
-            ->orderBy('order_time', 'desc')
+        // Сегодняшние бронирования для таблицы
+        $todayBookings = $activeBookings->filter(fn($b) => $b->booking_date->isToday());
+
+        // Заказы на эту неделю (сегодня и до конца недели)
+        $weekEnd = now()->endOfWeek();
+        
+        $weeklyOrders = MassageOrder::where('employee_id', $user->id)
+            ->whereDate('order_date', '>=', today())
+            ->whereDate('order_date', '<=', $weekEnd)
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('order_date')
+            ->orderBy('order_time')
             ->with(['client', 'service'])
-            ->limit(5)
             ->get();
 
-        // Количество заказов за сегодня
-        $todayOrdersCount = MassageOrder::where('employee_id', $user->id)
+        // Заказы на сегодня со статусом "в ожидании" (для модалки "Клиент пришёл")
+        $pendingTodayOrders = MassageOrder::where('employee_id', $user->id)
             ->whereDate('order_date', today())
-            ->count();
+            ->where('status', 'pending')
+            ->orderBy('order_time')
+            ->with(['client', 'service'])
+            ->get();
+
+        // Заказы на сегодня со статусом "подтверждён" (для модалки "Заказ завершён")
+        $confirmedTodayOrders = MassageOrder::where('employee_id', $user->id)
+            ->whereDate('order_date', today())
+            ->where('status', 'confirmed')
+            ->orderBy('order_time')
+            ->with(['client', 'service'])
+            ->get();
 
         // Количество клиентов массажиста (по responsible_id или created_by для обратной совместимости)
         $clientsCount = MassageClient::where(function ($q) use ($user) {
             $q->where('responsible_id', $user->id)
               ->orWhere('created_by', $user->id);
         })->count();
+
+        // Последние 5 клиентов по заказам с датой последнего визита
+        $recentClientsData = MassageOrder::where('employee_id', $user->id)
+            ->whereNotNull('client_id')
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('order_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->with('client')
+            ->get()
+            ->groupBy('client_id')
+            ->map(function ($orders) {
+                $lastOrder = $orders->first();
+                return (object) [
+                    'client' => $lastOrder->client,
+                    'last_visit' => $lastOrder->order_date,
+                ];
+            })
+            ->filter(fn($item) => $item->client !== null)
+            ->take(5)
+            ->values();
 
         // Ближайшее дежурство
         $upcomingDuty = CleaningDuty::where('user_id', $user->id)
@@ -60,12 +101,39 @@ class DashboardController extends Controller
 
         return view('masseuse.dashboard', compact(
             'todayBookings',
-            'recentOrders',
-            'todayOrdersCount',
+            'activeBookings',
+            'weeklyOrders',
+            'pendingTodayOrders',
+            'confirmedTodayOrders',
             'clientsCount',
+            'recentClientsData',
             'upcomingDuty',
             'notificationsCount'
         ));
+    }
+
+    /**
+     * Update order status (for quick actions).
+     */
+    public function updateOrderStatus(Request $request, MassageOrder $order)
+    {
+        $user = auth()->user();
+        
+        // Проверяем что это заказ этой массажистки
+        if ($order->employee_id !== $user->id) {
+            return response()->json(['success' => false, 'message' => __('Доступ запрещён')], 403);
+        }
+        
+        $validated = $request->validate([
+            'status' => 'required|in:confirmed,cancelled,completed',
+        ]);
+        
+        $order->update(['status' => $validated['status']]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => __('Статус заказа обновлён'),
+        ]);
     }
 
     /**

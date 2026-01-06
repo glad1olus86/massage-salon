@@ -53,3 +53,237 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   Mobile Styles for Operator Dashboard
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+  /* Таблица заказов - скрываем лишние колонки */
+  /* Оставляем: Клиент, Дата, Заработок */
+  /* Скрываем: Услуга (3), Сотрудник (4), Длительность (5) */
+  .orders-table th:nth-child(3),
+  .orders-table td:nth-child(3),
+  .orders-table th:nth-child(4),
+  .orders-table td:nth-child(4),
+  .orders-table th:nth-child(5),
+  .orders-table td:nth-child(5) {
+    display: none;
+  }
+
+  .orders-table {
+    width: 100%;
+    table-layout: fixed;
+    font-size: 14px;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 12px 10px;
+    word-wrap: break-word;
+  }
+
+  /* Ширина колонок: Клиент 45%, Дата 25%, Заработок 30% */
+  .orders-table th:first-child,
+  .orders-table td:first-child {
+    width: 45%;
+  }
+
+  .orders-table th:nth-child(2),
+  .orders-table td:nth-child(2) {
+    width: 25%;
+  }
+
+  .orders-table th:nth-child(6),
+  .orders-table td:nth-child(6) {
+    width: 30%;
+    text-align: right;
+  }
+
+  /* Footer таблицы */
+  .table-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .table-sum {
+    font-size: 16px;
+    text-align: center;
+    padding: 16px;
+    background: rgba(177, 32, 84, 0.08);
+    border-radius: 12px;
+    order: -1; /* Итого сверху */
+  }
+
+  .table-sum span {
+    display: block;
+    font-size: 24px;
+    margin-top: 4px;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card-actions .btn,
+  .card-actions .sm-button {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
+
+  /* Секция дежурных */
+  .duty-wrapper {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .duty--fixed {
+    min-height: auto;
+    max-height: none;
+  }
+
+  .duty-row {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 0;
+  }
+
+  .duty-row__employee {
+    min-width: 120px;
+  }
+
+  .duty-row__name {
+    font-size: 14px;
+    max-width: 80px;
+  }
+
+  .duty-row__days {
+    gap: 4px;
+  }
+
+  .duty-day {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Секция эффективности */
+  .performance .block-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .performance .block-title {
+    font-size: 14px;
+  }
+
+  .performance .block-title__numbers {
+    font-size: 20px;
+  }
+
+  .table--performance {
+    font-size: 14px;
+  }
+
+  .table--performance th,
+  .table--performance td {
+    padding: 10px 12px;
+  }
+
+  .lg-table-number {
+    font-size: 18px !important;
+  }
+
+  .performance-person {
+    gap: 10px;
+  }
+
+  .performance-person .avatar--sm {
+    width: 36px;
+    height: 36px;
+  }
+
+  .performance-person .text-link--lg {
+    font-size: 14px;
+  }
+
+  /* Block header адаптация */
+  .block-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .block-title {
+    font-size: 14px;
+  }
+
+  .block-title__numbers {
+    font-size: 18px;
+  }
+
+  /* Dropdown адаптация */
+  .dropdown__trigger {
+    min-height: 44px;
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .dropdown__menu {
+    min-width: 180px;
+  }
+
+  .dropdown__option {
+    min-height: 48px;
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .orders-table th,
+  .orders-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .table-sum {
+    font-size: 14px;
+  }
+
+  .table-sum span {
+    font-size: 20px;
+  }
+
+  .duty-row__branch {
+    display: none;
+  }
+
+  .duty-row__employee {
+    min-width: 100px;
+  }
+
+  .duty-row__name {
+    max-width: 70px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .duty-day {
+    width: 16px;
+    height: 16px;
+  }
+
+  .duty-row__days {
+    gap: 3px;
+  }
+
+  .lg-table-number {
+    font-size: 16px !important;
+  }
+}

@@ -40,15 +40,26 @@
                     <select name="service_id" class="form-select" id="service-select">
                         <option value="">{{ __('Выберите услугу') }}</option>
                         @foreach($services as $service)
-                            @php
-                                $price = $service->pivot->is_extra 
-                                    ? ($service->extra_price ?? $service->price * 1.5) 
-                                    : $service->price;
-                            @endphp
-                            <option value="{{ $service->id }}" data-price="{{ $price }}" {{ old('service_id', $order->service_id) == $service->id ? 'selected' : '' }}>
-                                {{ $service->name }} {{ $service->pivot->is_extra ? '(Extra)' : '' }} - {{ number_format($price, 0, ',', ' ') }} CZK
+                            <option value="{{ $service->id }}" 
+                                    data-price="{{ $service->price }}"
+                                    data-has-60="{{ $service->operator_share_60 !== null ? '1' : '0' }}"
+                                    data-has-90="{{ $service->operator_share_90 !== null ? '1' : '0' }}"
+                                    data-has-120="{{ $service->operator_share_120 !== null ? '1' : '0' }}"
+                                    {{ old('service_id', $order->service_id) == $service->id ? 'selected' : '' }}>
+                                {{ $service->name }} {{ $service->pivot->is_extra ? '(Extra)' : '' }} - {{ number_format($service->price, 0, ',', ' ') }} CZK
                             </option>
                         @endforeach
+                    </select>
+                </div>
+                
+                <!-- Длительность -->
+                <div class="form-group">
+                    <label class="form-label">{{ __('Длительность') }}</label>
+                    <select name="duration" class="form-select" id="duration-select">
+                        <option value="">{{ __('Выберите длительность') }}</option>
+                        <option value="60" data-duration="60" {{ old('duration', $order->duration) == 60 ? 'selected' : '' }}>60 {{ __('минут') }}</option>
+                        <option value="90" data-duration="90" {{ old('duration', $order->duration) == 90 ? 'selected' : '' }}>90 {{ __('минут') }}</option>
+                        <option value="120" data-duration="120" {{ old('duration', $order->duration) == 120 ? 'selected' : '' }}>120 {{ __('минут') }}</option>
                     </select>
                 </div>
                 
@@ -71,12 +82,12 @@
                 <!-- Финансы -->
                 <div class="form-group">
                     <label class="form-label">{{ __('Сумма') }} (CZK) *</label>
-                    <input type="number" name="amount" class="form-input" id="amount-input" value="{{ old('amount', $order->amount) }}" min="0" step="100" required>
+                    <input type="number" name="amount" class="form-input" id="amount-input" value="{{ old('amount', $order->amount) }}" min="0" step="1" required>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">{{ __('Чаевые') }} (CZK)</label>
-                    <input type="number" name="tip" class="form-input" value="{{ old('tip', $order->tip ?? 0) }}" min="0" step="50">
+                    <input type="number" name="tip" class="form-input" value="{{ old('tip', $order->tip ?? 0) }}" min="0" step="1">
                 </div>
                 
                 <!-- Способ оплаты и статус -->

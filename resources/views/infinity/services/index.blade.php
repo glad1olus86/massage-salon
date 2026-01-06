@@ -124,6 +124,13 @@
 .services__row:hover .services__actions-inline {
     opacity: 1;
 }
+
+/* На мобильных кнопки всегда видны */
+@media (max-width: 768px) {
+    .services__actions-inline {
+        opacity: 1;
+    }
+}
 .services__action-btn {
     width: 32px;
     height: 32px;
@@ -150,14 +157,42 @@
     background: var(--brand-color);
     color: #fff;
     border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 .lg-button {
-    height: 50px;
-    padding: 0 30px;
-    border-radius: 12px;
-    font-size: 20px;
+    height: 54px;
+    padding: 0 32px;
+    border-radius: 14px;
+    font-size: 18px;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(177, 32, 84, 0.3);
+    gap: 8px;
+}
+.lg-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(177, 32, 84, 0.4);
+    background: linear-gradient(135deg, var(--brand-color) 0%, #d4366a 100%);
+}
+.services__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+}
+@media (max-width: 600px) {
+    .services__actions {
+        padding: 16px;
+    }
+    .lg-button {
+        width: 100%;
+        height: 50px;
+        font-size: 16px;
+        border-radius: 12px;
+    }
 }
 </style>
 @endpush

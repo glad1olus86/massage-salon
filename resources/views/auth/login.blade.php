@@ -113,12 +113,15 @@
             </div>
             @if ($settings['enable_signup'] == 'on')
                 <p class="my-4 text-center">{{ __("Don't have an account?") }}
-                    <a href="{{ route('register', ['0',$lang]) }}" class="text-primary">{{ __('Register') }}</a>
+                    <a href="javascript:void(0)" onclick="openMasseuseRegisterModal()" class="text-primary">{{ __('Register as Masseuse') }}</a>
                 </p>
             @endif
         </div>
         {{ Form::close() }}
     </div>
+
+    <!-- Masseuse Registration Modal -->
+    @include('auth.partials.masseuse-register-modal')
 @endsection
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>

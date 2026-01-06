@@ -49,9 +49,7 @@
 
                 <button type="submit" class="submit-button login-button">{{ __('Войти в систему') }}</button>
                 
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="submit-button register-button">{{ __('Регистрация') }}</a>
-                @endif
+                <button type="button" onclick="openMasseuseRegisterModal()" class="submit-button register-button">{{ __('Регистрация') }}</button>
             </form>
 
             @if (Route::has('password.request'))
@@ -59,4 +57,7 @@
             @endif
         </div>
     </div>
+
+    <!-- Masseuse Registration Modal -->
+    @include('auth.partials.masseuse-register-modal')
 @endsection

@@ -200,6 +200,46 @@ class InfinityController extends Controller
             ];
         }
 
+        // Chart data - заказы за выбранный период
+        $chartPeriod = $request->get('chart_period', 'week');
+        
+        $chartData = match($chartPeriod) {
+            'month' => collect(range(29, 0))->map(function ($daysAgo) use ($creatorId) {
+                $date = now()->subDays($daysAgo);
+                return [
+                    'date' => $date->format('d.m'),
+                    'count' => MassageOrder::where('created_by', $creatorId)
+                        ->whereDate('order_date', $date)
+                        ->where('status', '!=', 'cancelled')
+                        ->count()
+                ];
+            }),
+            'year' => collect(range(11, 0))->map(function ($monthsAgo) use ($creatorId) {
+                $date = now()->subMonths($monthsAgo);
+                return [
+                    'date' => $date->translatedFormat('M'),
+                    'count' => MassageOrder::where('created_by', $creatorId)
+                        ->whereYear('order_date', $date->year)
+                        ->whereMonth('order_date', $date->month)
+                        ->where('status', '!=', 'cancelled')
+                        ->count()
+                ];
+            }),
+            default => collect(range(6, 0))->map(function ($daysAgo) use ($creatorId) {
+                $date = now()->subDays($daysAgo);
+                return [
+                    'date' => $date->format('d.m'),
+                    'count' => MassageOrder::where('created_by', $creatorId)
+                        ->whereDate('order_date', $date)
+                        ->where('status', '!=', 'cancelled')
+                        ->count()
+                ];
+            }),
+        };
+        
+        $chartLabels = $chartData->pluck('date')->toArray();
+        $chartValues = $chartData->pluck('count')->toArray();
+
         return view('infinity.dashboard', compact(
             'ordersCount',
             'recentOrders',
@@ -213,7 +253,10 @@ class InfinityController extends Controller
             'year',
             'topEmployees',
             'leaderEmployee',
-            'period'
+            'period',
+            'chartPeriod',
+            'chartLabels',
+            'chartValues'
         ));
     }
 

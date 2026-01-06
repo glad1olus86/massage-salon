@@ -86,11 +86,11 @@
                             </div>
                         </div>
 
-                        @if($services->count() > 0)
+                        @if($regularServices->count() > 0 || $extraServices->count() > 0)
                         <div class="form-group form-group--full masseuse-field" id="mainServicesField">
                             <label class="form-label">{{ __('Основные услуги') }}</label>
                             <div class="services-checkboxes" id="regularServices">
-                                @foreach($services as $service)
+                                @forelse($regularServices as $service)
                                 <label class="checkbox-card" data-service-id="{{ $service->id }}">
                                     <input type="checkbox" name="services[]" value="{{ $service->id }}" 
                                         class="regular-service-checkbox"
@@ -100,14 +100,16 @@
                                         <span class="checkbox-card__price">{{ $service->formatted_price }}</span>
                                     </span>
                                 </label>
-                                @endforeach
+                                @empty
+                                <p class="services-empty">{{ __('Нет доступных услуг') }}</p>
+                                @endforelse
                             </div>
                         </div>
 
                         <div class="form-group form-group--full masseuse-field" id="extraServicesField">
                             <label class="form-label">{{ __('Экстра услуги') }}</label>
                             <div class="services-checkboxes" id="extraServices">
-                                @foreach($services as $service)
+                                @forelse($extraServices as $service)
                                 <label class="checkbox-card checkbox-card--extra" data-service-id="{{ $service->id }}">
                                     <input type="checkbox" name="extra_services[]" value="{{ $service->id }}" 
                                         class="extra-service-checkbox"
@@ -117,7 +119,9 @@
                                         <span class="checkbox-card__price">{{ $service->formatted_price }}</span>
                                     </span>
                                 </label>
-                                @endforeach
+                                @empty
+                                <p class="services-empty">{{ __('Нет экстра услуг') }}</p>
+                                @endforelse
                             </div>
                         </div>
                         @endif
@@ -192,6 +196,7 @@
 .checkbox-card__content--extra { border-style: dashed; }
 .checkbox-card input:checked + .checkbox-card__content--extra { border-color: #f5a623; background: rgba(245, 166, 35, 0.1); border-style: solid; }
 .checkbox-card--disabled { opacity: 0.4; pointer-events: none; }
+.services-empty { color: #999; font-size: 14px; padding: 12px; }
 .checkbox-card__name { font-weight: 600; color: #333; }
 .checkbox-card__price { font-size: 13px; color: #666; }
 .form-actions { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
@@ -327,47 +332,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     })();
-    
-    // Логика взаимоисключения услуг
-    document.querySelectorAll('.regular-service-checkbox').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            const serviceId = this.value;
-            const extraCheckbox = document.querySelector('.extra-service-checkbox[value="' + serviceId + '"]');
-            const extraCard = extraCheckbox.closest('.checkbox-card');
-            
-            if (this.checked) {
-                extraCheckbox.checked = false;
-                extraCard.classList.add('checkbox-card--disabled');
-            } else {
-                extraCard.classList.remove('checkbox-card--disabled');
-            }
-        });
-        if (checkbox.checked) {
-            const serviceId = checkbox.value;
-            const extraCard = document.querySelector('.checkbox-card--extra[data-service-id="' + serviceId + '"]');
-            if (extraCard) extraCard.classList.add('checkbox-card--disabled');
-        }
-    });
-
-    document.querySelectorAll('.extra-service-checkbox').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            const serviceId = this.value;
-            const regularCheckbox = document.querySelector('.regular-service-checkbox[value="' + serviceId + '"]');
-            const regularCard = regularCheckbox.closest('.checkbox-card');
-            
-            if (this.checked) {
-                regularCheckbox.checked = false;
-                regularCard.classList.add('checkbox-card--disabled');
-            } else {
-                regularCard.classList.remove('checkbox-card--disabled');
-            }
-        });
-        if (checkbox.checked) {
-            const serviceId = checkbox.value;
-            const regularCard = document.querySelector('#regularServices .checkbox-card[data-service-id="' + serviceId + '"]');
-            if (regularCard) regularCard.classList.add('checkbox-card--disabled');
-        }
-    });
 });
 </script>
 @endpush

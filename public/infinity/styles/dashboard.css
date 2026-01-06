@@ -1,14 +1,53 @@
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto auto;
   gap: 20px;
   width: 100%;
 }
+
+/* Row 1 */
 .new-orders {
   grid-column: 1/5;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
 }
+
+.orders-chart {
+  grid-column: 5/8;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 350px;
+}
+
+.orders-chart__content {
+  flex: 1;
+  padding: 16px 20px 20px;
+  position: relative;
+  min-height: 280px;
+}
+
+.orders-chart__content canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Row 2 */
+.duty {
+  grid-column: 1/5;
+  grid-row: 2;
+}
+
+.action-tiles-wrapper {
+  grid-column: 5/8;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .new-orders__content {
   padding-top: 8px;
   flex: 1;
@@ -29,13 +68,6 @@
   justify-content: center;
   text-align: center;
   text-decoration: none;
-}
-
-.duty-wrapper {
-  grid-column: 5/8;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 .duty__content {
@@ -131,27 +163,61 @@
 @media (max-width: 1200px) {
   .dashboard-grid {
     grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: auto auto auto;
     gap: 18px;
   }
 
   .new-orders {
-    grid-column: auto;
+    grid-column: 1 / -1;
+    grid-row: 1;
   }
 
-  .duty-wrapper {
-    grid-column: auto;
+  .orders-chart {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-height: 280px;
+  }
+
+  .duty {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .action-tiles-wrapper {
+    grid-column: 2;
+    grid-row: 3;
   }
 }
 
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
     gap: 18px;
   }
 
   .new-orders,
-  .duty-wrapper {
+  .orders-chart,
+  .duty,
+  .action-tiles-wrapper {
     grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .orders-chart {
+    min-height: 250px;
+  }
+
+  .orders-chart__content {
+    min-height: 200px;
+  }
+
+  .action-tiles-wrapper {
+    flex-direction: row;
+  }
+
+  .action-tiles-wrapper .action-tile {
+    flex: 1;
   }
 
   .performance-grid {
@@ -159,9 +225,373 @@
   }
 }
 
+/* Легенда календаря - скрыта на десктопе */
+.calendar__legend {
+  display: none;
+}
+
+/* Короткие названия дней - скрыты на десктопе */
+.calendar__weekday-short {
+  display: none;
+}
+
+.calendar__weekday-full {
+  display: inline;
+}
+
 @media (max-width: 768px) {
   .dashboard-grid {
+    grid-template-columns: 1fr;
     gap: 16px;
+    overflow: hidden;
+  }
+
+  .new-orders,
+  .orders-chart,
+  .duty,
+  .action-tiles-wrapper {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .orders-chart {
+    min-height: 220px;
+  }
+
+  .orders-chart__content {
+    min-height: 180px;
+    padding: 12px 14px 16px;
+  }
+
+  .action-tiles-wrapper {
+    flex-direction: column;
+  }
+
+  /* Карточки не должны выходить за экран */
+  .card,
+  .new-orders {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Календарь - убираем скролл */
+  .calendar {
+    overflow: hidden;
+  }
+
+  .calendar__inner {
+    overflow: hidden;
+  }
+
+  .calendar__weekdays {
+    overflow: hidden;
+  }
+
+  .calendar__grid {
+    overflow: hidden;
+  }
+
+  /* Короткие названия дней на мобилке */
+  .calendar__weekday-full {
+    display: none;
+  }
+
+  .calendar__weekday-short {
+    display: inline;
+  }
+
+  /* Таблица заказов - компактная */
+  .new-orders__content {
+    overflow-x: hidden;
+    padding: 0 12px;
+  }
+
+  .orders-table {
+    width: 100%;
+    table-layout: fixed;
+    font-size: 14px;
+  }
+
+  /* Скрываем колонки "Услуга" и "Сотрудник" в таблице заказов */
+  .orders-table th:nth-child(3),
+  .orders-table td:nth-child(3),
+  .orders-table th:nth-child(4),
+  .orders-table td:nth-child(4) {
+    display: none;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 10px 8px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Первая колонка (Клиент) - 60%, вторая (Дата) - 40% */
+  .orders-table th:first-child,
+  .orders-table td:first-child {
+    width: 60%;
+  }
+
+  .orders-table th:nth-child(2),
+  .orders-table td:nth-child(2) {
+    width: 40%;
+  }
+
+  /* Action tiles - горизонтальный layout на мобилке */
+  .action-tile {
+    flex-direction: row;
+    min-height: 70px;
+  }
+
+  .action-tile__icon {
+    width: 70px;
+    height: 70px;
+    flex: 0 0 70px;
+  }
+
+  .action-tile__icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .action-tile__label {
+    font-size: 16px;
+    padding: 0 16px;
+  }
+
+  /* Кнопки действий */
+  .card-actions--bottom {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-actions--bottom .btn,
+  .card-actions--bottom .sm-button {
+    width: 100%;
+    min-height: 48px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Календарь - ячейки по центру */
+  .calendar__cell {
+    min-height: 50px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .calendar__date {
+    font-size: 14px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin: 0 auto;
+  }
+
+  /* Цвета ячеек по статусу уборки - ТОЛЬКО на мобилке (приглушённые) */
+  .calendar__cell--status-clean .calendar__date {
+    background-color: rgba(34, 197, 94, 0.25);
+    color: #166534;
+  }
+
+  .calendar__cell--status-dirty .calendar__date {
+    background-color: rgba(239, 68, 68, 0.25);
+    color: #991b1b;
+  }
+
+  .calendar__cell--status-none .calendar__date {
+    background-color: rgba(177, 32, 84, 0.16);
+    color: var(--accent-color);
+  }
+
+  /* Сегодняшний день - обводка */
+  .calendar__cell--today .calendar__date--today {
+    box-shadow: 0 0 0 3px var(--brand-color);
+  }
+
+  .calendar__weekday {
+    font-size: 11px;
+    padding: 8px 2px;
+  }
+
+  .calendar__meta {
+    display: none;
+  }
+
+  .calendar__items {
+    display: none;
+  }
+
+  .calendar__header {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .calendar__month-title {
+    font-size: 16px;
+  }
+
+  /* Легенда календаря - показываем на мобилке */
+  .calendar__legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 16px;
+    background: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .calendar__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .calendar__legend-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+  }
+
+  .calendar__legend-dot--clean {
+    background-color: rgba(34, 197, 94, 0.4);
+  }
+
+  .calendar__legend-dot--dirty {
+    background-color: rgba(239, 68, 68, 0.4);
+  }
+
+  .calendar__legend-text {
+    font-size: 13px;
+    color: var(--accent-color);
+    font-weight: 500;
+  }
+
+  /* Performance секция */
+  .performance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .leader {
+    order: -1;
+  }
+
+  /* Показываем колонку "Уборка (коэфф.)" на мобилке */
+  .table--performance th:nth-child(3),
+  .table--performance td:nth-child(3) {
+    display: table-cell;
+  }
+
+  .table--performance {
+    font-size: 13px;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .table--performance th,
+  .table--performance td {
+    padding: 8px 6px;
+  }
+
+  /* Ширина колонок: Сотрудник 50%, Заказов 25%, Уборка 25% */
+  .table--performance th:first-child,
+  .table--performance td:first-child {
+    width: 50%;
+  }
+
+  .table--performance th:nth-child(2),
+  .table--performance td:nth-child(2),
+  .table--performance th:nth-child(3),
+  .table--performance td:nth-child(3) {
+    width: 25%;
+    text-align: center;
+  }
+
+  /* Performance block header - специальный layout */
+  .performance .block-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 14px 16px;
+  }
+
+  .performance .block-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .performance .block-title__numbers {
+    font-size: 20px;
+    display: block;
+  }
+
+  .performance .block-title__text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    font-size: 12px;
+  }
+
+  .performance .block-title__dropdown-inline {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .performance .block-title__dropdown-inline .dropdown__trigger {
+    min-height: 28px;
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  /* Block header адаптация */
+  .block-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+
+  .block-title {
+    font-size: 14px;
+  }
+
+  .block-title__numbers {
+    font-size: 18px;
+  }
+
+  /* Dropdown адаптация */
+  .dropdown__trigger {
+    min-height: 40px;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .dropdown__menu {
+    min-width: 160px;
+  }
+
+  .dropdown__option {
+    min-height: 44px;
+    padding: 12px 14px;
+    font-size: 15px;
   }
 }
 
@@ -176,5 +606,76 @@
 
   .performance-section {
     gap: 18px;
+  }
+
+  /* Ещё компактнее */
+  .orders-table th,
+  .orders-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .block-header {
+    padding: 12px 14px;
+  }
+
+  .block-title {
+    font-size: 15px;
+  }
+
+  .calendar__cell {
+    min-height: 60px;
+    padding: 4px 2px;
+  }
+
+  .calendar__weekday {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-grid {
+    gap: 12px;
+  }
+
+  .calendar__grid {
+    gap: 2px;
+  }
+
+  .calendar__cell {
+    min-height: 50px;
+  }
+
+  .calendar__date {
+    font-size: 13px;
+  }
+
+  .calendar__date--today {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Duty row компактнее */
+  .duty-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .duty-row__branch {
+    display: none;
+  }
+
+  .duty-row__employee {
+    min-width: 100px;
+  }
+
+  .duty-row__name {
+    max-width: 80px;
+    font-size: 13px;
+  }
+
+  .duty-day {
+    width: 16px;
+    height: 16px;
   }
 }

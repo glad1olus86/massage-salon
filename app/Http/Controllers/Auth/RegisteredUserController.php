@@ -138,4 +138,99 @@ class RegisteredUserController extends Controller
             return \Redirect::to('login');
         }
     }
+
+    /**
+     * Handle masseuse registration request.
+     */
+    public function storeMasseuse(Request $request)
+    {
+        \Log::info('Masseuse registration started', [
+            'has_avatar' => $request->hasFile('avatar'),
+            'photos_count' => $request->hasFile('photos') ? count($request->file('photos')) : 0,
+            'all_files' => $request->allFiles(),
+        ]);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => ['required', 'string', 'min:8'],
+            'phone' => 'nullable|string|max:20',
+            'birth_date' => 'nullable|date',
+            'nationality' => 'nullable|string|max:50',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'photos' => 'nullable|array|max:8',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
+            'services' => 'nullable|array',
+            'services.*' => 'exists:massage_services,id',
+            'extra_services' => 'nullable|array',
+            'extra_services.*' => 'exists:massage_services,id',
+            'about' => 'nullable|string|max:2000',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        // Создаем пользователя-массажистку
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->type = 'user';
+        $user->created_by = 2; // ID владельца салона
+        $user->lang = \App::getLocale();
+        $user->birth_date = $request->birth_date;
+        $user->nationality = $request->nationality;
+        $user->bio = $request->about; // Поле "О себе" из формы регистрации
+        $user->is_active = $request->is_active ?? 1;
+        $user->plan = 1;
+
+        // Обработка аватара
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars/2', 'public');
+            $user->avatar = $path;
+            \Log::info('Avatar uploaded', ['path' => $path]);
+        }
+
+        // Обработка фотогалереи
+        $photos = [];
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                if (count($photos) >= 8) break;
+                $path = $photo->store('employees/2', 'public');
+                $photos[] = $path;
+            }
+            \Log::info('Photos uploaded', ['count' => count($photos), 'paths' => $photos]);
+        }
+        $user->photos = $photos;
+
+        $user->save();
+
+        // Email verification - always mark as verified
+        $user->email_verified_at = date('Y-m-d H:i:s');
+        $user->save();
+
+        // Назначаем роль masseuse
+        $role = Role::findByName('masseuse');
+        $user->assignRole($role);
+
+        // Привязка услуг (обычные и экстра)
+        $syncData = [];
+        foreach ($request->services ?? [] as $serviceId) {
+            $syncData[$serviceId] = ['is_extra' => false];
+        }
+        foreach ($request->extra_services ?? [] as $serviceId) {
+            if (!isset($syncData[$serviceId])) {
+                $syncData[$serviceId] = ['is_extra' => true];
+            }
+        }
+        if (!empty($syncData)) {
+            $user->massageServices()->sync($syncData);
+        }
+
+        \Log::info('Masseuse registration completed', ['user_id' => $user->id]);
+
+        // Логиним пользователя
+        \Auth::login($user);
+
+        return redirect()->route('masseuse.dashboard')
+            ->with('success', __('Регистрация успешно завершена! Добро пожаловать!'));
+    }
 }

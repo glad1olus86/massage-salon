@@ -6,6 +6,7 @@
 
 @section('content')
 <section class="dashboard-grid">
+    <!-- Row 1: Orders + Chart -->
     <!-- New Orders Card -->
     <div class="new-orders card">
         <div class="block-header">
@@ -71,48 +72,83 @@
         </div>
     </div>
     
-    <!-- Right Column -->
-    <div class="duty-wrapper">
-        <!-- Duty Card -->
-        <div class="duty card duty--fixed">
-            <div class="block-header">
-                <div class="block-title">
-                    {{ __('дежурные недели:') }}
-                    <span class="block-title__numbers">{{ $dutyCount ?? 0 }}</span>
-                </div>
-                <img src="{{ asset('infinity/assets/icons/cleaning-icon.svg') }}" alt="" class="block-title__icon">
+    <!-- Orders Chart -->
+    <div class="orders-chart card">
+        <div class="block-header">
+            <div class="block-title">
+                {{ __('Динамика заказов') }}
             </div>
-
-            <div class="duty__content duty__content--compact">
-                @forelse($dutyEmployees ?? [] as $duty)
-                <div class="duty-row">
-                    <div class="duty-row__employee">
-                        @if($duty->has_avatar ?? false)
-                            <img class="avatar avatar--xs" src="{{ $duty->avatar }}" alt="">
+            <div class="dropdown" data-dropdown>
+                <button type="button" class="dropdown__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="dropdown__value" data-dropdown-value>
+                        @if(($chartPeriod ?? 'week') === 'month')
+                            {{ __('месяц') }}
+                        @elseif(($chartPeriod ?? 'week') === 'year')
+                            {{ __('год') }}
                         @else
-                            <div class="avatar avatar--xs avatar--placeholder">{{ $duty->initials ?? '?' }}</div>
+                            {{ __('неделю') }}
                         @endif
-                        <span class="duty-row__name">{{ $duty->name ?? 'N/A' }}</span>
+                    </span>
+                    <div class="arrow-button">
+                        <svg viewBox="0 0 7 5" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white"/>
+                        </svg>
                     </div>
-                    <div class="duty-row__days">
-                        @foreach($duty->week_days as $day)
-                            <span class="duty-day {{ $day->has_duty ? ($day->is_completed ? 'duty-day--done' : 'duty-day--pending') : 'duty-day--empty' }}" 
-                                  title="{{ $day->date->format('d.m') }}{{ $day->has_duty ? ($day->is_completed ? ' ✓' : ' ○') : '' }}">
-                            </span>
-                        @endforeach
-                    </div>
-                    <div class="duty-row__branch">{{ $duty->branch ?? 'N/A' }}</div>
+                </button>
+                <div class="dropdown__menu" role="listbox">
+                    <button type="button" class="dropdown__option" role="option" data-value="week" {{ ($chartPeriod ?? 'week') === 'week' ? 'aria-selected=true' : '' }} onclick="changeChartPeriod('week')">{{ __('неделю') }}</button>
+                    <button type="button" class="dropdown__option" role="option" data-value="month" {{ ($chartPeriod ?? 'week') === 'month' ? 'aria-selected=true' : '' }} onclick="changeChartPeriod('month')">{{ __('месяц') }}</button>
+                    <button type="button" class="dropdown__option" role="option" data-value="year" {{ ($chartPeriod ?? 'week') === 'year' ? 'aria-selected=true' : '' }} onclick="changeChartPeriod('year')">{{ __('год') }}</button>
                 </div>
-                @empty
-                <div class="duty-empty">
-                    {{ __('Нет дежурных на этой неделе') }}
-                </div>
-                @endforelse
             </div>
         </div>
+        <div class="orders-chart__content">
+            <canvas id="ordersChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Row 2: Duty + Action Tiles -->
+    <!-- Duty Card -->
+    <div class="duty card duty--fixed">
+        <div class="block-header">
+            <div class="block-title">
+                {{ __('дежурные недели:') }}
+                <span class="block-title__numbers">{{ $dutyCount ?? 0 }}</span>
+            </div>
+            <img src="{{ asset('infinity/assets/icons/cleaning-icon.svg') }}" alt="" class="block-title__icon">
+        </div>
 
-        <!-- Action Tiles -->
-        <a href="#" class="action-tile">
+        <div class="duty__content duty__content--compact">
+            @forelse($dutyEmployees ?? [] as $duty)
+            <div class="duty-row">
+                <div class="duty-row__employee">
+                    @if($duty->has_avatar ?? false)
+                        <img class="avatar avatar--xs" src="{{ $duty->avatar }}" alt="">
+                    @else
+                        <div class="avatar avatar--xs avatar--placeholder">{{ $duty->initials ?? '?' }}</div>
+                    @endif
+                    <span class="duty-row__name">{{ $duty->name ?? 'N/A' }}</span>
+                </div>
+                <div class="duty-row__days">
+                    @foreach($duty->week_days as $day)
+                        <span class="duty-day {{ $day->has_duty ? ($day->is_completed ? 'duty-day--done' : 'duty-day--pending') : 'duty-day--empty' }}" 
+                              title="{{ $day->date->format('d.m') }}{{ $day->has_duty ? ($day->is_completed ? ' ✓' : ' ○') : '' }}">
+                        </span>
+                    @endforeach
+                </div>
+                <div class="duty-row__branch">{{ $duty->branch ?? 'N/A' }}</div>
+            </div>
+            @empty
+            <div class="duty-empty">
+                {{ __('Нет дежурных на этой неделе') }}
+            </div>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Action Tiles Wrapper -->
+    <div class="action-tiles-wrapper">
+        <a href="{{ route('infinity.calendar') }}" class="action-tile">
             <span class="action-tile__icon">
                 <img src="{{ asset('infinity/assets/icons/control-icon.svg') }}" alt="">
             </span>
@@ -154,13 +190,13 @@
             </div>
             
             <div class="calendar__weekdays" aria-hidden="true">
-                <div class="calendar__weekday">{{ __('Понедельник') }}</div>
-                <div class="calendar__weekday">{{ __('Вторник') }}</div>
-                <div class="calendar__weekday">{{ __('Среда') }}</div>
-                <div class="calendar__weekday">{{ __('Четверг') }}</div>
-                <div class="calendar__weekday">{{ __('Пятница') }}</div>
-                <div class="calendar__weekday">{{ __('Суббота') }}</div>
-                <div class="calendar__weekday">{{ __('Воскресенье') }}</div>
+                <div class="calendar__weekday"><span class="calendar__weekday-full">{{ __('Понедельник') }}</span><span class="calendar__weekday-short">{{ __('Пн') }}</span></div>
+                <div class="calendar__weekday"><span class="calendar__weekday-full">{{ __('Вторник') }}</span><span class="calendar__weekday-short">{{ __('Вт') }}</span></div>
+                <div class="calendar__weekday"><span class="calendar__weekday-full">{{ __('Среда') }}</span><span class="calendar__weekday-short">{{ __('Ср') }}</span></div>
+                <div class="calendar__weekday"><span class="calendar__weekday-full">{{ __('Четверг') }}</span><span class="calendar__weekday-short">{{ __('Чт') }}</span></div>
+                <div class="calendar__weekday"><span class="calendar__weekday-full">{{ __('Пятница') }}</span><span class="calendar__weekday-short">{{ __('Пт') }}</span></div>
+                <div class="calendar__weekday"><span class="calendar__weekday-full">{{ __('Суббота') }}</span><span class="calendar__weekday-short">{{ __('Сб') }}</span></div>
+                <div class="calendar__weekday"><span class="calendar__weekday-full">{{ __('Воскресенье') }}</span><span class="calendar__weekday-short">{{ __('Вс') }}</span></div>
             </div>
 
             <div class="calendar__grid" role="grid">
@@ -176,7 +212,22 @@
 
                 {{-- Days of month --}}
                 @foreach($calendarData as $dateKey => $dayData)
-                    <div class="calendar__cell {{ $dayData['isToday'] ? 'calendar__cell--today' : '' }} {{ $dayData['isWeekend'] ? 'calendar__cell--weekend' : '' }}" role="gridcell">
+                    @php
+                        $dutyStatus = 'none';
+                        if ($dayData['duty']) {
+                            $duty = $dayData['duty'];
+                            $cleanCount = $duty->cleaningStatuses->where('status', 'clean')->count();
+                            $totalCount = $duty->cleaningStatuses->count();
+                            if ($totalCount > 0) {
+                                $dutyStatus = ($cleanCount == $totalCount) ? 'clean' : 'dirty';
+                            } elseif ($duty->status === 'completed') {
+                                $dutyStatus = 'clean';
+                            } else {
+                                $dutyStatus = 'dirty';
+                            }
+                        }
+                    @endphp
+                    <div class="calendar__cell {{ $dayData['isToday'] ? 'calendar__cell--today' : '' }} {{ $dayData['isWeekend'] ? 'calendar__cell--weekend' : '' }} calendar__cell--status-{{ $dutyStatus }}" role="gridcell" data-duty-status="{{ $dutyStatus }}">
                         <div class="calendar__date {{ $dayData['isToday'] ? 'calendar__date--today' : '' }}">{{ $dayData['day'] }}</div>
                         
                         <div class="calendar__meta">
@@ -234,6 +285,18 @@
                     </div>
                 @endforeach
             </div>
+            
+            <!-- Легенда для мобильной версии -->
+            <div class="calendar__legend">
+                <div class="calendar__legend-item">
+                    <span class="calendar__legend-dot calendar__legend-dot--clean"></span>
+                    <span class="calendar__legend-text">{{ __('Убрано') }}</span>
+                </div>
+                <div class="calendar__legend-item">
+                    <span class="calendar__legend-dot calendar__legend-dot--dirty"></span>
+                    <span class="calendar__legend-text">{{ __('Не убрано') }}</span>
+                </div>
+            </div>
         </div>
     </div>
     @else
@@ -255,23 +318,26 @@
             <div class="block-header">
                 <div class="block-title">
                     <span class="block-title__numbers">TOP 10</span>
-                    {{ __('сотрудников по эффективности за') }}
-                </div>
-
-                <div class="dropdown" data-dropdown>
-                    <button type="button" class="dropdown__trigger" aria-haspopup="listbox" aria-expanded="false">
-                        <span class="dropdown__value" data-dropdown-value>{{ __('неделю') }}</span>
-                        <div class="arrow-button" aria-hidden="true">
-                            <svg viewBox="0 0 7 5" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white"/>
-                            </svg>
-                        </div>
-                    </button>
-                    <div class="dropdown__menu" role="listbox" aria-label="Период">
-                        <button type="button" class="dropdown__option" role="option" data-value="день">{{ __('день') }}</button>
-                        <button type="button" class="dropdown__option" role="option" data-value="неделю" aria-selected="true">{{ __('неделю') }}</button>
-                        <button type="button" class="dropdown__option" role="option" data-value="месяц">{{ __('месяц') }}</button>
-                    </div>
+                    <span class="block-title__text">
+                        {{ __('сотрудников по эффективности за') }}
+                        <span class="block-title__dropdown-inline">
+                            <span class="dropdown" data-dropdown>
+                                <button type="button" class="dropdown__trigger" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown__value" data-dropdown-value>{{ __('неделю') }}</span>
+                                    <span class="arrow-button" aria-hidden="true">
+                                        <svg viewBox="0 0 7 5" fill="none">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <span class="dropdown__menu" role="listbox" aria-label="Период">
+                                    <button type="button" class="dropdown__option" role="option" data-value="день">{{ __('день') }}</button>
+                                    <button type="button" class="dropdown__option" role="option" data-value="неделю" aria-selected="true">{{ __('неделю') }}</button>
+                                    <button type="button" class="dropdown__option" role="option" data-value="месяц">{{ __('месяц') }}</button>
+                                </span>
+                            </span>
+                        </span>
+                    </span>
                 </div>
             </div>
 
@@ -505,9 +571,16 @@
 @endpush
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 function changePeriod(period) {
     window.location.href = '{{ route("infinity.dashboard") }}?period=' + period;
+}
+
+function changeChartPeriod(chartPeriod) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('chart_period', chartPeriod);
+    window.location.href = url.toString();
 }
 
 function changeDashboardBranch(branchId) {
@@ -515,5 +588,91 @@ function changeDashboardBranch(branchId) {
     url.searchParams.set('branch_id', branchId);
     window.location.href = url.toString();
 }
+
+// Orders Chart initialization
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('ordersChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const chartLabels = @json($chartLabels ?? []);
+    const chartData = @json($chartValues ?? []);
+    
+    // Fallback if no data
+    if (chartLabels.length === 0) {
+        canvas.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#888;">{{ __("Нет данных для графика") }}</div>';
+        return;
+    }
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: '{{ __("Заказы") }}',
+                data: chartData,
+                borderColor: '#B12054',
+                backgroundColor: 'rgba(177, 32, 84, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointBackgroundColor: '#B12054',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#160B0E',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: false,
+                    callbacks: {
+                        title: function(items) {
+                            return items[0].label;
+                        },
+                        label: function(context) {
+                            return context.parsed.y + ' {{ __("заказов") }}';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { 
+                        stepSize: 1,
+                        color: '#666',
+                        font: { size: 12 }
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.06)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#666',
+                        font: { size: 12 }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+});
 </script>
 @endpush

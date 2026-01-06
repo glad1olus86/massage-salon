@@ -29,6 +29,16 @@
 </head>
 
 <body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Открыть меню">
+        <span class="mobile-menu-btn__line"></span>
+        <span class="mobile-menu-btn__line"></span>
+        <span class="mobile-menu-btn__line"></span>
+    </button>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
     @include('partials.admin.infinity-sidebar')
     
     <div class="container">
@@ -42,6 +52,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('infinity/scripts/interactions.js') }}"></script>
+    <script src="{{ asset('infinity/scripts/mobile-sidebar.js') }}"></script>
     @stack('scripts')
 </body>
 

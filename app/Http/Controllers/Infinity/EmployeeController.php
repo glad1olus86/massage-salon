@@ -55,10 +55,21 @@ class EmployeeController extends Controller
     public function create()
     {
         $branches = Branch::where('created_by', Auth::user()->creatorId())->get();
-        $services = MassageService::where('created_by', Auth::user()->creatorId())
+        
+        // Обычные услуги (is_extra = false)
+        $regularServices = MassageService::where('created_by', Auth::user()->creatorId())
             ->where('is_active', true)
+            ->where('is_extra', false)
             ->orderBy('sort_order')
             ->get();
+        
+        // Экстра услуги (is_extra = true)
+        $extraServices = MassageService::where('created_by', Auth::user()->creatorId())
+            ->where('is_active', true)
+            ->where('is_extra', true)
+            ->orderBy('sort_order')
+            ->get();
+        
         $roles = Role::where('created_by', Auth::user()->creatorId())->get();
         
         // Получаем операторов (пользователи с ролью operator)
@@ -67,7 +78,7 @@ class EmployeeController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('infinity.employees.create', compact('branches', 'services', 'roles', 'operators'));
+        return view('infinity.employees.create', compact('branches', 'regularServices', 'extraServices', 'roles', 'operators'));
     }
 
     /**
@@ -82,6 +93,7 @@ class EmployeeController extends Controller
             'phone' => 'nullable|string|max:20',
             'birth_date' => 'nullable|date',
             'nationality' => 'nullable|string|max:50',
+            'bio' => 'nullable|string|max:2000',
             'branch_id' => 'required|exists:branches,id',
             'operator_id' => 'nullable|exists:users,id',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -103,6 +115,7 @@ class EmployeeController extends Controller
         $user->operator_id = $validated['operator_id'] ?? null;
         $user->birth_date = $validated['birth_date'] ?? null;
         $user->nationality = $validated['nationality'] ?? null;
+        $user->bio = $validated['bio'] ?? null;
         $user->is_active = 1;
 
         // Обработка аватарки
@@ -153,10 +166,21 @@ class EmployeeController extends Controller
         }
 
         $branches = Branch::where('created_by', Auth::user()->creatorId())->get();
-        $services = MassageService::where('created_by', Auth::user()->creatorId())
+        
+        // Обычные услуги (is_extra = false)
+        $regularServices = MassageService::where('created_by', Auth::user()->creatorId())
             ->where('is_active', true)
+            ->where('is_extra', false)
             ->orderBy('sort_order')
             ->get();
+        
+        // Экстра услуги (is_extra = true)
+        $extraServices = MassageService::where('created_by', Auth::user()->creatorId())
+            ->where('is_active', true)
+            ->where('is_extra', true)
+            ->orderBy('sort_order')
+            ->get();
+        
         $roles = Role::where('created_by', Auth::user()->creatorId())->get();
         
         // Получаем операторов (пользователи с ролью operator)
@@ -169,7 +193,7 @@ class EmployeeController extends Controller
         $selectedServices = $employee->regularServices->pluck('id')->toArray();
         $selectedExtraServices = $employee->extraServices->pluck('id')->toArray();
         
-        return view('infinity.employees.edit', compact('employee', 'branches', 'services', 'roles', 'operators', 'selectedServices', 'selectedExtraServices'));
+        return view('infinity.employees.edit', compact('employee', 'branches', 'regularServices', 'extraServices', 'roles', 'operators', 'selectedServices', 'selectedExtraServices'));
     }
 
     /**
@@ -188,6 +212,7 @@ class EmployeeController extends Controller
             'phone' => 'nullable|string|max:20',
             'birth_date' => 'nullable|date',
             'nationality' => 'nullable|string|max:50',
+            'bio' => 'nullable|string|max:2000',
             'branch_id' => 'required|exists:branches,id',
             'operator_id' => 'nullable|exists:users,id',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -210,6 +235,7 @@ class EmployeeController extends Controller
         $employee->operator_id = $validated['operator_id'] ?? null;
         $employee->birth_date = $validated['birth_date'] ?? null;
         $employee->nationality = $validated['nationality'] ?? null;
+        $employee->bio = $validated['bio'] ?? null;
 
         if (!empty($validated['password'])) {
             $employee->password = Hash::make($validated['password']);

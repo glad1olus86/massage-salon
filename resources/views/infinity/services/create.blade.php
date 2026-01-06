@@ -33,6 +33,36 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">{{ __('Доля оператора (CZK)') }}</label>
+                    <div class="form-row form-row--thirds">
+                        <div class="form-field">
+                            <label for="operator_share_60" class="form-sublabel">60 {{ __('мин') }}</label>
+                            <input type="number" id="operator_share_60" name="operator_share_60" class="form-input @error('operator_share_60') is-invalid @enderror" 
+                                   value="{{ old('operator_share_60') }}" min="0" step="50" placeholder="0">
+                            @error('operator_share_60')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-field">
+                            <label for="operator_share_90" class="form-sublabel">90 {{ __('мин') }}</label>
+                            <input type="number" id="operator_share_90" name="operator_share_90" class="form-input @error('operator_share_90') is-invalid @enderror" 
+                                   value="{{ old('operator_share_90') }}" min="0" step="50" placeholder="0">
+                            @error('operator_share_90')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-field">
+                            <label for="operator_share_120" class="form-sublabel">120 {{ __('мин') }}</label>
+                            <input type="number" id="operator_share_120" name="operator_share_120" class="form-input @error('operator_share_120') is-invalid @enderror" 
+                                   value="{{ old('operator_share_120') }}" min="0" step="50" placeholder="0">
+                            @error('operator_share_120')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="description" class="form-label">{{ __('Описание') }}</label>
                     <textarea id="description" name="description" class="form-input form-textarea @error('description') is-invalid @enderror" 
                               rows="3" placeholder="{{ __('Описание услуги...') }}">{{ old('description') }}</textarea>
@@ -102,6 +132,21 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+}
+.form-row--thirds {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+.form-sublabel {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-color);
+    margin-bottom: 6px;
+    opacity: 0.7;
 }
 .form-label {
     display: block;
@@ -207,9 +252,53 @@
     padding-top: 20px;
     border-top: 1px solid rgba(22, 11, 14, 0.1);
 }
+.form-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.form-actions .btn--outlined-dark {
+    background: transparent;
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+}
+.form-actions .btn--outlined-dark:hover {
+    background: var(--accent-color);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.form-actions .btn--dark {
+    background: var(--accent-color);
+    color: #fff;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.form-actions .btn--dark:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
 @media (max-width: 600px) {
     .form-row {
         grid-template-columns: 1fr;
+    }
+    .form-row--thirds {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .form-actions .btn {
+        width: 100%;
+        padding: 16px 24px;
     }
 }
 </style>

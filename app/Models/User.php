@@ -30,6 +30,7 @@ class User extends Authenticatable
         'photos',
         'birth_date',
         'nationality',
+        'bio',
         'company_address',
         'company_ico',
         'company_phone',

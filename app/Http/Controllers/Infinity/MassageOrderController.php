@@ -148,6 +148,14 @@ class MassageOrderController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        // Debug: логируем что пришло
+        \Log::info('Order update', [
+            'order_id' => $order->id,
+            'old_status' => $order->status,
+            'new_status' => $validated['status'],
+            'all_validated' => $validated
+        ]);
+
         $order->update($validated);
 
         return redirect()->route('infinity.orders.index')

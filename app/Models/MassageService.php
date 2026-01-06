@@ -13,6 +13,9 @@ class MassageService extends Model
         'name',
         'description',
         'price',
+        'operator_share_60',
+        'operator_share_90',
+        'operator_share_120',
         'duration',
         'is_active',
         'is_extra',
@@ -22,6 +25,9 @@ class MassageService extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
+        'operator_share_60' => 'decimal:2',
+        'operator_share_90' => 'decimal:2',
+        'operator_share_120' => 'decimal:2',
         'is_active' => 'boolean',
         'is_extra' => 'boolean',
     ];

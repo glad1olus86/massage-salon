@@ -44,6 +44,9 @@ class MassageServiceController extends Controller
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
+            'operator_share_60' => 'nullable|numeric|min:0',
+            'operator_share_90' => 'nullable|numeric|min:0',
+            'operator_share_120' => 'nullable|numeric|min:0',
             'duration' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
             'is_extra' => 'boolean',
@@ -54,6 +57,9 @@ class MassageServiceController extends Controller
         $service->name = $validated['name'];
         $service->description = $validated['description'] ?? null;
         $service->price = $validated['price'];
+        $service->operator_share_60 = $validated['operator_share_60'] ?? null;
+        $service->operator_share_90 = $validated['operator_share_90'] ?? null;
+        $service->operator_share_120 = $validated['operator_share_120'] ?? null;
         $service->duration = $validated['duration'] ?? null;
         $service->is_active = $request->boolean('is_active', true);
         $service->is_extra = $request->boolean('is_extra', false);
@@ -90,6 +96,9 @@ class MassageServiceController extends Controller
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
+            'operator_share_60' => 'nullable|numeric|min:0',
+            'operator_share_90' => 'nullable|numeric|min:0',
+            'operator_share_120' => 'nullable|numeric|min:0',
             'duration' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
             'is_extra' => 'boolean',
@@ -99,6 +108,9 @@ class MassageServiceController extends Controller
         $service->name = $validated['name'];
         $service->description = $validated['description'] ?? null;
         $service->price = $validated['price'];
+        $service->operator_share_60 = $validated['operator_share_60'] ?? null;
+        $service->operator_share_90 = $validated['operator_share_90'] ?? null;
+        $service->operator_share_120 = $validated['operator_share_120'] ?? null;
         $service->duration = $validated['duration'] ?? null;
         $service->is_active = $request->boolean('is_active', true);
         $service->is_extra = $request->boolean('is_extra', false);

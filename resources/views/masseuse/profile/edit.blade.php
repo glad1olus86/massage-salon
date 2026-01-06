@@ -85,7 +85,7 @@
                 <div class="services-column">
                     <h4 class="services-column-title">{{ __('Основные услуги') }}</h4>
                     <div class="services-list">
-                        @foreach($services as $service)
+                        @forelse($regularServices as $service)
                         <label class="service-checkbox">
                             <input type="checkbox" name="services[]" value="{{ $service->id }}" 
                                 {{ $user->massageServices->where('id', $service->id)->where('pivot.is_extra', false)->count() ? 'checked' : '' }}>
@@ -93,22 +93,26 @@
                             <span class="service-name">{{ $service->name }}</span>
                             <span class="service-price">{{ number_format($service->price, 0, ',', ' ') }} CZK</span>
                         </label>
-                        @endforeach
+                        @empty
+                        <p class="services-empty">{{ __('Нет доступных услуг') }}</p>
+                        @endforelse
                     </div>
                 </div>
                 
                 <div class="services-column">
                     <h4 class="services-column-title">{{ __('Экстра услуги') }}</h4>
                     <div class="services-list">
-                        @foreach($services as $service)
+                        @forelse($extraServices as $service)
                         <label class="service-checkbox service-checkbox--extra">
                             <input type="checkbox" name="extra_services[]" value="{{ $service->id }}" 
                                 {{ $user->massageServices->where('id', $service->id)->where('pivot.is_extra', true)->count() ? 'checked' : '' }}>
                             <span class="service-checkbox-box"></span>
                             <span class="service-name">{{ $service->name }}</span>
-                            <span class="service-price">{{ number_format($service->extra_price ?? $service->price * 1.5, 0, ',', ' ') }} CZK</span>
+                            <span class="service-price">{{ number_format($service->price, 0, ',', ' ') }} CZK</span>
                         </label>
-                        @endforeach
+                        @empty
+                        <p class="services-empty">{{ __('Нет экстра услуг') }}</p>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -270,6 +274,12 @@
     pointer-events: none;
     background: #f5f5f5;
 }
+.services-empty {
+    color: #999;
+    font-size: 14px;
+    padding: 12px;
+    text-align: center;
+}
 </style>
 @endpush
 
@@ -323,56 +333,5 @@ function updateGalleryAddVisibility() {
     const count = grid.querySelectorAll('.gallery-item').length;
     addBtn.style.display = count >= 8 ? 'none' : 'flex';
 }
-
-// Services mutual exclusion
-document.querySelectorAll('input[name="services[]"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const serviceId = this.value;
-        const extraCheckbox = document.querySelector(`input[name="extra_services[]"][value="${serviceId}"]`);
-        const extraLabel = extraCheckbox.closest('.service-checkbox');
-        
-        if (this.checked) {
-            extraCheckbox.checked = false;
-            extraCheckbox.disabled = true;
-            extraLabel.classList.add('service-checkbox--disabled');
-        } else {
-            extraCheckbox.disabled = false;
-            extraLabel.classList.remove('service-checkbox--disabled');
-        }
-    });
-    // Init on load
-    if (checkbox.checked) {
-        const serviceId = checkbox.value;
-        const extraCheckbox = document.querySelector(`input[name="extra_services[]"][value="${serviceId}"]`);
-        const extraLabel = extraCheckbox.closest('.service-checkbox');
-        extraCheckbox.disabled = true;
-        extraLabel.classList.add('service-checkbox--disabled');
-    }
-});
-
-document.querySelectorAll('input[name="extra_services[]"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const serviceId = this.value;
-        const mainCheckbox = document.querySelector(`input[name="services[]"][value="${serviceId}"]`);
-        const mainLabel = mainCheckbox.closest('.service-checkbox');
-        
-        if (this.checked) {
-            mainCheckbox.checked = false;
-            mainCheckbox.disabled = true;
-            mainLabel.classList.add('service-checkbox--disabled');
-        } else {
-            mainCheckbox.disabled = false;
-            mainLabel.classList.remove('service-checkbox--disabled');
-        }
-    });
-    // Init on load
-    if (checkbox.checked) {
-        const serviceId = checkbox.value;
-        const mainCheckbox = document.querySelector(`input[name="services[]"][value="${serviceId}"]`);
-        const mainLabel = mainCheckbox.closest('.service-checkbox');
-        mainCheckbox.disabled = true;
-        mainLabel.classList.add('service-checkbox--disabled');
-    }
-});
 </script>
 @endpush

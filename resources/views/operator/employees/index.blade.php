@@ -1,4 +1,4 @@
-@extends('layouts.infinity')
+@extends('layouts.operator')
 
 @section('page-title')
     {{ __('Мои сотрудники') }}
@@ -90,8 +90,8 @@
 @push('css-page')
 <style>
 .employees-section { margin-top: 20px; }
-.entity-list { overflow: hidden; }
-.entity-list__body { padding: 20px; background: #fff; }
+.entity-list { border-radius: 18px; }
+.entity-list__body { padding: 20px; background: #fff; border-radius: 0 0 18px 18px; }
 .entity-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .entity-row { display: grid; grid-template-columns: 56px 160px 80px 120px 1fr auto; align-items: center; gap: 16px; padding: 14px 18px; background: #fff; border-radius: 12px; border: 2px solid var(--brand-color); }
 .entity-row__avatar { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; }
@@ -111,8 +111,54 @@
 .empty-state { padding: 60px; text-align: center; color: #888; }
 .empty-state svg { margin-bottom: 20px; opacity: 0.5; }
 .empty-state p { font-size: 18px; margin-bottom: 20px; }
-.btn.btn--dark.sm-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 24px; text-align: center; }
+.btn.btn--dark.sm-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 24px; text-align: center; white-space: nowrap; }
+
+/* Красивые кнопки добавления */
+.block-header .btn.btn--dark.sm-button {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
+.block-header .btn.btn--dark.sm-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
 @media (max-width: 1100px) { .entity-row { grid-template-columns: 56px 140px 70px 100px 1fr auto; } }
-@media (max-width: 900px) { .entity-row { grid-template-columns: 48px 1fr auto; } .entity-row__services, .pill { display: none; } }
+
+@media (max-width: 900px) { 
+  .entity-row { grid-template-columns: 48px 1fr auto; } 
+  .entity-row__services, .pill { display: none; }
+  
+  /* Кнопки добавления на мобилке */
+  .block-header .btn.btn--dark.sm-button {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .block-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+  
+  .block-header .btn.btn--dark.sm-button {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+}
 </style>
 @endpush

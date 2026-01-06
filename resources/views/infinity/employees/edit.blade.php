@@ -111,11 +111,11 @@
                             </div>
                         </div>
 
-                        @if($services->count() > 0)
+                        @if($regularServices->count() > 0 || $extraServices->count() > 0)
                         <div class="form-group form-group--full" id="mainServicesField">
                             <label class="form-label">{{ __('Основные услуги') }}</label>
                             <div class="services-checkboxes" id="regularServices">
-                                @foreach($services as $service)
+                                @forelse($regularServices as $service)
                                 <label class="checkbox-card" data-service-id="{{ $service->id }}">
                                     <input type="checkbox" name="services[]" value="{{ $service->id }}" 
                                         class="regular-service-checkbox"
@@ -125,14 +125,16 @@
                                         <span class="checkbox-card__price">{{ $service->formatted_price }}</span>
                                     </span>
                                 </label>
-                                @endforeach
+                                @empty
+                                <p class="services-empty">{{ __('Нет доступных услуг') }}</p>
+                                @endforelse
                             </div>
                         </div>
 
                         <div class="form-group form-group--full" id="extraServicesField">
                             <label class="form-label">{{ __('Экстра услуги') }}</label>
                             <div class="services-checkboxes" id="extraServices">
-                                @foreach($services as $service)
+                                @forelse($extraServices as $service)
                                 <label class="checkbox-card checkbox-card--extra" data-service-id="{{ $service->id }}">
                                     <input type="checkbox" name="extra_services[]" value="{{ $service->id }}" 
                                         class="extra-service-checkbox"
@@ -142,7 +144,9 @@
                                         <span class="checkbox-card__price">{{ $service->formatted_price }}</span>
                                     </span>
                                 </label>
-                                @endforeach
+                                @empty
+                                <p class="services-empty">{{ __('Нет экстра услуг') }}</p>
+                                @endforelse
                             </div>
                         </div>
                         @endif
@@ -174,6 +178,12 @@
                             </select>
                             <small class="form-hint">{{ __('Оператор, который управляет этим сотрудником') }}</small>
                         @endif
+                        </div>
+
+                        <div class="form-group form-group--full" id="bioField">
+                            <label class="form-label">{{ __('О себе') }}</label>
+                            <textarea name="bio" class="form-textarea" rows="4" placeholder="{{ __('Расскажите о себе, своем опыте и преимуществах...') }}">{{ old('bio', $employee->bio) }}</textarea>
+                            <small class="form-hint">{{ __('Этот текст будет отображаться в профиле сотрудника') }}</small>
                         </div>
                     </div>
                 </div>
@@ -218,6 +228,8 @@
 .required { color: var(--brand-color); }
 .form-input, .form-select { padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; transition: border-color 0.2s; width: 100%; box-sizing: border-box; }
 .form-input:focus, .form-select:focus { outline: none; border-color: var(--brand-color); }
+.form-textarea { padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; transition: border-color 0.2s; width: 100%; box-sizing: border-box; resize: vertical; min-height: 100px; font-family: inherit; }
+.form-textarea:focus { outline: none; border-color: var(--brand-color); }
 .services-checkboxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
 .checkbox-card { display: block; cursor: pointer; }
 .checkbox-card input { display: none; }
@@ -390,46 +402,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 })();
-
-// Логика взаимоисключения услуг
-document.querySelectorAll('.regular-service-checkbox').forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-        const serviceId = this.value;
-        const extraCheckbox = document.querySelector('.extra-service-checkbox[value="' + serviceId + '"]');
-        const extraCard = extraCheckbox.closest('.checkbox-card');
-        
-        if (this.checked) {
-            extraCheckbox.checked = false;
-            extraCard.classList.add('checkbox-card--disabled');
-        } else {
-            extraCard.classList.remove('checkbox-card--disabled');
-        }
-    });
-    if (checkbox.checked) {
-        const serviceId = checkbox.value;
-        const extraCard = document.querySelector('.checkbox-card--extra[data-service-id="' + serviceId + '"]');
-        if (extraCard) extraCard.classList.add('checkbox-card--disabled');
-    }
-});
-
-document.querySelectorAll('.extra-service-checkbox').forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-        const serviceId = this.value;
-        const regularCheckbox = document.querySelector('.regular-service-checkbox[value="' + serviceId + '"]');
-        const regularCard = regularCheckbox.closest('.checkbox-card');
-        
-        if (this.checked) {
-            regularCheckbox.checked = false;
-            regularCard.classList.add('checkbox-card--disabled');
-        } else {
-            regularCard.classList.remove('checkbox-card--disabled');
-        }
-    });
-    if (checkbox.checked) {
-        const serviceId = checkbox.value;
-        const regularCard = document.querySelector('#regularServices .checkbox-card[data-service-id="' + serviceId + '"]');
-        if (regularCard) regularCard.classList.add('checkbox-card--disabled');
-    }
-});
 </script>
 @endpush

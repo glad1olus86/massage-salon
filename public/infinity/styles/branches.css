@@ -110,8 +110,30 @@
 }
 
 @media (max-width: 768px) {
+  .branch-card__header {
+    padding: 12px 14px;
+  }
+
   .branch-card__address {
-    font-size: 28px;
+    font-size: 18px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+  }
+
+  .branch-card__header .block-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .branch-card__actions {
+    gap: 8px;
+    flex-shrink: 0;
   }
 
   .branch-card__body {
@@ -120,25 +142,38 @@
   }
 
   .branch-card__media {
-    min-height: 240px;
+    min-height: 200px;
   }
 
   .branch-card__map {
     grid-row: 3;
-    min-height: 240px;
+    min-height: 200px;
   }
 }
 
 @media (max-width: 600px) {
   .branch-card__body {
-    padding: 18px;
+    padding: 16px;
+  }
+
+  .branch-card__address {
+    font-size: 16px;
+    padding: 5px 10px;
   }
 
   .branch-card__label {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .branch-card__value {
-    font-size: 16px;
+    font-size: 15px;
+  }
+
+  .branch-card__media {
+    min-height: 180px;
+  }
+
+  .branch-card__map {
+    min-height: 180px;
   }
 }

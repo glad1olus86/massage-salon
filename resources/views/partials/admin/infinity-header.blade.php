@@ -9,15 +9,9 @@
 @endphp
 
 <header class="header">
-    <button type="button" class="header-profile-button">
-        <img src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : asset('infinity/assets/profile-image.webp') }}" alt="Profile" class="header-profile__image">
-        <span class="header-profile__name">{{ Auth::user()->name }}</span>
-        <div class="arrow-button">
-            <svg viewBox="0 0 7 5" fill="none">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white"/>
-            </svg>
-        </div>
-    </button>
+    <div class="header-welcome">
+        {{ __('Привет') }}, <strong>{{ Auth::user()->name }}</strong>!
+    </div>
     
     <div class="header-row">
         <!-- Language Switcher -->
@@ -35,20 +29,25 @@
             </div>
         </div>
         
-        <a href="{{ route('profile') }}" class="header__outlined-button">
+        <a href="{{ route('profile') }}" class="header__outlined-button header__outlined-button--settings">
             <img src="{{ asset('infinity/assets/icons/header-settings-icon.svg') }}" alt="" class="header__outlined-button-icon">
             {{ __('Настройки') }}
         </a>
         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
             @csrf
             <button type="submit" class="header__outlined-button" title="{{ __('Выйти') }}">
-                <img src="{{ asset('infinity/assets/icons/header-logout-icon.svg') }}" alt="" class="header__outlined-button-icon">
+                <img src="{{ asset('infinity/assets/icons/header-logout-icon.svg') }}" alt="" class="header__outlined-button-icon header__logout-icon--desktop">
+                <img src="{{ asset('infinity/assets/icons/header-logout-icon-brand.svg') }}" alt="" class="header__outlined-button-icon header__logout-icon--mobile">
             </button>
         </form>
     </div>
 </header>
 
 <style>
+.header-welcome {
+    font-size: 18px;
+    color: #fff;
+}
 .language-dropdown {
     position: relative;
 }

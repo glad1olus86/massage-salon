@@ -632,6 +632,13 @@
     justify-content: space-between;
 }
 
+.day-details-section h4 .btn {
+    padding: 5px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
 .bookings-list {
     display: flex;
     flex-direction: column;
@@ -978,32 +985,99 @@
         font-size: 8px;
     }
 
-    .modal-content {
-        max-width: 100%;
-        max-height: 100vh;
-        border-radius: 0;
-    }
-
+    /* Модальное окно - открывается ниже хедера */
     .modal-overlay {
         padding: 0;
+        align-items: flex-start;
+        padding-top: 70px; /* Отступ для хедера с меню и языком */
+    }
+
+    .modal-content {
+        max-width: 100%;
+        max-height: calc(100vh - 70px);
+        border-radius: 20px 20px 0 0;
+        margin: 0;
+    }
+
+    .modal-content--large {
+        max-width: 100%;
     }
 
     .modal-header {
         padding: 16px 20px;
+        border-radius: 20px 20px 0 0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .modal-close {
+        width: 40px;
+        height: 40px;
+        font-size: 28px;
     }
 
     .modal-body {
         padding: 20px;
+        overflow-y: auto;
     }
 
     .form-row {
         grid-template-columns: 1fr;
     }
 
+    /* Заголовок секции с кнопкой */
+    .day-details-section h4 {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .day-details-section h4 .btn {
+        padding: 6px 14px;
+        font-size: 12px;
+        min-width: auto;
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    /* Бейдж бронирования - горизонтальный layout */
     .booking-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+    }
+
+    .booking-time {
+        font-size: 14px;
+        min-width: auto;
+        flex-shrink: 0;
+    }
+
+    .booking-room {
+        padding: 4px 8px;
+        font-size: 11px;
+        flex-shrink: 0;
+    }
+
+    .booking-user {
+        flex: 1;
+        font-size: 13px;
+        text-align: right;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .booking-actions {
+        flex-shrink: 0;
+    }
+
+    .booking-actions .btn {
+        padding: 5px 10px;
+        font-size: 11px;
     }
 
     .duty-info {

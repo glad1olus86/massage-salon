@@ -218,4 +218,33 @@ class OrderController extends Controller
         return redirect()->route('operator.orders.index')
             ->with('success', __('Заказ удалён'));
     }
+
+    /**
+     * Update order status via AJAX.
+     */
+    public function updateStatus(Request $request, MassageOrder $order)
+    {
+        $operator = Auth::user();
+        $subordinateIds = $operator->getSubordinateIds();
+
+        // Проверяем доступ
+        if (!in_array($order->employee_id, $subordinateIds)) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Доступ запрещён')
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:pending,confirmed,completed,cancelled',
+        ]);
+
+        $order->update(['status' => $validated['status']]);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Статус обновлён'),
+            'status' => $validated['status']
+        ]);
+    }
 }

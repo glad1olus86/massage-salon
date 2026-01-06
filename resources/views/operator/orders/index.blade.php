@@ -44,11 +44,14 @@
 
         <div class="orders__content">
             @if(isset($orders) && $orders->count() > 0)
-            <table class="table table--spacious orders-table">
+            
+            {{-- Desktop таблица --}}
+            <table class="table table--spacious orders-table orders-table--desktop">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('Клиент') }}</th>
                         <th scope="col">{{ __('Дата') }}</th>
+                        <th scope="col">{{ __('Длительность') }}</th>
                         <th scope="col">{{ __('Услуга') }}</th>
                         <th scope="col">{{ __('Сотрудник') }}</th>
                         <th scope="col">{{ __('Сумма') }}</th>
@@ -61,13 +64,25 @@
                     <tr>
                         <td>{{ $order->client_display_name }}</td>
                         <td>{{ $order->formatted_date }}</td>
+                        <td>{{ $order->duration ? $order->duration . ' ' . __('мин') : '-' }}</td>
                         <td>{{ $order->service_display_name }}</td>
                         <td><a class="text-link text-link--brand" href="#">{{ $order->employee_display_name }}</a></td>
                         <td class="order-amount">{{ $order->formatted_amount }}</td>
                         <td>
-                            <span class="order-status order-status--{{ $order->status }}">
-                                {{ \App\Models\MassageOrder::getStatuses()[$order->status] ?? $order->status }}
-                            </span>
+                            <div class="status-dropdown" data-order-id="{{ $order->id }}">
+                                <span class="order-status order-status--{{ $order->status }} order-status--clickable" onclick="toggleStatusDropdown(this)">
+                                    {{ \App\Models\MassageOrder::getStatuses()[$order->status] ?? $order->status }}
+                                </span>
+                                <div class="status-dropdown__menu">
+                                    @foreach(\App\Models\MassageOrder::getStatuses() as $statusKey => $statusLabel)
+                                        <button type="button" 
+                                                class="status-dropdown__option status-dropdown__option--{{ $statusKey }} {{ $order->status === $statusKey ? 'is-active' : '' }}"
+                                                onclick="changeOrderStatus({{ $order->id }}, '{{ $statusKey }}')">
+                                            {{ $statusLabel }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <div class="action-buttons">
@@ -93,6 +108,87 @@
                     @endforeach
                 </tbody>
             </table>
+            
+            {{-- Mobile карточки --}}
+            <div class="orders-cards orders-cards--mobile">
+                @foreach($orders as $order)
+                <div class="order-card">
+                    <div class="order-card__header">
+                        <span class="order-card__client">{{ $order->client_display_name }}</span>
+                        <div class="status-dropdown" data-order-id="{{ $order->id }}">
+                            <span class="order-status order-status--{{ $order->status }} order-status--clickable" onclick="toggleStatusDropdown(this)">
+                                {{ \App\Models\MassageOrder::getStatuses()[$order->status] ?? $order->status }}
+                            </span>
+                            <div class="status-dropdown__menu">
+                                @foreach(\App\Models\MassageOrder::getStatuses() as $statusKey => $statusLabel)
+                                    <button type="button" 
+                                            class="status-dropdown__option status-dropdown__option--{{ $statusKey }} {{ $order->status === $statusKey ? 'is-active' : '' }}"
+                                            onclick="changeOrderStatus({{ $order->id }}, '{{ $statusKey }}')">
+                                        {{ $statusLabel }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-card__badges">
+                        <span class="order-badge order-badge--date">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            {{ $order->formatted_date }}
+                        </span>
+                        @if($order->duration)
+                        <span class="order-badge order-badge--duration">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            {{ $order->duration }} {{ __('мин') }}
+                        </span>
+                        @endif
+                        <span class="order-badge order-badge--service">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            {{ $order->service_display_name }}
+                        </span>
+                        <span class="order-badge order-badge--employee">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            {{ $order->employee_display_name }}
+                        </span>
+                        <span class="order-badge order-badge--amount">
+                            {{ $order->formatted_amount }}
+                        </span>
+                    </div>
+                    <div class="order-card__actions">
+                        <a href="{{ route('operator.orders.edit', $order) }}" class="order-card__btn order-card__btn--edit">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            {{ __('Изменить') }}
+                        </a>
+                        <form action="{{ route('operator.orders.destroy', $order) }}" method="POST" class="order-card__form" onsubmit="return confirm('{{ __('Удалить заказ?') }}')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="order-card__btn order-card__btn--delete">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                {{ __('Удалить') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                @endforeach
+            </div>
             
             <div class="pagination-wrapper">
                 {{ $orders->withQueryString()->links() }}
@@ -134,6 +230,70 @@
 .order-status--pending { background: rgba(234, 179, 8, 0.15); color: #ca8a04; }
 .order-status--confirmed { background: rgba(59, 130, 246, 0.15); color: #2563eb; }
 .order-status--cancelled { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+
+/* Status Dropdown */
+.status-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 50;
+}
+
+.status-dropdown.is-open {
+    z-index: 1000;
+}
+
+.order-status--clickable {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.order-status--clickable:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.status-dropdown__menu {
+    position: fixed;
+    min-width: 140px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 6px;
+    z-index: 9999;
+    display: none;
+}
+
+.status-dropdown.is-open .status-dropdown__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.status-dropdown__option {
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+}
+
+.status-dropdown__option:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.status-dropdown__option.is-active {
+    background: rgba(177, 32, 84, 0.1);
+}
+
+.status-dropdown__option--completed { color: #16a34a; }
+.status-dropdown__option--pending { color: #ca8a04; }
+.status-dropdown__option--confirmed { color: #2563eb; }
+.status-dropdown__option--cancelled { color: #dc2626; }
+
 .action-buttons { display: flex; gap: 8px; }
 .action-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s; }
 .action-btn--edit { background-color: rgba(177, 32, 84, 0.1); color: var(--brand-color); }
@@ -147,6 +307,244 @@
 .dropdown.is-open .dropdown__menu { display: flex; flex-direction: column; gap: 4px; }
 .dropdown__option { border: 0; cursor: pointer; border-radius: 6px; padding: 8px 12px; text-align: left; background: transparent; color: #fff; font-size: 14px; text-decoration: none; display: block; }
 .dropdown__option:hover, .dropdown__option[aria-selected="true"] { background: rgba(255, 255, 255, 0.1); }
+
+/* Mobile карточки - скрыты на десктопе */
+.orders-cards--mobile {
+    display: none;
+}
+
 @media (max-width: 900px) { .orders-table { min-width: 800px; } .orders__content { overflow-x: auto; } }
+
+@media (max-width: 768px) {
+    /* Скрываем таблицу на мобилке */
+    .orders-table--desktop {
+        display: none;
+    }
+    
+    /* Показываем карточки */
+    .orders-cards--mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px;
+    }
+    
+    .orders__content {
+        overflow-x: hidden;
+    }
+    
+    /* Карточка заказа */
+    .order-card {
+        background: #fff;
+        border: 2px solid var(--brand-color);
+        border-radius: 12px;
+        padding: 14px;
+    }
+    
+    .order-card__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    
+    .order-card__client {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--accent-color);
+    }
+    
+    /* Бейджи */
+    .order-card__badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+    
+    .order-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    
+    .order-badge--date {
+        background: rgba(59, 130, 246, 0.12);
+        color: #2563eb;
+    }
+    
+    .order-badge--duration {
+        background: rgba(34, 197, 94, 0.12);
+        color: #16a34a;
+    }
+    
+    .order-badge--service {
+        background: rgba(177, 32, 84, 0.12);
+        color: var(--brand-color);
+    }
+    
+    .order-badge--employee {
+        background: rgba(139, 92, 246, 0.12);
+        color: #7c3aed;
+    }
+    
+    .order-badge--amount {
+        background: var(--accent-color);
+        color: #fff;
+        font-weight: 700;
+    }
+    
+    /* Кнопки действий */
+    .order-card__actions {
+        display: flex;
+        gap: 10px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(177, 32, 84, 0.15);
+    }
+    
+    .order-card__form {
+        flex: 1;
+        display: flex;
+    }
+    
+    .order-card__btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 44px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .order-card__btn--edit {
+        background: var(--accent-color);
+        color: #fff;
+    }
+    
+    .order-card__btn--edit:hover {
+        opacity: 0.9;
+    }
+    
+    .order-card__btn--delete {
+        background: rgba(239, 68, 68, 0.12);
+        color: #dc2626;
+        width: 100%;
+    }
+    
+    .order-card__btn--delete:hover {
+        background: rgba(239, 68, 68, 0.2);
+    }
+    
+    /* Block header адаптация */
+    .block-header {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 14px 16px;
+    }
+    
+    .header-actions {
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 100%;
+    }
+    
+    .header-actions .dropdown {
+        flex: 1;
+    }
+    
+    .header-actions .dropdown__trigger {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .header-actions .btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-card__badges {
+        gap: 6px;
+    }
+    
+    .order-badge {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    
+    .order-card__client {
+        font-size: 16px;
+    }
+}
 </style>
+@endpush
+
+@push('scripts')
+<script>
+function toggleStatusDropdown(element) {
+    const dropdown = element.closest('.status-dropdown');
+    const menu = dropdown.querySelector('.status-dropdown__menu');
+    
+    // Закрываем все другие дропдауны
+    document.querySelectorAll('.status-dropdown.is-open').forEach(d => {
+        if (d !== dropdown) {
+            d.classList.remove('is-open');
+        }
+    });
+    
+    // Переключаем текущий
+    dropdown.classList.toggle('is-open');
+    
+    // Позиционируем меню
+    if (dropdown.classList.contains('is-open')) {
+        const rect = element.getBoundingClientRect();
+        menu.style.top = (rect.bottom + 6) + 'px';
+        menu.style.left = (rect.left + rect.width / 2 - 70) + 'px';
+    }
+}
+
+function changeOrderStatus(orderId, status) {
+    fetch('{{ url("operator/orders") }}/' + orderId + '/status', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ status: status })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || '{{ __("Ошибка при изменении статуса") }}');
+        }
+    })
+    .catch(error => {
+        alert('{{ __("Ошибка соединения") }}');
+    });
+}
+
+// Закрытие дропдауна при клике вне его
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.status-dropdown')) {
+        document.querySelectorAll('.status-dropdown.is-open').forEach(dropdown => {
+            dropdown.classList.remove('is-open');
+        });
+    }
+});
+</script>
 @endpush

@@ -17,13 +17,21 @@ class ProfileController extends Controller
         $user = auth()->user();
         $user->load(['massageServices', 'branch']);
         
-        // Получаем все доступные услуги от создателя
-        $services = MassageService::where('created_by', $user->creatorId())
+        // Получаем обычные услуги (is_extra = false)
+        $regularServices = MassageService::where('created_by', $user->creatorId())
             ->where('is_active', true)
+            ->where('is_extra', false)
             ->orderBy('name')
             ->get();
         
-        return view('masseuse.profile.edit', compact('user', 'services'));
+        // Получаем экстра услуги (is_extra = true)
+        $extraServices = MassageService::where('created_by', $user->creatorId())
+            ->where('is_active', true)
+            ->where('is_extra', true)
+            ->orderBy('name')
+            ->get();
+        
+        return view('masseuse.profile.edit', compact('user', 'regularServices', 'extraServices'));
     }
 
     /**

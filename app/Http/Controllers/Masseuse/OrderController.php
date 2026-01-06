@@ -68,6 +68,7 @@ class OrderController extends Controller
             'client_name' => 'nullable|string|max:255',
             'service_id' => 'nullable|exists:massage_services,id',
             'service_name' => 'nullable|string|max:255',
+            'duration' => 'nullable|integer|in:60,90,120',
             'order_date' => 'required|date',
             'order_time' => 'nullable',
             'amount' => 'required|numeric|min:0',
@@ -101,6 +102,12 @@ class OrderController extends Controller
             abort(403);
         }
         
+        // Запрещаем редактирование подтверждённых и завершённых заказов
+        if (in_array($order->status, ['confirmed', 'completed'])) {
+            return redirect()->route('masseuse.orders.index')
+                ->with('error', __('Нельзя редактировать подтверждённые или завершённые заказы'));
+        }
+        
         $clients = MassageClient::where('created_by', $user->creatorId())
             ->orderBy('first_name')
             ->get();
@@ -121,11 +128,18 @@ class OrderController extends Controller
             abort(403);
         }
         
+        // Запрещаем обновление подтверждённых и завершённых заказов
+        if (in_array($order->status, ['confirmed', 'completed'])) {
+            return redirect()->route('masseuse.orders.index')
+                ->with('error', __('Нельзя редактировать подтверждённые или завершённые заказы'));
+        }
+        
         $validated = $request->validate([
             'client_id' => 'nullable|exists:massage_clients,id',
             'client_name' => 'nullable|string|max:255',
             'service_id' => 'nullable|exists:massage_services,id',
             'service_name' => 'nullable|string|max:255',
+            'duration' => 'nullable|integer|in:60,90,120',
             'order_date' => 'required|date',
             'order_time' => 'nullable',
             'amount' => 'required|numeric|min:0',
@@ -151,6 +165,12 @@ class OrderController extends Controller
         
         if ($order->employee_id !== $user->id) {
             abort(403);
+        }
+        
+        // Запрещаем удаление подтверждённых и завершённых заказов
+        if (in_array($order->status, ['confirmed', 'completed'])) {
+            return redirect()->route('masseuse.orders.index')
+                ->with('error', __('Нельзя удалить подтверждённые или завершённые заказы'));
         }
         
         $order->delete();

@@ -7,29 +7,32 @@
 @section('content')
 <!-- Orders Section -->
 <section class="new-orders card">
-    <div class="block-header block-header--dark-red" style="justify-content: end;">
+    <div class="block-header block-header--dark-red">
         <div class="block-title">
             <span class="block-title__numbers">{{ $ordersCount }}</span>
             {{ __('новых заказов за') }}
         </div>
-        <div class="dropdown" data-dropdown>
-            <button type="button" class="dropdown__trigger" aria-haspopup="listbox" aria-expanded="false">
-                <span class="dropdown__value" data-dropdown-value>
-                    @if($period == 'day') {{ __('актуальный день') }}
-                    @elseif($period == 'week') {{ __('актуальную неделю') }}
-                    @else {{ __('актуальный месяц') }}
-                    @endif
-                </span>
-                <div class="arrow-button" aria-hidden="true">
-                    <svg viewBox="0 0 7 5" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white" />
-                    </svg>
+        <div class="header-actions">
+            <div class="dropdown" data-dropdown>
+                <button type="button" class="dropdown__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="dropdown__value" data-dropdown-value>
+                        @switch($period ?? 'week')
+                            @case('day') {{ __('день') }} @break
+                            @case('week') {{ __('неделю') }} @break
+                            @case('month') {{ __('месяц') }} @break
+                        @endswitch
+                    </span>
+                    <div class="arrow-button">
+                        <svg viewBox="0 0 7 5" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white" />
+                        </svg>
+                    </div>
+                </button>
+                <div class="dropdown__menu" role="listbox" aria-label="{{ __('Период') }}">
+                    <button type="button" class="dropdown__option" role="option" data-value="day" onclick="changePeriod('day')" {{ ($period ?? '') == 'day' ? 'aria-selected=true' : '' }}>{{ __('день') }}</button>
+                    <button type="button" class="dropdown__option" role="option" data-value="week" onclick="changePeriod('week')" {{ ($period ?? 'week') == 'week' ? 'aria-selected=true' : '' }}>{{ __('неделю') }}</button>
+                    <button type="button" class="dropdown__option" role="option" data-value="month" onclick="changePeriod('month')" {{ ($period ?? '') == 'month' ? 'aria-selected=true' : '' }}>{{ __('месяц') }}</button>
                 </div>
-            </button>
-            <div class="dropdown__menu" role="listbox" aria-label="{{ __('Период') }}">
-                <button type="button" class="dropdown__option" role="option" data-value="day" onclick="changePeriod('day')">{{ __('актуальный день') }}</button>
-                <button type="button" class="dropdown__option" role="option" data-value="week" onclick="changePeriod('week')">{{ __('актуальную неделю') }}</button>
-                <button type="button" class="dropdown__option" role="option" data-value="month" onclick="changePeriod('month')">{{ __('актуальный месяц') }}</button>
             </div>
         </div>
     </div>
@@ -43,7 +46,8 @@
                         <th scope="col">{{ __('Услуга') }}</th>
                         <th scope="col">{{ __('Сотрудник') }}</th>
                         <th scope="col">{{ __('Длительность') }}</th>
-                        <th scope="col">{{ __('Заработок') }}</th>
+                        <th scope="col">{{ __('Статус') }}</th>
+                        <th scope="col">{{ __('Стоимость') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,11 +58,27 @@
                         <td>{{ $order->service?->name ?? $order->service_name ?? 'N/A' }}</td>
                         <td><a class="text-link text-link--brand" href="#">{{ $order->employee?->name ?? 'N/A' }}</a></td>
                         <td>{{ $order->duration ?? '-' }} min</td>
+                        <td>
+                            <div class="status-dropdown" data-order-id="{{ $order->id }}">
+                                <span class="order-status order-status--{{ $order->status }} order-status--clickable" onclick="toggleStatusDropdown(this)">
+                                    {{ __(\App\Models\MassageOrder::getStatuses()[$order->status] ?? $order->status) }}
+                                </span>
+                                <div class="status-dropdown__menu">
+                                    @foreach(\App\Models\MassageOrder::getStatuses() as $statusKey => $statusLabel)
+                                        <button type="button" 
+                                                class="status-dropdown__option status-dropdown__option--{{ $statusKey }} {{ $order->status === $statusKey ? 'is-active' : '' }}"
+                                                onclick="changeOrderStatus({{ $order->id }}, '{{ $statusKey }}')">
+                                            {{ __($statusLabel) }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </td>
                         <td class="semibold"><span class="text-link--brand">{{ number_format($order->amount, 0) }}</span> Kč</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px; color: #888;">
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #888;">
                             {{ __('Нет заказов за выбранный период') }}
                         </td>
                     </tr>
@@ -70,14 +90,14 @@
                     <button type="button" class="btn btn--dark sm-button sm-button--dark">{{ __('Новый заказ') }}</button>
                     <button type="button" class="btn btn--outlined-dark sm-button sm-button--outlined-dark">{{ __('Полная статистика заказов') }}</button>
                 </div>
-                <span class="semibold table-sum">{{ __('ИТОГО ДОХОД ОПЕРАТОРА:') }} <span class="text-link--brand">{{ number_format($operatorCommission, 0) }} Kč</span></span>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Duty Section -->
-<section class="duty-wrapper">
+<!-- Duty and Income Section -->
+<section class="duty-income-wrapper">
+    <!-- Duty Card -->
     <div class="duty card duty--fixed">
         <div class="block-header">
             <div class="block-title">
@@ -114,35 +134,66 @@
             @endforelse
         </div>
     </div>
+
+    <!-- Operator Income Card -->
+    <div class="income card income--fixed">
+        <div class="block-header">
+            <div class="block-title">
+                {{ __('Доход оператора') }}
+            </div>
+            <svg class="block-title__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+        </div>
+
+        <div class="income__total">
+            <span class="income__label">{{ __('За текущий месяц:') }}</span>
+            <span class="income__amount">{{ number_format($monthlyOperatorIncome, 0, ',', ' ') }} Kč</span>
+        </div>
+
+        <div class="income__orders">
+            <span class="income__orders-title">{{ __('Последние заказы:') }}</span>
+            @forelse($recentIncomeOrders as $order)
+            <div class="income-order">
+                <div class="income-order__info">
+                    <span class="income-order__service">{{ $order->service?->name ?? 'N/A' }}</span>
+                    <span class="income-order__employee">{{ $order->employee?->name ?? 'N/A' }}</span>
+                </div>
+                <span class="income-order__share">+{{ number_format($order->operator_share, 0) }} Kč</span>
+            </div>
+            @empty
+            <div class="income-empty">{{ __('Нет заказов за этот месяц') }}</div>
+            @endforelse
+        </div>
+    </div>
 </section>
 
 <!-- Performance Section -->
 <div class="performance card">
-    <div class="block-header">
-        <div class="block-title">
+    <div class="block-header block-header--wrap">
+        <div class="block-title block-title--inline">
             <span class="block-title__numbers">TOP 10</span>
-            {{ __('сотрудников по эффективности за') }}
-        </div>
-
-        <div class="dropdown" data-dropdown>
-            <button type="button" class="dropdown__trigger" aria-haspopup="listbox" aria-expanded="false">
-                <span class="dropdown__value" data-dropdown-value>
-                    @if($performancePeriod == 'day') {{ __('актуальный день') }}
-                    @elseif($performancePeriod == 'week') {{ __('актуальную неделю') }}
-                    @else {{ __('актуальный месяц') }}
-                    @endif
-                </span>
-                <div class="arrow-button" aria-hidden="true">
-                    <svg viewBox="0 0 7 5" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white" />
-                    </svg>
+            <span class="block-title__text">{{ __('сотрудников по эффективности за') }} <div class="dropdown dropdown--inline" data-dropdown>
+                <button type="button" class="dropdown__trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="dropdown__value" data-dropdown-value>
+                        @if($performancePeriod == 'day') {{ __('день') }}
+                        @elseif($performancePeriod == 'week') {{ __('неделю') }}
+                        @else {{ __('месяц') }}
+                        @endif
+                    </span>
+                    <div class="arrow-button" aria-hidden="true">
+                        <svg viewBox="0 0 7 5" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.98734V0L3.37859 2.7877L6.75719 0V1.98734L3.37859 4.77504L0 1.98734Z" fill="white" />
+                        </svg>
+                    </div>
+                </button>
+                <div class="dropdown__menu" role="listbox" aria-label="{{ __('Период') }}">
+                    <button type="button" class="dropdown__option" role="option" onclick="changePerformancePeriod('day')">{{ __('день') }}</button>
+                    <button type="button" class="dropdown__option" role="option" onclick="changePerformancePeriod('week')">{{ __('неделю') }}</button>
+                    <button type="button" class="dropdown__option" role="option" onclick="changePerformancePeriod('month')">{{ __('месяц') }}</button>
                 </div>
-            </button>
-            <div class="dropdown__menu" role="listbox" aria-label="{{ __('Период') }}">
-                <button type="button" class="dropdown__option" role="option" onclick="changePerformancePeriod('day')">{{ __('актуальный день') }}</button>
-                <button type="button" class="dropdown__option" role="option" onclick="changePerformancePeriod('week')">{{ __('актуальную неделю') }}</button>
-                <button type="button" class="dropdown__option" role="option" onclick="changePerformancePeriod('month')">{{ __('актуальный месяц') }}</button>
-            </div>
+            </div></span>
         </div>
     </div>
 
@@ -184,6 +235,107 @@
 
 @push('css-page')
 <style>
+/* Header actions с dropdown */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Dropdown styles */
+.dropdown {
+    position: relative;
+    display: inline-flex;
+}
+
+.dropdown__trigger {
+    border: 0;
+    cursor: pointer;
+    background-color: var(--accent-color);
+    color: #fff;
+    font-size: 16px;
+    border-radius: 10px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dropdown__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 150px;
+    padding: 8px;
+    border-radius: 10px;
+    z-index: 10;
+    background: var(--accent-color);
+    display: none;
+}
+
+.dropdown.is-open .dropdown__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dropdown__option {
+    border: 0;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 8px 12px;
+    text-align: left;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown__option:hover,
+.dropdown__option[aria-selected="true"] {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Inline dropdown в заголовке (для performance) */
+.dropdown--inline {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.dropdown--inline .dropdown__trigger {
+    padding: 5px 10px;
+    font-size: 14px;
+    gap: 6px;
+}
+
+.block-title--inline {
+    display: block;
+}
+
+.block-title--inline .block-title__text {
+    display: block;
+    margin-top: 4px;
+}
+
+.block-header--wrap {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    /* Компактная кнопка на мобилке */
+    .dropdown--inline .dropdown__trigger {
+        padding: 4px 8px;
+        font-size: 12px;
+        gap: 4px;
+    }
+    
+    .dropdown--inline .arrow-button svg {
+        width: 7px;
+        height: 5px;
+    }
+}
+
 /* Avatar placeholder styles */
 .avatar--placeholder {
     display: flex;
@@ -202,11 +354,111 @@
 
 /* Duty card fixed height */
 .duty--fixed {
-    min-height: 280px;
-    max-height: 280px;
+    min-height: 420px;
+    max-height: 420px;
     display: flex;
     flex-direction: column;
 }
+
+/* Duty and Income wrapper - два блока рядом */
+.duty-income-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+    .duty-income-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Income card styles */
+.income--fixed {
+    min-height: 420px;
+    max-height: 420px;
+    display: flex;
+    flex-direction: column;
+}
+
+.income__total {
+    padding: 20px;
+    background: linear-gradient(135deg, var(--brand-color) 0%, #A91D4D 100%);
+    border-radius: 12px;
+    margin: 16px;
+    text-align: center;
+}
+
+.income__label {
+    display: block;
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.income__amount {
+    display: block;
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.income__orders {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 16px 16px;
+}
+
+.income__orders-title {
+    display: block;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.income-order {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.income-order:last-child {
+    border-bottom: none;
+}
+
+.income-order__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.income-order__service {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.income-order__employee {
+    font-size: 12px;
+    color: #888;
+}
+
+.income-order__share {
+    font-size: 16px;
+    font-weight: 700;
+    color: #22c55e;
+}
+
+.income-empty {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-size: 14px;
+}
+
 .duty__content--compact {
     flex: 1;
     overflow-y: auto;
@@ -295,6 +547,95 @@
     color: #888;
     font-size: 14px;
 }
+
+/* Order status badges */
+.order-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.order-status--pending {
+    background: rgba(234, 179, 8, 0.15);
+    color: #ca8a04;
+}
+.order-status--confirmed {
+    background: rgba(59, 130, 246, 0.15);
+    color: #2563eb;
+}
+.order-status--completed {
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+}
+.order-status--cancelled {
+    background: rgba(239, 68, 68, 0.15);
+    color: #dc2626;
+}
+
+/* Status Dropdown */
+.status-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 50;
+}
+
+.status-dropdown.is-open {
+    z-index: 1000;
+}
+
+.order-status--clickable {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.order-status--clickable:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.status-dropdown__menu {
+    position: fixed;
+    min-width: 140px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 6px;
+    z-index: 9999;
+    display: none;
+}
+
+.status-dropdown.is-open .status-dropdown__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.status-dropdown__option {
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+}
+
+.status-dropdown__option:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.status-dropdown__option.is-active {
+    background: rgba(177, 32, 84, 0.1);
+}
+
+.status-dropdown__option--completed { color: #16a34a; }
+.status-dropdown__option--pending { color: #ca8a04; }
+.status-dropdown__option--confirmed { color: #2563eb; }
+.status-dropdown__option--cancelled { color: #dc2626; }
 </style>
 @endpush
 
@@ -310,6 +651,79 @@ function changePerformancePeriod(period) {
     const url = new URL(window.location.href);
     url.searchParams.set('performance_period', period);
     window.location.href = url.toString();
+}
+
+// Dropdown toggle
+document.querySelectorAll('[data-dropdown]').forEach(dropdown => {
+    const trigger = dropdown.querySelector('.dropdown__trigger');
+    if (trigger) {
+        trigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Закрываем все другие дропдауны
+            document.querySelectorAll('[data-dropdown].is-open').forEach(d => {
+                if (d !== dropdown) d.classList.remove('is-open');
+            });
+            dropdown.classList.toggle('is-open');
+        });
+    }
+});
+
+// Закрытие при клике вне дропдауна
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('[data-dropdown]') && !e.target.closest('.status-dropdown')) {
+        document.querySelectorAll('[data-dropdown].is-open').forEach(d => {
+            d.classList.remove('is-open');
+        });
+        document.querySelectorAll('.status-dropdown.is-open').forEach(d => {
+            d.classList.remove('is-open');
+        });
+    }
+});
+
+// Status dropdown functions
+function toggleStatusDropdown(element) {
+    const dropdown = element.closest('.status-dropdown');
+    const menu = dropdown.querySelector('.status-dropdown__menu');
+    
+    // Закрываем все другие дропдауны
+    document.querySelectorAll('.status-dropdown.is-open').forEach(d => {
+        if (d !== dropdown) {
+            d.classList.remove('is-open');
+        }
+    });
+    
+    // Переключаем текущий
+    dropdown.classList.toggle('is-open');
+    
+    // Позиционируем меню
+    if (dropdown.classList.contains('is-open')) {
+        const rect = element.getBoundingClientRect();
+        menu.style.top = (rect.bottom + 6) + 'px';
+        menu.style.left = (rect.left + rect.width / 2 - 70) + 'px';
+    }
+}
+
+function changeOrderStatus(orderId, status) {
+    fetch('{{ url("operator/orders") }}/' + orderId + '/status', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ status: status })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || '{{ __("Ошибка при изменении статуса") }}');
+        }
+    })
+    .catch(error => {
+        alert('{{ __("Ошибка соединения") }}');
+    });
 }
 </script>
 @endpush

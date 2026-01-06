@@ -29,14 +29,15 @@
             </div>
         </div>
         
-        <a href="{{ route('masseuse.profile.edit') }}" class="header__outlined-button">
+        <a href="{{ route('masseuse.profile.edit') }}" class="header__outlined-button header__outlined-button--settings">
             <img src="{{ asset('infinity/assets/icons/header-settings-icon.svg') }}" alt="" class="header__outlined-button-icon">
             {{ __('Профиль') }}
         </a>
         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
             @csrf
             <button type="submit" class="header__outlined-button" title="{{ __('Выйти') }}">
-                <img src="{{ asset('infinity/assets/icons/header-logout-icon.svg') }}" alt="" class="header__outlined-button-icon">
+                <img src="{{ asset('infinity/assets/icons/header-logout-icon.svg') }}" alt="" class="header__outlined-button-icon header__logout-icon--desktop">
+                <img src="{{ asset('infinity/assets/icons/header-logout-icon-brand.svg') }}" alt="" class="header__outlined-button-icon header__logout-icon--mobile">
             </button>
         </form>
     </div>
