@@ -54,7 +54,7 @@ class MassageOrderController extends Controller
         
         $services = MassageService::where('created_by', \Auth::user()->creatorId())
             ->where('is_active', true)
-            ->orderBy('is_extra')
+            ->where('is_extra', false)
             ->orderBy('name')
             ->get();
         
@@ -113,7 +113,7 @@ class MassageOrderController extends Controller
             ->get();
         
         $services = MassageService::where('created_by', \Auth::user()->creatorId())
-            ->orderBy('is_extra')
+            ->where('is_extra', false)
             ->orderBy('name')
             ->get();
         
