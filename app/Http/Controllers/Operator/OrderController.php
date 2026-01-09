@@ -75,8 +75,11 @@ class OrderController extends Controller
         $branchIds = User::whereIn('id', $subordinateIds)->pluck('branch_id')->unique()->filter();
         $branches = Branch::whereIn('id', $branchIds)->orderBy('name')->get();
 
-        // Только подопечные сотрудники
-        $employees = User::whereIn('id', $subordinateIds)->orderBy('name')->get();
+        // Только подопечные сотрудники с ролью masseuse через Spatie
+        $employees = User::whereIn('id', $subordinateIds)
+            ->role('masseuse')
+            ->orderBy('name')
+            ->get();
 
         $statuses = MassageOrder::getStatuses();
         $paymentMethods = MassageOrder::getPaymentMethods();
@@ -149,7 +152,11 @@ class OrderController extends Controller
         $branchIds = User::whereIn('id', $subordinateIds)->pluck('branch_id')->unique()->filter();
         $branches = Branch::whereIn('id', $branchIds)->orderBy('name')->get();
 
-        $employees = User::whereIn('id', $subordinateIds)->orderBy('name')->get();
+        // Только подопечные сотрудники с ролью masseuse через Spatie
+        $employees = User::whereIn('id', $subordinateIds)
+            ->role('masseuse')
+            ->orderBy('name')
+            ->get();
 
         $statuses = MassageOrder::getStatuses();
         $paymentMethods = MassageOrder::getPaymentMethods();

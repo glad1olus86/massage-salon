@@ -61,9 +61,12 @@ class MassageOrderController extends Controller
             ->orderBy('name')
             ->get();
         
-        // Получаем сотрудников (users) компании
-        $employees = User::where('created_by', \Auth::user()->creatorId())
-            ->orWhere('id', \Auth::user()->creatorId())
+        // Получаем только массажисток (users с ролью masseuse через Spatie)
+        $employees = User::where(function ($q) {
+                $q->where('created_by', \Auth::user()->creatorId())
+                  ->orWhere('id', \Auth::user()->creatorId());
+            })
+            ->role('masseuse')
             ->orderBy('name')
             ->get();
 
@@ -116,8 +119,12 @@ class MassageOrderController extends Controller
             ->orderBy('name')
             ->get();
         
-        $employees = User::where('created_by', \Auth::user()->creatorId())
-            ->orWhere('id', \Auth::user()->creatorId())
+        // Получаем только массажисток (users с ролью masseuse через Spatie)
+        $employees = User::where(function ($q) {
+                $q->where('created_by', \Auth::user()->creatorId())
+                  ->orWhere('id', \Auth::user()->creatorId());
+            })
+            ->role('masseuse')
             ->orderBy('name')
             ->get();
 
