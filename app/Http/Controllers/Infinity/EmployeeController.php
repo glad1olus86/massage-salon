@@ -212,6 +212,11 @@ class EmployeeController extends Controller
             'phone' => 'nullable|string|max:20',
             'birth_date' => 'nullable|date',
             'nationality' => 'nullable|string|max:50',
+            'languages' => 'nullable|array',
+            'languages.*' => 'string|max:50',
+            'height' => 'nullable|integer|min:100|max:250',
+            'weight' => 'nullable|integer|min:30|max:200',
+            'breast_size' => 'nullable|integer|min:0|max:10',
             'bio' => 'nullable|string|max:2000',
             'branch_id' => 'required|exists:branches,id',
             'operator_id' => 'nullable|exists:users,id',
@@ -235,6 +240,10 @@ class EmployeeController extends Controller
         $employee->operator_id = $validated['operator_id'] ?? null;
         $employee->birth_date = $validated['birth_date'] ?? null;
         $employee->nationality = $validated['nationality'] ?? null;
+        $employee->languages = $validated['languages'] ?? null;
+        $employee->height = $validated['height'] ?? null;
+        $employee->weight = $validated['weight'] ?? null;
+        $employee->breast_size = $validated['breast_size'] ?? null;
         $employee->bio = $validated['bio'] ?? null;
 
         if (!empty($validated['password'])) {

@@ -52,6 +52,38 @@
                     <input type="date" name="birth_date" class="adding-form__bio-input" placeholder="{{ __('Дата рождения') }}">
                     <input type="text" name="nationality" class="adding-form__bio-input" placeholder="{{ __('Национальность') }}">
                     <input type="password" name="password" class="adding-form__bio-input" placeholder="{{ __('Пароль') }}" required minlength="8">
+                    <input type="number" name="height" class="adding-form__bio-input" placeholder="{{ __('Рост (см)') }}" min="100" max="250">
+                    <input type="number" name="weight" class="adding-form__bio-input" placeholder="{{ __('Вес (кг)') }}" min="30" max="200">
+                    <input type="number" name="breast_size" class="adding-form__bio-input" placeholder="{{ __('Размер груди') }}" min="0" max="10">
+                    <div class="adding-form__languages-wrapper">
+                        <label class="adding-form__languages-label">{{ __('Языки') }}</label>
+                        <div class="adding-form__languages-grid">
+                            <label class="language-option">
+                                <input type="checkbox" name="languages[]" value="Čeština" class="language-option__input">
+                                <span class="language-option__text">Čeština</span>
+                            </label>
+                            <label class="language-option">
+                                <input type="checkbox" name="languages[]" value="Русский" class="language-option__input">
+                                <span class="language-option__text">Русский</span>
+                            </label>
+                            <label class="language-option">
+                                <input type="checkbox" name="languages[]" value="English" class="language-option__input">
+                                <span class="language-option__text">English</span>
+                            </label>
+                            <label class="language-option">
+                                <input type="checkbox" name="languages[]" value="Українська" class="language-option__input">
+                                <span class="language-option__text">Українська</span>
+                            </label>
+                            <label class="language-option">
+                                <input type="checkbox" name="languages[]" value="Deutsch" class="language-option__input">
+                                <span class="language-option__text">Deutsch</span>
+                            </label>
+                            <label class="language-option">
+                                <input type="checkbox" name="languages[]" value="Español" class="language-option__input">
+                                <span class="language-option__text">Español</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 

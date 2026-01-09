@@ -582,6 +582,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/calendar', [\App\Http\Controllers\Operator\CalendarController::class, 'index'])->name('operator.calendar');
         Route::get('/calendar/day/{date}', [\App\Http\Controllers\Operator\CalendarController::class, 'dayDetails'])->name('operator.calendar.day');
         Route::get('/calendar/month-data', [\App\Http\Controllers\Operator\CalendarController::class, 'getMonthData'])->name('operator.calendar.month-data');
+        
+        // Day details for dashboard modal (AJAX)
+        Route::get('/day-details/{date}', [\App\Http\Controllers\Operator\DashboardController::class, 'getDayDetails'])->name('operator.day-details');
+        Route::post('/duties/{duty}/complete', [\App\Http\Controllers\Operator\DashboardController::class, 'completeDuty'])->name('operator.duties.complete');
+        Route::put('/duties/{duty}/change', [\App\Http\Controllers\Operator\DashboardController::class, 'changeDuty'])->name('operator.duties.change');
+        Route::put('/cleaning-status/{status}', [\App\Http\Controllers\Operator\DashboardController::class, 'toggleCleaningStatus'])->name('operator.cleaning-status.toggle');
+        
+        // Bookings (Бронирования)
+        Route::post('/bookings', [\App\Http\Controllers\Operator\DashboardController::class, 'storeBooking'])->name('operator.bookings.store');
     });
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile')->middleware(['auth', 'XSS', 'revalidate']);

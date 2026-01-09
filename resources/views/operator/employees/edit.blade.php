@@ -99,6 +99,60 @@
                             </div>
                         </div>
 
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">{{ __('Рост (см)') }}</label>
+                                <input type="number" name="height" class="form-input" value="{{ old('height', $employee->height) }}" min="100" max="250" placeholder="170">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">{{ __('Вес (кг)') }}</label>
+                                <input type="number" name="weight" class="form-input" value="{{ old('weight', $employee->weight) }}" min="30" max="200" placeholder="55">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">{{ __('Размер груди') }}</label>
+                                <input type="number" name="breast_size" class="form-input" value="{{ old('breast_size', $employee->breast_size) }}" min="0" max="10" placeholder="3">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">{{ __('Языки') }}</label>
+                                <div class="languages-checkboxes">
+                                    @php $selectedLanguages = old('languages', $employee->languages ?? []); @endphp
+                                    <label class="language-checkbox">
+                                        <input type="checkbox" name="languages[]" value="Čeština" {{ in_array('Čeština', $selectedLanguages) ? 'checked' : '' }}>
+                                        <span>Čeština</span>
+                                    </label>
+                                    <label class="language-checkbox">
+                                        <input type="checkbox" name="languages[]" value="Русский" {{ in_array('Русский', $selectedLanguages) ? 'checked' : '' }}>
+                                        <span>Русский</span>
+                                    </label>
+                                    <label class="language-checkbox">
+                                        <input type="checkbox" name="languages[]" value="English" {{ in_array('English', $selectedLanguages) ? 'checked' : '' }}>
+                                        <span>English</span>
+                                    </label>
+                                    <label class="language-checkbox">
+                                        <input type="checkbox" name="languages[]" value="Українська" {{ in_array('Українська', $selectedLanguages) ? 'checked' : '' }}>
+                                        <span>Українська</span>
+                                    </label>
+                                    <label class="language-checkbox">
+                                        <input type="checkbox" name="languages[]" value="Deutsch" {{ in_array('Deutsch', $selectedLanguages) ? 'checked' : '' }}>
+                                        <span>Deutsch</span>
+                                    </label>
+                                    <label class="language-checkbox">
+                                        <input type="checkbox" name="languages[]" value="Español" {{ in_array('Español', $selectedLanguages) ? 'checked' : '' }}>
+                                        <span>Español</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--full" id="bioField">
+                            <label class="form-label">{{ __('О себе') }}</label>
+                            <textarea name="bio" class="form-textarea" rows="4" placeholder="{{ __('Расскажите о себе, своем опыте и преимуществах...') }}">{{ old('bio', $employee->bio) }}</textarea>
+                            <small class="form-hint">{{ __('Этот текст будет отображаться в профиле сотрудника') }}</small>
+                        </div>
+
                         @if($services->count() > 0)
                         <div class="form-group form-group--full" id="mainServicesField">
                             <label class="form-label">{{ __('Основные услуги') }}</label>
@@ -193,6 +247,14 @@
 .nationality-item { padding: 10px 14px; cursor: pointer; transition: background 0.15s; display: flex; align-items: center; gap: 10px; }
 .nationality-item:hover, .nationality-item.active { background: rgba(177, 32, 84, 0.1); }
 .nationality-item img { width: 24px; height: 18px; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+.languages-checkboxes { display: flex; flex-wrap: wrap; gap: 8px; }
+.language-checkbox { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #f5f5f5; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-size: 14px; }
+.language-checkbox:hover { background: #eee; }
+.language-checkbox input { accent-color: var(--brand-color); }
+.language-checkbox input:checked + span { color: var(--brand-color); font-weight: 600; }
+.form-textarea { padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; transition: border-color 0.2s; width: 100%; box-sizing: border-box; resize: vertical; min-height: 100px; font-family: inherit; }
+.form-textarea:focus { outline: none; border-color: var(--brand-color); }
+.form-hint { font-size: 12px; color: #888; margin-top: 4px; }
 @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } .photos-grid { grid-template-columns: repeat(4, 1fr); } }
 </style>
 @endpush

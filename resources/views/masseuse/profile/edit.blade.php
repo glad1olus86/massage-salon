@@ -47,6 +47,62 @@
                 <label class="form-label">{{ __('Роль') }}</label>
                 <input type="text" value="{{ __('Массажист') }}" class="form-input" disabled>
             </div>
+
+            <div class="form-group">
+                <label for="birth_date" class="form-label">{{ __('Дата рождения') }}</label>
+                <input type="date" id="birth_date" name="birth_date" value="{{ old('birth_date', $user->birth_date?->format('Y-m-d')) }}" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <label for="nationality" class="form-label">{{ __('Национальность') }}</label>
+                <input type="text" id="nationality" name="nationality" value="{{ old('nationality', $user->nationality) }}" class="form-input" placeholder="{{ __('Например: Ukraine') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="height" class="form-label">{{ __('Рост (см)') }}</label>
+                <input type="number" id="height" name="height" value="{{ old('height', $user->height) }}" class="form-input" min="100" max="250" placeholder="170">
+            </div>
+            
+            <div class="form-group">
+                <label for="weight" class="form-label">{{ __('Вес (кг)') }}</label>
+                <input type="number" id="weight" name="weight" value="{{ old('weight', $user->weight) }}" class="form-input" min="30" max="200" placeholder="55">
+            </div>
+
+            <div class="form-group">
+                <label for="breast_size" class="form-label">{{ __('Размер груди') }}</label>
+                <input type="number" id="breast_size" name="breast_size" value="{{ old('breast_size', $user->breast_size) }}" class="form-input" min="0" max="10" placeholder="3">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ __('Языки') }}</label>
+                <div class="languages-checkboxes">
+                    @php $selectedLanguages = old('languages', $user->languages ?? []); @endphp
+                    <label class="language-checkbox">
+                        <input type="checkbox" name="languages[]" value="Čeština" {{ in_array('Čeština', $selectedLanguages) ? 'checked' : '' }}>
+                        <span>Čeština</span>
+                    </label>
+                    <label class="language-checkbox">
+                        <input type="checkbox" name="languages[]" value="Русский" {{ in_array('Русский', $selectedLanguages) ? 'checked' : '' }}>
+                        <span>Русский</span>
+                    </label>
+                    <label class="language-checkbox">
+                        <input type="checkbox" name="languages[]" value="English" {{ in_array('English', $selectedLanguages) ? 'checked' : '' }}>
+                        <span>English</span>
+                    </label>
+                    <label class="language-checkbox">
+                        <input type="checkbox" name="languages[]" value="Українська" {{ in_array('Українська', $selectedLanguages) ? 'checked' : '' }}>
+                        <span>Українська</span>
+                    </label>
+                    <label class="language-checkbox">
+                        <input type="checkbox" name="languages[]" value="Deutsch" {{ in_array('Deutsch', $selectedLanguages) ? 'checked' : '' }}>
+                        <span>Deutsch</span>
+                    </label>
+                    <label class="language-checkbox">
+                        <input type="checkbox" name="languages[]" value="Español" {{ in_array('Español', $selectedLanguages) ? 'checked' : '' }}>
+                        <span>Español</span>
+                    </label>
+                </div>
+            </div>
             
             <div class="form-group form-group--full">
                 <label for="bio" class="form-label">{{ __('О себе') }}</label>
@@ -279,6 +335,34 @@
     font-size: 14px;
     padding: 12px;
     text-align: center;
+}
+
+/* Languages */
+.languages-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.language-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+.language-checkbox:hover {
+    background: #eee;
+}
+.language-checkbox input {
+    accent-color: var(--brand-color, #8B1538);
+}
+.language-checkbox input:checked + span {
+    color: var(--brand-color, #8B1538);
+    font-weight: 600;
 }
 </style>
 @endpush

@@ -119,9 +119,11 @@
                     <span class="duty-row__name">{{ $duty->name ?? 'N/A' }}</span>
                 </div>
                 <div class="duty-row__days">
-                    @foreach($duty->week_days as $day)
+                    @foreach($duty->week_days as $dayIndex => $day)
                         <span class="duty-day {{ $day->has_duty ? ($day->is_completed ? 'duty-day--done' : 'duty-day--pending') : 'duty-day--empty' }}" 
-                              title="{{ $day->date->format('d.m') }}{{ $day->has_duty ? ($day->is_completed ? ' ✓' : ' ○') : '' }}">
+                              title="{{ $day->date->format('d.m') }}{{ $day->has_duty ? ($day->is_completed ? ' ✓' : ' ○') : '' }}"
+                              onclick="openDayModal('{{ $day->date->format('Y-m-d') }}', '{{ $duty->user_id }}', '{{ $duty->branch_id ?? '' }}')"
+                              style="cursor: pointer;">
                         </span>
                     @endforeach
                 </div>
@@ -232,6 +234,89 @@
     </div>
 </div>
 @endsection
+
+{{-- Day Details Modal --}}
+<div id="dayDetailsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content modal-content--large">
+        <div class="modal-header">
+            <h3 id="dayDetailsTitle">{{ __('Детали дня') }}</h3>
+            <button type="button" class="modal-close" onclick="closeDayDetailsModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="dayDetailsContent">
+            <div class="loading">{{ __('Загрузка...') }}</div>
+        </div>
+    </div>
+</div>
+
+{{-- Change Duty Modal --}}
+<div id="changeDutyModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>{{ __('Сменить дежурного') }}</h3>
+            <button type="button" class="modal-close" onclick="closeChangeDutyModal()">&times;</button>
+        </div>
+        <form id="changeDutyForm" onsubmit="submitChangeDuty(event)">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="duty_id" id="changeDutyId">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">{{ __('Новый дежурный') }} <span class="required">*</span></label>
+                    <select name="user_id" id="newDutyPerson" class="form-input" required>
+                        <option value="">{{ __('Выберите сотрудника') }}</option>
+                    </select>
+                </div>
+                <div id="employeesWithPoints" class="employees-points-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" onclick="closeChangeDutyModal()">{{ __('Отмена') }}</button>
+                <button type="submit" class="btn btn--brand">{{ __('Сохранить') }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- Add Booking Modal --}}
+<div id="addBookingModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>{{ __('Добавить бронирование') }}</h3>
+            <button type="button" class="modal-close" onclick="closeAddBookingModal()">&times;</button>
+        </div>
+        <form id="addBookingForm" onsubmit="submitBooking(event)">
+            @csrf
+            <input type="hidden" name="booking_date" id="bookingDate">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">{{ __('Комната') }} <span class="required">*</span></label>
+                    <select name="room_id" id="bookingRoom" class="form-input" required>
+                        <option value="">{{ __('Выберите комнату') }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">{{ __('Сотрудник') }} <span class="required">*</span></label>
+                    <select name="user_id" id="bookingUser" class="form-input" required>
+                        <option value="">{{ __('Выберите сотрудника') }}</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group form-group--half">
+                        <label class="form-label">{{ __('Время начала') }} <span class="required">*</span></label>
+                        <input type="time" name="start_time" id="bookingStartTime" class="form-input" required>
+                    </div>
+                    <div class="form-group form-group--half">
+                        <label class="form-label">{{ __('Время окончания') }} <span class="required">*</span></label>
+                        <input type="time" name="end_time" id="bookingEndTime" class="form-input" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" onclick="closeAddBookingModal()">{{ __('Отмена') }}</button>
+                <button type="submit" class="btn btn--brand">{{ __('Сохранить') }}</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 @push('css-page')
 <style>
@@ -636,6 +721,362 @@
 .status-dropdown__option--pending { color: #ca8a04; }
 .status-dropdown__option--confirmed { color: #2563eb; }
 .status-dropdown__option--cancelled { color: #dc2626; }
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.25s ease-out;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content--large {
+    max-width: 600px;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--brand-color) 0%, #9a1c4a 100%);
+    border-radius: 20px 20px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.modal-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+    border-radius: 0 0 20px 20px;
+}
+
+/* Day Details Content */
+.day-details-section {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.day-details-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.day-details-section h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--brand-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.booking-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 2px solid rgba(177, 32, 84, 0.15);
+    border-radius: 12px;
+    flex-wrap: wrap;
+}
+
+.booking-time {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--brand-color);
+    min-width: 110px;
+}
+
+.booking-room {
+    background: var(--brand-color);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.booking-user {
+    flex: 1;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Duty Info */
+.duty-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(177, 32, 84, 0.08) 0%, rgba(177, 32, 84, 0.03) 100%);
+    border: 2px solid rgba(177, 32, 84, 0.15);
+    border-radius: 14px;
+    flex-wrap: wrap;
+}
+
+.duty-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+}
+
+.duty-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--brand-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(177, 32, 84, 0.3);
+}
+
+.duty-details {
+    flex: 1;
+}
+
+.duty-details-name {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--accent-color);
+    margin-bottom: 4px;
+}
+
+.duty-details-status {
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.duty-actions-modal {
+    display: flex;
+    gap: 10px;
+}
+
+.no-duty-message {
+    text-align: center;
+    padding: 30px 20px;
+    color: #888;
+    background: #f9f9f9;
+    border-radius: 12px;
+}
+
+/* Cleaning Statuses */
+.cleaning-statuses {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.cleaning-status-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: #fff;
+    border: 2px solid #eee;
+    border-radius: 10px;
+}
+
+.cleaning-status-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: #333;
+}
+
+.cleaning-status-toggle {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.cleaning-status-toggle.clean {
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+}
+
+.cleaning-status-toggle.dirty {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+/* Employees Points List */
+.employees-points-list {
+    margin-top: 16px;
+}
+
+.employee-points-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f9f9f9;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.employee-points {
+    font-weight: 600;
+    color: var(--brand-color);
+}
+
+/* Modal Form Styles */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.form-label .required {
+    color: #ef4444;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--brand-color);
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-group--half {
+    flex: 1;
+}
+
+.btn--brand {
+    background: linear-gradient(135deg, var(--brand-color) 0%, #9a1c4a 100%);
+    color: #fff;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn--secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn--sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+}
 </style>
 @endpush
 
@@ -725,5 +1166,265 @@ function changeOrderStatus(orderId, status) {
         alert('{{ __("Ошибка соединения") }}');
     });
 }
+
+// Day Details Modal Functions
+let currentDate = null;
+let currentBranchId = null;
+
+function openDayModal(date, userId, branchId) {
+    currentDate = date;
+    currentBranchId = branchId;
+    document.getElementById('dayDetailsModal').style.display = 'flex';
+    document.getElementById('dayDetailsContent').innerHTML = '<div class="loading">{{ __("Загрузка...") }}</div>';
+    
+    // Используем тот же endpoint что и календарь оператора
+    fetch('{{ url("operator/calendar/day") }}/' + date, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('dayDetailsTitle').textContent = data.formatted_date;
+        renderDayDetails(data);
+    })
+    .catch(error => {
+        document.getElementById('dayDetailsContent').innerHTML = '<div class="error" style="text-align: center; padding: 40px; color: #ef4444;">{{ __("Ошибка загрузки") }}</div>';
+    });
+}
+
+function renderDayDetails(data) {
+    let html = '';
+    
+    // Bookings section
+    html += '<div class="day-details-section">';
+    html += '<h4>{{ __("Бронирования") }} <button class="btn btn--brand btn--sm" onclick="openAddBookingModal(\'' + data.date + '\', ' + JSON.stringify(data.rooms || []).replace(/"/g, '&quot;') + ', ' + JSON.stringify(data.branchEmployees || []).replace(/"/g, '&quot;') + ')">+ {{ __("Добавить") }}</button></h4>';
+    if (data.bookings && data.bookings.length > 0) {
+        html += '<div class="bookings-list">';
+        data.bookings.forEach(function(booking) {
+            let roomNumber = booking.room && booking.room.room_number ? booking.room.room_number : 'N/A';
+            html += '<div class="booking-item">';
+            html += '<span class="booking-time">' + booking.start_time.substring(0,5) + ' - ' + booking.end_time.substring(0,5) + '</span>';
+            html += '<span class="booking-room">{{ __("Комната") }} ' + roomNumber + '</span>';
+            html += '<span class="booking-user">' + (booking.user ? booking.user.name : 'N/A') + '</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+    } else {
+        html += '<div class="no-duty-message">{{ __("Нет бронирований на этот день") }}</div>';
+    }
+    html += '</div>';
+    
+    // Duty section
+    html += '<div class="day-details-section">';
+    html += '<h4>{{ __("Дежурный") }}</h4>';
+    if (data.duty) {
+        html += '<div class="duty-info">';
+        html += '<div class="duty-person">';
+        html += '<div class="duty-avatar">' + (data.duty.user ? data.duty.user.name.substring(0,2).toUpperCase() : '?') + '</div>';
+        html += '<div class="duty-details">';
+        html += '<div class="duty-details-name">' + (data.duty.user ? data.duty.user.name : 'N/A') + '</div>';
+        html += '<div class="duty-details-status">' + (data.duty.status === 'completed' ? '<svg viewBox="0 0 20 20" fill="none" width="12" height="12" style="vertical-align: middle;"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z" fill="#22c55e"/></svg> {{ __("Выполнено") }}' : '<svg viewBox="0 0 20 20" fill="none" width="12" height="12" style="vertical-align: middle;"><circle cx="10" cy="10" r="4" fill="#f59e0b"/></svg> {{ __("Ожидает выполнения") }}') + '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="duty-actions-modal">';
+        html += '<button class="btn btn--secondary btn--sm" onclick="openChangeDutyModal(' + data.duty.id + ', ' + JSON.stringify(data.employees || []).replace(/"/g, '&quot;') + ')">{{ __("Сменить") }}</button>';
+        if (data.duty.status !== 'completed') {
+            html += '<button class="btn btn--brand btn--sm" onclick="completeDuty(' + data.duty.id + ')"><svg viewBox="0 0 20 20" fill="none" width="12" height="12" style="vertical-align: middle;"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z" fill="currentColor"/></svg> {{ __("Выполнено") }}</button>';
+        }
+        html += '</div>';
+        html += '</div>';
+    } else {
+        html += '<div class="no-duty-message">{{ __("Дежурный не назначен на этот день") }}</div>';
+    }
+    html += '</div>';
+    
+    // Cleaning statuses
+    let cleaningStatuses = data.duty && data.duty.cleaning_statuses ? data.duty.cleaning_statuses : [];
+    if (cleaningStatuses.length > 0) {
+        html += '<div class="day-details-section">';
+        html += '<h4>{{ __("Статус уборки комнат") }}</h4>';
+        html += '<div class="cleaning-statuses">';
+        cleaningStatuses.forEach(function(status) {
+            let roomNumber = status.room && status.room.room_number ? status.room.room_number : 'N/A';
+            let name = status.area_type === 'common_area' ? '{{ __("Общая зона") }}' : '{{ __("Комната") }} ' + roomNumber;
+            let statusClass = status.status === 'clean' ? 'clean' : 'dirty';
+            let statusIcon = status.status === 'clean' 
+                ? '<svg viewBox="0 0 20 20" fill="none" width="12" height="12" style="vertical-align: middle;"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.7071 6.29289C17.0976 6.68342 17.0976 7.31658 16.7071 7.70711L9.70711 14.7071C9.31658 15.0976 8.68342 15.0976 8.29289 14.7071L4.79289 11.2071C4.40237 10.8166 4.40237 10.1834 4.79289 9.79289C5.18342 9.40237 5.81658 9.40237 6.20711 9.79289L9 12.5858L15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289Z" fill="currentColor"/></svg> {{ __("Чисто") }}'
+                : '<svg viewBox="0 0 20 20" fill="none" width="12" height="12" style="vertical-align: middle;"><circle cx="10" cy="10" r="4" fill="currentColor"/></svg> {{ __("Грязно") }}';
+            html += '<div class="cleaning-status-item">';
+            html += '<span class="cleaning-status-name">' + name + '</span>';
+            html += '<button class="cleaning-status-toggle ' + statusClass + '" onclick="toggleCleaningStatus(' + status.id + ', \'' + status.status + '\')">' + statusIcon + '</button>';
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</div>';
+    }
+    
+    document.getElementById('dayDetailsContent').innerHTML = html;
+}
+
+function closeDayDetailsModal() {
+    document.getElementById('dayDetailsModal').style.display = 'none';
+}
+
+function openChangeDutyModal(dutyId, employees) {
+    document.getElementById('changeDutyId').value = dutyId;
+    let select = document.getElementById('newDutyPerson');
+    select.innerHTML = '<option value="">{{ __("Выберите сотрудника") }}</option>';
+    
+    let pointsList = '';
+    if (employees && employees.length > 0) {
+        employees.forEach(function(emp) {
+            let userId = emp.user_id || emp.id;
+            let userName = emp.user ? emp.user.name : emp.name;
+            let points = emp.points || 0;
+            select.innerHTML += '<option value="' + userId + '">' + userName + '</option>';
+            pointsList += '<div class="employee-points-item"><span>' + userName + '</span><span class="employee-points">' + points + ' {{ __("баллов") }}</span></div>';
+        });
+    }
+    document.getElementById('employeesWithPoints').innerHTML = pointsList;
+    document.getElementById('changeDutyModal').style.display = 'flex';
+}
+
+function closeChangeDutyModal() {
+    document.getElementById('changeDutyModal').style.display = 'none';
+}
+
+function submitChangeDuty(e) {
+    e.preventDefault();
+    let dutyId = document.getElementById('changeDutyId').value;
+    let userId = document.getElementById('newDutyPerson').value;
+    
+    fetch('{{ url("infinitycrm/duties") }}/' + dutyId + '/change', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ user_id: userId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeChangeDutyModal();
+            if (currentDate) {
+                openDayModal(currentDate, '', currentBranchId);
+            }
+        } else {
+            alert(data.message || '{{ __("Ошибка") }}');
+        }
+    });
+}
+
+function completeDuty(dutyId) {
+    if (!confirm('{{ __("Отметить дежурство как выполненное?") }}')) return;
+    
+    fetch('{{ url("infinitycrm/duties") }}/' + dutyId + '/complete', {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (currentDate) {
+                openDayModal(currentDate, '', currentBranchId);
+            }
+        } else {
+            alert(data.message || '{{ __("Ошибка") }}');
+        }
+    });
+}
+
+function toggleCleaningStatus(statusId, currentStatus) {
+    let newStatus = currentStatus === 'clean' ? 'dirty' : 'clean';
+    
+    fetch('{{ url("infinitycrm/cleaning-status") }}/' + statusId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ status: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (currentDate) {
+                openDayModal(currentDate, '', currentBranchId);
+            }
+        } else {
+            alert(data.message || '{{ __("Ошибка") }}');
+        }
+    });
+}
+
+// Booking functions
+function openAddBookingModal(date, rooms, employees) {
+    document.getElementById('bookingDate').value = date;
+    document.getElementById('bookingStartTime').value = '';
+    document.getElementById('bookingEndTime').value = '';
+    
+    let roomSelect = document.getElementById('bookingRoom');
+    roomSelect.innerHTML = '<option value="">{{ __("Выберите комнату") }}</option>';
+    if (rooms && rooms.length > 0) {
+        rooms.forEach(function(room) {
+            roomSelect.innerHTML += '<option value="' + room.id + '">{{ __("Комната") }} ' + room.room_number + '</option>';
+        });
+    }
+    
+    let userSelect = document.getElementById('bookingUser');
+    userSelect.innerHTML = '<option value="">{{ __("Выберите сотрудника") }}</option>';
+    if (employees && employees.length > 0) {
+        employees.forEach(function(emp) {
+            userSelect.innerHTML += '<option value="' + emp.id + '">' + emp.name + '</option>';
+        });
+    }
+    
+    document.getElementById('addBookingModal').style.display = 'flex';
+}
+
+function closeAddBookingModal() {
+    document.getElementById('addBookingModal').style.display = 'none';
+    document.getElementById('addBookingForm').reset();
+}
+
+function submitBooking(e) {
+    e.preventDefault();
+    let form = document.getElementById('addBookingForm');
+    let formData = new FormData(form);
+    
+    fetch('{{ route("infinity.bookings.store") }}', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeAddBookingModal();
+            if (currentDate) {
+                openDayModal(currentDate, '', currentBranchId);
+            }
+        } else {
+            alert(data.message || '{{ __("Ошибка при создании бронирования") }}');
+        }
+    })
+    .catch(error => {
+        alert('{{ __("Ошибка соединения") }}');
+    });
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(function(modal) {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+        }
+    });
+});
 </script>
 @endpush

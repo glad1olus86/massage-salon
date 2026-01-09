@@ -30,6 +30,10 @@ class User extends Authenticatable
         'photos',
         'birth_date',
         'nationality',
+        'languages',
+        'height',
+        'weight',
+        'breast_size',
         'bio',
         'company_address',
         'company_ico',
@@ -62,6 +66,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'photos' => 'array',
+        'languages' => 'array',
         'birth_date' => 'date',
     ];
 

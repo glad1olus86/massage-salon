@@ -70,9 +70,13 @@
                         @foreach($services as $service)
                             <option value="{{ $service->id }}" 
                                     data-price="{{ $service->price }}"
-                                    data-has-60="{{ $service->operator_share_60 !== null ? '1' : '0' }}"
-                                    data-has-90="{{ $service->operator_share_90 !== null ? '1' : '0' }}"
-                                    data-has-120="{{ $service->operator_share_120 !== null ? '1' : '0' }}"
+                                    data-price-15="{{ $service->price_15 }}"
+                                    data-price-30="{{ $service->price_30 }}"
+                                    data-price-45="{{ $service->price_45 }}"
+                                    data-price-60="{{ $service->price_60 }}"
+                                    data-price-90="{{ $service->price_90 }}"
+                                    data-price-120="{{ $service->price_120 }}"
+                                    data-price-180="{{ $service->price_180 }}"
                                     {{ old('service_id') == $service->id ? 'selected' : '' }}>
                                 {{ $service->name }} ({{ $service->formatted_price }})
                             </option>
@@ -85,9 +89,13 @@
                     <label class="form-label">{{ __('Длительность') }}</label>
                     <select name="duration" class="form-select" id="duration-select">
                         <option value="">{{ __('Выберите длительность') }}</option>
+                        <option value="15" data-duration="15" {{ old('duration') == 15 ? 'selected' : '' }}>15 {{ __('минут') }}</option>
+                        <option value="30" data-duration="30" {{ old('duration') == 30 ? 'selected' : '' }}>30 {{ __('минут') }}</option>
+                        <option value="45" data-duration="45" {{ old('duration') == 45 ? 'selected' : '' }}>45 {{ __('минут') }}</option>
                         <option value="60" data-duration="60" {{ old('duration') == 60 ? 'selected' : '' }}>60 {{ __('минут') }}</option>
                         <option value="90" data-duration="90" {{ old('duration') == 90 ? 'selected' : '' }}>90 {{ __('минут') }}</option>
                         <option value="120" data-duration="120" {{ old('duration') == 120 ? 'selected' : '' }}>120 {{ __('минут') }}</option>
+                        <option value="180" data-duration="180" {{ old('duration') == 180 ? 'selected' : '' }}>180 {{ __('минут') }}</option>
                     </select>
                 </div>
                 
@@ -171,53 +179,68 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateDurationOptions() {
         const selected = serviceSelect.options[serviceSelect.selectedIndex];
+        const options = durationSelect.querySelectorAll('option[data-duration]');
         
         if (!selected || !selected.value) {
-            // Показываем все опции если услуга не выбрана
-            const options = durationSelect.querySelectorAll('option[data-duration]');
-            options.forEach(opt => {
-                opt.style.display = '';
-                opt.disabled = false;
-            });
+            // Если услуга не выбрана - показываем все
+            options.forEach(opt => { opt.style.display = ''; opt.disabled = false; });
             return;
         }
         
-        // Получаем data-атрибуты (в JS они преобразуются в camelCase)
-        const has60 = selected.getAttribute('data-has-60');
-        const has90 = selected.getAttribute('data-has-90');
-        const has120 = selected.getAttribute('data-has-120');
+        // Проверяем какие длительности имеют цену
+        const durations = ['15', '30', '45', '60', '90', '120', '180'];
+        let hasAnyPrice = false;
         
-        console.log('Service selected:', selected.value, 'has60:', has60, 'has90:', has90, 'has120:', has120);
+        durations.forEach(d => {
+            const price = selected.getAttribute('data-price-' + d);
+            if (price && parseFloat(price) > 0) hasAnyPrice = true;
+        });
         
-        // Если все поля пустые (0) - показываем все опции
-        const allEmpty = has60 === '0' && has90 === '0' && has120 === '0';
-        
-        const options = durationSelect.querySelectorAll('option[data-duration]');
         options.forEach(opt => {
             const duration = opt.getAttribute('data-duration');
-            let show = allEmpty; // По умолчанию показываем все если ничего не настроено
-            
-            if (!allEmpty) {
-                if (duration === '60') show = has60 === '1';
-                else if (duration === '90') show = has90 === '1';
-                else if (duration === '120') show = has120 === '1';
-            }
-            
+            const price = selected.getAttribute('data-price-' + duration);
+            // Показываем если есть цена > 0, или если нет ни одной цены (показываем все)
+            const show = !hasAnyPrice || (price && parseFloat(price) > 0);
             opt.style.display = show ? '' : 'none';
             opt.disabled = !show;
         });
+        
+        // Сбрасываем выбор если текущая длительность скрыта
+        const currentOption = durationSelect.options[durationSelect.selectedIndex];
+        if (currentOption && currentOption.disabled) {
+            durationSelect.value = '';
+        }
+    }
+    
+    function updatePrice() {
+        const serviceOption = serviceSelect.options[serviceSelect.selectedIndex];
+        const duration = durationSelect.value;
+        
+        if (!serviceOption || !serviceOption.value) return;
+        
+        // Если выбрана длительность - берём цену для этой длительности
+        if (duration) {
+            const durationPrice = serviceOption.getAttribute('data-price-' + duration);
+            if (durationPrice && parseFloat(durationPrice) > 0) {
+                amountInput.value = durationPrice;
+                return;
+            }
+        }
+        
+        // Иначе берём базовую цену
+        const basePrice = serviceOption.getAttribute('data-price');
+        if (basePrice) amountInput.value = basePrice;
     }
     
     serviceSelect.addEventListener('change', function() {
-        const selected = this.options[this.selectedIndex];
-        const price = selected.getAttribute('data-price');
-        if (price) {
-            amountInput.value = price;
-        }
         updateDurationOptions();
+        updatePrice();
     });
     
-    // Инициализация при загрузке
+    durationSelect.addEventListener('change', function() {
+        updatePrice();
+    });
+    
     updateDurationOptions();
 });
 </script>

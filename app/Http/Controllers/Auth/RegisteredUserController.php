@@ -157,6 +157,11 @@ class RegisteredUserController extends Controller
             'phone' => 'nullable|string|max:20',
             'birth_date' => 'nullable|date',
             'nationality' => 'nullable|string|max:50',
+            'languages' => 'nullable|array',
+            'languages.*' => 'string|max:50',
+            'height' => 'nullable|integer|min:100|max:250',
+            'weight' => 'nullable|integer|min:30|max:200',
+            'breast_size' => 'nullable|integer|min:0|max:10',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'photos' => 'nullable|array|max:8',
             'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
@@ -178,6 +183,10 @@ class RegisteredUserController extends Controller
         $user->lang = \App::getLocale();
         $user->birth_date = $request->birth_date;
         $user->nationality = $request->nationality;
+        $user->languages = $request->languages;
+        $user->height = $request->height;
+        $user->weight = $request->weight;
+        $user->breast_size = $request->breast_size;
         $user->bio = $request->about; // Поле "О себе" из формы регистрации
         $user->is_active = $request->is_active ?? 1;
         $user->plan = 1;

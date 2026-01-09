@@ -55,14 +55,7 @@ class DashboardController extends Controller
         $operatorIncome = 0;
         foreach ($orders as $order) {
             if ($order->service && $order->status !== 'cancelled') {
-                $duration = $order->duration ?? 60;
-                $share = match ($duration) {
-                    60 => $order->service->operator_share_60,
-                    90 => $order->service->operator_share_90,
-                    120 => $order->service->operator_share_120,
-                    default => $order->service->operator_share_60,
-                };
-                $operatorIncome += $share ?? 0;
+                $operatorIncome += $this->getOperatorShare($order);
             }
         }
 
@@ -76,16 +69,7 @@ class DashboardController extends Controller
         
         $monthlyOperatorIncome = 0;
         foreach ($monthOrders as $order) {
-            if ($order->service) {
-                $duration = $order->duration ?? 60;
-                $share = match ($duration) {
-                    60 => $order->service->operator_share_60,
-                    90 => $order->service->operator_share_90,
-                    120 => $order->service->operator_share_120,
-                    default => $order->service->operator_share_60,
-                };
-                $monthlyOperatorIncome += $share ?? 0;
-            }
+            $monthlyOperatorIncome += $this->getOperatorShare($order);
         }
 
         // Последние 8 заказов для модуля дохода (только не отменённые)
@@ -98,17 +82,7 @@ class DashboardController extends Controller
             ->take(8)
             ->get()
             ->map(function ($order) {
-                $duration = $order->duration ?? 60;
-                $share = 0;
-                if ($order->service) {
-                    $share = match ($duration) {
-                        60 => $order->service->operator_share_60,
-                        90 => $order->service->operator_share_90,
-                        120 => $order->service->operator_share_120,
-                        default => $order->service->operator_share_60,
-                    };
-                }
-                $order->operator_share = $share ?? 0;
+                $order->operator_share = $this->getOperatorShare($order);
                 return $order;
             });
 
@@ -214,6 +188,7 @@ class DashboardController extends Controller
 
             return (object) [
                 'user_id' => $user?->id,
+                'branch_id' => $branch?->id,
                 'name' => $user?->name ?? 'N/A',
                 'branch' => $branch?->name ?? 'N/A',
                 'avatar' => $hasRealAvatar ? asset('storage/' . $avatarPath) : null,
@@ -246,5 +221,210 @@ class DashboardController extends Controller
         }
 
         return $initials ?: '?';
+    }
+
+    /**
+     * Get operator share for an order based on duration.
+     */
+    protected function getOperatorShare($order): float
+    {
+        if (!$order->service) {
+            return 0;
+        }
+        
+        $duration = $order->duration ?? 60;
+        
+        $share = match ($duration) {
+            15 => $order->service->operator_share_15,
+            30 => $order->service->operator_share_30,
+            45 => $order->service->operator_share_45,
+            60 => $order->service->operator_share_60,
+            90 => $order->service->operator_share_90,
+            120 => $order->service->operator_share_120,
+            180 => $order->service->operator_share_180,
+            default => $order->service->operator_share_60,
+        };
+        
+        return (float) ($share ?? 0);
+    }
+
+    /**
+     * Get day details for modal (AJAX).
+     */
+    public function getDayDetails(Request $request, string $date)
+    {
+        $operator = Auth::user();
+        $subordinateIds = $operator->getSubordinateIds();
+        $branchId = $request->get('branch_id');
+        
+        $dateObj = Carbon::parse($date);
+        
+        // Получаем бронирования на этот день для подопечных
+        $bookings = \App\Models\RoomBooking::whereDate('booking_date', $dateObj)
+            ->whereIn('user_id', $subordinateIds)
+            ->with(['room', 'user'])
+            ->orderBy('start_time')
+            ->get();
+        
+        // Получаем дежурство на этот день
+        $duty = CleaningDuty::whereDate('duty_date', $dateObj)
+            ->whereIn('user_id', $subordinateIds)
+            ->with(['user', 'cleaningStatuses.room'])
+            ->first();
+        
+        // Получаем список подопечных для смены дежурного
+        $employees = \App\Models\DutyPoint::where('created_by', $operator->creatorId())
+            ->with('user')
+            ->orderBy('points', 'desc')
+            ->get()
+            ->filter(function ($point) use ($subordinateIds) {
+                return in_array($point->user_id, $subordinateIds);
+            })
+            ->values();
+        
+        // Получаем комнаты для кнопки "Добавить"
+        $rooms = \App\Models\Room::when($branchId, function ($q) use ($branchId) {
+            $q->where('branch_id', $branchId);
+        })->orderBy('room_number')->get();
+        
+        // Получаем подопечных сотрудников для бронирования
+        $branchEmployees = User::whereIn('id', $subordinateIds)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+        
+        // Получаем статусы уборки комнат на этот день (даже если нет дежурного)
+        $cleaningStatuses = [];
+        if (!$duty && $branchId) {
+            // Если нет дежурного, показываем комнаты филиала
+            $cleaningStatuses = $rooms->map(function ($room) {
+                return (object) [
+                    'id' => null,
+                    'room_id' => $room->id,
+                    'room' => $room,
+                    'area_type' => 'room',
+                    'status' => 'unknown',
+                ];
+            })->values();
+        }
+        
+        return response()->json([
+            'date' => $date,
+            'formatted_date' => $dateObj->translatedFormat('j F Y (l)'),
+            'bookings' => $bookings,
+            'duty' => $duty,
+            'employees' => $employees,
+            'rooms' => $rooms,
+            'branchEmployees' => $branchEmployees,
+            'cleaningStatuses' => $cleaningStatuses,
+        ]);
+    }
+
+    /**
+     * Complete duty (AJAX).
+     */
+    public function completeDuty(Request $request, int $dutyId)
+    {
+        $operator = Auth::user();
+        $subordinateIds = $operator->getSubordinateIds();
+        
+        $duty = CleaningDuty::whereIn('user_id', $subordinateIds)
+            ->findOrFail($dutyId);
+        
+        $duty->status = 'completed';
+        $duty->save();
+        
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Change duty person (AJAX).
+     */
+    public function changeDuty(Request $request, int $dutyId)
+    {
+        $operator = Auth::user();
+        $subordinateIds = $operator->getSubordinateIds();
+        
+        $duty = CleaningDuty::whereIn('user_id', $subordinateIds)
+            ->findOrFail($dutyId);
+        
+        $newUserId = $request->input('user_id');
+        
+        // Проверяем что новый пользователь - подопечный
+        if (!in_array($newUserId, $subordinateIds)) {
+            return response()->json(['success' => false, 'message' => __('Доступ запрещён')]);
+        }
+        
+        $duty->user_id = $newUserId;
+        $duty->save();
+        
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Toggle cleaning status (AJAX).
+     */
+    public function toggleCleaningStatus(Request $request, int $statusId)
+    {
+        $operator = Auth::user();
+        $subordinateIds = $operator->getSubordinateIds();
+        
+        $status = \App\Models\CleaningStatus::whereHas('duty', function ($q) use ($subordinateIds) {
+            $q->whereIn('user_id', $subordinateIds);
+        })->findOrFail($statusId);
+        
+        $status->status = $request->input('status', 'clean');
+        $status->save();
+        
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Store a new booking (AJAX).
+     */
+    public function storeBooking(Request $request)
+    {
+        $operator = Auth::user();
+        $subordinateIds = $operator->getSubordinateIds();
+        
+        $request->validate([
+            'booking_date' => 'required|date',
+            'room_id' => 'required|exists:rooms,id',
+            'user_id' => 'required|exists:users,id',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
+        ]);
+        
+        // Проверяем что пользователь - подопечный
+        if (!in_array($request->user_id, $subordinateIds)) {
+            return response()->json(['success' => false, 'message' => __('Доступ запрещён')]);
+        }
+        
+        // Проверяем конфликты бронирования
+        $conflict = \App\Models\RoomBooking::where('room_id', $request->room_id)
+            ->whereDate('booking_date', $request->booking_date)
+            ->where(function ($q) use ($request) {
+                $q->whereBetween('start_time', [$request->start_time, $request->end_time])
+                  ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+                  ->orWhere(function ($q2) use ($request) {
+                      $q2->where('start_time', '<=', $request->start_time)
+                         ->where('end_time', '>=', $request->end_time);
+                  });
+            })
+            ->exists();
+        
+        if ($conflict) {
+            return response()->json(['success' => false, 'message' => __('Комната уже забронирована на это время')]);
+        }
+        
+        $booking = \App\Models\RoomBooking::create([
+            'booking_date' => $request->booking_date,
+            'room_id' => $request->room_id,
+            'user_id' => $request->user_id,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'created_by' => $operator->id,
+        ]);
+        
+        return response()->json(['success' => true, 'booking' => $booking]);
     }
 }

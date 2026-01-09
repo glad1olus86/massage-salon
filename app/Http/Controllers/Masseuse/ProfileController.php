@@ -45,6 +45,13 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:1000',
+            'birth_date' => 'nullable|date',
+            'nationality' => 'nullable|string|max:50',
+            'languages' => 'nullable|array',
+            'languages.*' => 'string|max:50',
+            'height' => 'nullable|integer|min:100|max:250',
+            'weight' => 'nullable|integer|min:30|max:200',
+            'breast_size' => 'nullable|integer|min:0|max:10',
             'avatar' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
             'photos' => 'nullable|array|max:8',
             'photos.*' => 'image|mimes:jpeg,png,webp|max:5120',
@@ -57,6 +64,17 @@ class ProfileController extends Controller
 
         // Email и роль нельзя менять
         unset($validated['email'], $validated['type']);
+
+        // Обновляем основные поля
+        $user->name = $validated['name'];
+        $user->company_phone = $validated['phone'] ?? null;
+        $user->bio = $validated['bio'] ?? null;
+        $user->birth_date = $validated['birth_date'] ?? null;
+        $user->nationality = $validated['nationality'] ?? null;
+        $user->languages = $validated['languages'] ?? null;
+        $user->height = $validated['height'] ?? null;
+        $user->weight = $validated['weight'] ?? null;
+        $user->breast_size = $validated['breast_size'] ?? null;
 
         // Обновляем аватар
         if ($request->hasFile('avatar')) {
@@ -90,7 +108,12 @@ class ProfileController extends Controller
         $validated['photos'] = !empty($newPhotos) ? $newPhotos : null;
         unset($validated['existing_photos']);
 
-        $user->update($validated);
+        // Обновляем аватар если загружен
+        if (isset($validated['avatar'])) {
+            $user->avatar = $validated['avatar'];
+        }
+        $user->photos = $validated['photos'];
+        $user->save();
         
         // Синхронизируем услуги
         $syncData = [];

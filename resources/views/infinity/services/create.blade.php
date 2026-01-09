@@ -6,7 +6,7 @@
 
 @section('content')
 <section class="page-section">
-    <div class="card" style="max-width: 700px;">
+    <div class="card" style="max-width: 900px;">
         <div class="block-header">
             <div class="block-title">{{ __('Добавить услугу') }}</div>
         </div>
@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="price" class="form-label">{{ __('Цена (CZK)') }} <span class="required">*</span></label>
+                    <label for="price" class="form-label">{{ __('Базовая цена (CZK)') }} <span class="required">*</span></label>
                     <input type="number" id="price" name="price" class="form-input @error('price') is-invalid @enderror" 
                            value="{{ old('price', 0) }}" required min="0" step="100">
                     @error('price')
@@ -33,31 +33,83 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">{{ __('Доля оператора (CZK)') }}</label>
-                    <div class="form-row form-row--thirds">
+                    <label class="form-label">{{ __('Цены по длительности (CZK)') }}</label>
+                    <div class="duration-prices-grid">
+                        <div class="form-field">
+                            <label for="price_15" class="form-sublabel">15 {{ __('мин') }}</label>
+                            <input type="number" id="price_15" name="price_15" class="form-input" 
+                                   value="{{ old('price_15') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="price_30" class="form-sublabel">30 {{ __('мин') }}</label>
+                            <input type="number" id="price_30" name="price_30" class="form-input" 
+                                   value="{{ old('price_30') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="price_45" class="form-sublabel">45 {{ __('мин') }}</label>
+                            <input type="number" id="price_45" name="price_45" class="form-input" 
+                                   value="{{ old('price_45') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="price_60" class="form-sublabel">60 {{ __('мин') }}</label>
+                            <input type="number" id="price_60" name="price_60" class="form-input" 
+                                   value="{{ old('price_60') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="price_90" class="form-sublabel">90 {{ __('мин') }}</label>
+                            <input type="number" id="price_90" name="price_90" class="form-input" 
+                                   value="{{ old('price_90') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="price_120" class="form-sublabel">120 {{ __('мин') }}</label>
+                            <input type="number" id="price_120" name="price_120" class="form-input" 
+                                   value="{{ old('price_120') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="price_180" class="form-sublabel">180 {{ __('мин') }}</label>
+                            <input type="number" id="price_180" name="price_180" class="form-input" 
+                                   value="{{ old('price_180') }}" min="0" step="50" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">{{ __('Доля оператора по длительности (CZK)') }}</label>
+                    <div class="duration-prices-grid">
+                        <div class="form-field">
+                            <label for="operator_share_15" class="form-sublabel">15 {{ __('мин') }}</label>
+                            <input type="number" id="operator_share_15" name="operator_share_15" class="form-input" 
+                                   value="{{ old('operator_share_15') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="operator_share_30" class="form-sublabel">30 {{ __('мин') }}</label>
+                            <input type="number" id="operator_share_30" name="operator_share_30" class="form-input" 
+                                   value="{{ old('operator_share_30') }}" min="0" step="50" placeholder="0">
+                        </div>
+                        <div class="form-field">
+                            <label for="operator_share_45" class="form-sublabel">45 {{ __('мин') }}</label>
+                            <input type="number" id="operator_share_45" name="operator_share_45" class="form-input" 
+                                   value="{{ old('operator_share_45') }}" min="0" step="50" placeholder="0">
+                        </div>
                         <div class="form-field">
                             <label for="operator_share_60" class="form-sublabel">60 {{ __('мин') }}</label>
-                            <input type="number" id="operator_share_60" name="operator_share_60" class="form-input @error('operator_share_60') is-invalid @enderror" 
+                            <input type="number" id="operator_share_60" name="operator_share_60" class="form-input" 
                                    value="{{ old('operator_share_60') }}" min="0" step="50" placeholder="0">
-                            @error('operator_share_60')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
                         </div>
                         <div class="form-field">
                             <label for="operator_share_90" class="form-sublabel">90 {{ __('мин') }}</label>
-                            <input type="number" id="operator_share_90" name="operator_share_90" class="form-input @error('operator_share_90') is-invalid @enderror" 
+                            <input type="number" id="operator_share_90" name="operator_share_90" class="form-input" 
                                    value="{{ old('operator_share_90') }}" min="0" step="50" placeholder="0">
-                            @error('operator_share_90')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
                         </div>
                         <div class="form-field">
                             <label for="operator_share_120" class="form-sublabel">120 {{ __('мин') }}</label>
-                            <input type="number" id="operator_share_120" name="operator_share_120" class="form-input @error('operator_share_120') is-invalid @enderror" 
+                            <input type="number" id="operator_share_120" name="operator_share_120" class="form-input" 
                                    value="{{ old('operator_share_120') }}" min="0" step="50" placeholder="0">
-                            @error('operator_share_120')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
+                        </div>
+                        <div class="form-field">
+                            <label for="operator_share_180" class="form-sublabel">180 {{ __('мин') }}</label>
+                            <input type="number" id="operator_share_180" name="operator_share_180" class="form-input" 
+                                   value="{{ old('operator_share_180') }}" min="0" step="50" placeholder="0">
                         </div>
                     </div>
                 </div>
@@ -136,6 +188,11 @@
 .form-row--thirds {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 16px;
+}
+.duration-prices-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
 }
 .form-field {
     display: flex;
@@ -286,12 +343,20 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
+@media (max-width: 900px) {
+    .duration-prices-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
 @media (max-width: 600px) {
     .form-row {
         grid-template-columns: 1fr;
     }
     .form-row--thirds {
         grid-template-columns: 1fr 1fr 1fr;
+    }
+    .duration-prices-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
     .form-actions {
         flex-direction: column;
