@@ -121,9 +121,9 @@
                 <div class="duty-row__days">
                     @foreach($duty->week_days as $dayIndex => $day)
                         <span class="duty-day {{ $day->has_duty ? ($day->is_completed ? 'duty-day--done' : 'duty-day--pending') : 'duty-day--empty' }}" 
+                              style="width: 20px; height: 20px; border-radius: 50%; display: inline-block; cursor: pointer;"
                               title="{{ $day->date->format('d.m') }}{{ $day->has_duty ? ($day->is_completed ? ' ✓' : ' ○') : '' }}"
-                              onclick="openDayModal('{{ $day->date->format('Y-m-d') }}', '{{ $duty->user_id }}', '{{ $duty->branch_id ?? '' }}')"
-                              style="cursor: pointer;">
+                              onclick="openDayModal('{{ $day->date->format('Y-m-d') }}', '{{ $duty->user_id }}', '{{ $duty->branch_id ?? '' }}')">
                         </span>
                     @endforeach
                 </div>

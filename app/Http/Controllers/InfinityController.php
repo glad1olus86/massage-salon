@@ -90,6 +90,8 @@ class InfinityController extends Controller
             return (object)[
                 'name' => $firstDuty->user?->name ?? 'N/A',
                 'branch' => $firstDuty->branch?->name ?? 'N/A',
+                'branch_id' => $firstDuty->branch_id,
+                'user_id' => $firstDuty->user_id,
                 'avatar' => $hasAvatar ? asset('storage/' . $avatarPath) : null,
                 'has_avatar' => $hasAvatar,
                 'initials' => $this->getInitials($firstDuty->user?->name),

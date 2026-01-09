@@ -72,7 +72,7 @@
                                     data-has-90="{{ $service->operator_share_90 !== null ? '1' : '0' }}"
                                     data-has-120="{{ $service->operator_share_120 !== null ? '1' : '0' }}"
                                     {{ old('service_id', $order->service_id) == $service->id ? 'selected' : '' }}>
-                                {{ $service->name }} ({{ $service->formatted_price }})
+                                {{ $service->name }}
                             </option>
                         @endforeach
                     </select>

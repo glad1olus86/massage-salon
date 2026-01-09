@@ -75,7 +75,7 @@
                                     data-price-120="{{ $service->price_120 }}"
                                     data-price-180="{{ $service->price_180 }}"
                                     {{ old('service_id') == $service->id ? 'selected' : '' }}>
-                                {{ $service->name }} ({{ $service->formatted_price }})
+                                {{ $service->name }}
                             </option>
                         @endforeach
                     </select>
