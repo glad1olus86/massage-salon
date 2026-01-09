@@ -122,6 +122,23 @@ class OrderController extends Controller
 
         $validated['created_by'] = $operator->creatorId();
 
+        // Если не выбран клиент из списка, но введено имя - создаём нового клиента
+        if (empty($validated['client_id']) && !empty($validated['client_name'])) {
+            $nameParts = explode(' ', trim($validated['client_name']), 2);
+            $firstName = $nameParts[0] ?? '';
+            $lastName = $nameParts[1] ?? '';
+            
+            $client = MassageClient::create([
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'dob' => '1980-01-01',
+                'nationality' => 'Ukraine',
+                'created_by' => $operator->creatorId(),
+            ]);
+            
+            $validated['client_id'] = $client->id;
+        }
+
         MassageOrder::create($validated);
 
         return redirect()->route('operator.orders.index')

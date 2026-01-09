@@ -87,6 +87,23 @@ class OrderController extends Controller
         $validated['branch_id'] = $user->branch_id;
         $validated['created_by'] = $user->creatorId();
 
+        // Если не выбран клиент из списка, но введено имя - создаём нового клиента
+        if (empty($validated['client_id']) && !empty($validated['client_name'])) {
+            $nameParts = explode(' ', trim($validated['client_name']), 2);
+            $firstName = $nameParts[0] ?? '';
+            $lastName = $nameParts[1] ?? '';
+            
+            $client = MassageClient::create([
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'dob' => '1980-01-01',
+                'nationality' => 'Ukraine',
+                'created_by' => $user->creatorId(),
+            ]);
+            
+            $validated['client_id'] = $client->id;
+        }
+
         MassageOrder::create($validated);
 
         return redirect()->route('masseuse.orders.index')
@@ -151,6 +168,23 @@ class OrderController extends Controller
         
         if (empty($validated['order_time'])) {
             $validated['order_time'] = null;
+        }
+
+        // Если не выбран клиент из списка, но введено имя - создаём нового клиента
+        if (empty($validated['client_id']) && !empty($validated['client_name'])) {
+            $nameParts = explode(' ', trim($validated['client_name']), 2);
+            $firstName = $nameParts[0] ?? '';
+            $lastName = $nameParts[1] ?? '';
+            
+            $client = MassageClient::create([
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'dob' => '1980-01-01',
+                'nationality' => 'Ukraine',
+                'created_by' => $user->creatorId(),
+            ]);
+            
+            $validated['client_id'] = $client->id;
         }
 
         $order->update($validated);

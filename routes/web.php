@@ -343,6 +343,9 @@ Route::get('/config-cache', function () {
 //================================= Invoice Payment Gateways  ====================================//
 Route::group(['middleware' => ['auth']], function () {
 
+    // Suggestions (Идеи и предложения)
+    Route::post('/suggestions', [\App\Http\Controllers\SuggestionController::class, 'store'])->name('suggestions.store');
+
     // Route::get('/home', [DashboardController::class, 'account_dashboard_index'])->name('home')->middleware(['XSS', 'revalidate']);
 
     // Route::get('/dashboard', [DashboardController::class, 'show_dashboard'])->name('dashboard')->middleware(['auth', 'XSS', 'revalidate']);

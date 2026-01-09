@@ -54,7 +54,7 @@
         </ul>
     </div>
     
-    <a href="#" class="sidebar-ideas-wrapper">
+    <a href="#" class="sidebar-ideas-wrapper" onclick="event.preventDefault(); document.getElementById('suggestionModal').style.display='flex';">
         <div class="sidebar-ideas">
             {{ __('Идеи и') }}
             <svg class="sidebar-ideas-icon" viewBox="0 0 18 25" fill="none">
@@ -64,3 +64,29 @@
         </div>
     </a>
 </aside>
+
+<!-- Модальное окно для идей и предложений -->
+<div id="suggestionModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>{{ __('Идеи и предложения') }}</h3>
+            <button type="button" class="modal-close" onclick="document.getElementById('suggestionModal').style.display='none';">&times;</button>
+        </div>
+        <form action="{{ route('suggestions.store') }}" method="POST">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="subject">{{ __('Тема') }}</label>
+                    <input type="text" name="subject" id="subject" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">{{ __('Сообщение') }}</label>
+                    <textarea name="message" id="message" class="form-input" rows="5" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">{{ __('Отправить') }}</button>
+            </div>
+        </form>
+    </div>
+</div>
